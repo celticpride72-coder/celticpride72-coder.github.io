@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comfort by Design — Dashboards</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --edge:#232a34; --ink:#e7edf5; --dim:#93a1b3;
+    --accent:#4c8dff; --accent2:#2bd4a7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;flex-direction:column}
+  header{display:flex;align-items:center;gap:16px;padding:12px 18px;background:linear-gradient(180deg,#171d26,#12161d);border-bottom:1px solid var(--edge);flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px;font-size:16px;white-space:nowrap}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2)}
+  .brand small{display:block;font-weight:500;color:var(--dim);font-size:11px;letter-spacing:.3px}
+  nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .tab{appearance:none;border:1px solid var(--edge);background:var(--panel);color:var(--dim);
+       padding:9px 15px;border-radius:9px;cursor:pointer;font-weight:600;font-size:13.5px;transition:.12s}
+  .tab:hover{color:var(--ink);border-color:#31414f}
+  .tab.active{color:#fff;background:var(--accent);border-color:var(--accent);box-shadow:0 3px 12px rgba(76,141,255,.35)}
+  .tab .ico{margin-right:7px}
+  .wrap{flex:1;position:relative;min-height:0}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+  .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:14px;pointer-events:none;opacity:0;transition:.2s}
+  .loading.show{opacity:1}
+  footer{padding:7px 18px;font-size:11.5px;color:var(--dim);background:#0b0e13;border-top:1px solid var(--edge);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  footer b{color:#c3cedb;font-weight:600}
+  @media(max-width:640px){nav{margin-left:0;width:100%}.tab{flex:1;text-align:center}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="dot"></span><div>Comfort by Design<small>Business Dashboards</small></div></div>
+  <nav id="nav"></nav>
+</header>
+
+<div class="wrap">
+  <div class="loading" id="loading">Loading dashboard…</div>
+  <iframe id="frame" title="dashboard" src="revenue_dashboard.html"></iframe>
+</div>
+
+<footer>
+  <span><b>Live view</b> — each tab loads the current dashboard file; refreshed automatically by the daily updates.</span>
+  <span id="stamp"></span>
+</footer>
+
+<script>
+  const TABS = [
+    {id:"revenue",  label:"Revenue",       ico:"📈", file:"revenue_dashboard.html"},
+    {id:"sales",    label:"Sales",         ico:"💰", file:"sales_dashboard.html"},
+    {id:"booked",   label:"Booked Jobs",   ico:"📋", file:"booked_jobs_dashboard.html"},
+    {id:"fourdx",   label:"4DX Scoreboard",ico:"🎯", file:"4dx_dashboard_2026.html"},
+    {id:"lastmonth",label:"Last Month",    ico:"🗓️", file:"last_month_dashboard.html"}
+  ];
+  const nav = document.getElementById("nav");
+  const frame = document.getElementById("frame");
+  const loading = document.getElementById("loading");
+
+  function pick(t, btn){
+    document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    loading.classList.add("show");
+    frame.src = t.file;
+    try{ localStorage.setItem("cbd_tab", t.id); }catch(e){}
+  }
+  frame.addEventListener("load", ()=>loading.classList.remove("show"));
+
+  let start = "revenue";
+  try{ const s=localStorage.getItem("cbd_tab"); if(s && TABS.some(t=>t.id===s)) start=s; }catch(e){}
+
+  TABS.forEach(t=>{
+    const b=document.createElement("button");
+    b.className="tab"+(t.id===start?" active":"");
+    b.innerHTML=`<span class="ico">${t.ico}</span>${t.label}`;
+    b.onclick=()=>pick(t,b);
+    nav.appendChild(b);
+    if(t.id===start) frame.src=t.file;
+  });
+
+  document.getElementById("stamp").textContent =
+    "Opened " + new Date().toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+</script>
+</body>
+</html>

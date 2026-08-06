@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Last Month Dashboard — July 2026</title>
+<style>
+  :root{
+    --bg:#0f1720; --panel:#161f2b; --panel2:#1c2735; --line:#26303f;
+    --txt:#e8eef5; --muted:#93a2b5; --dim:#6b7a8d;
+    --rev:#3b9dff; --sales:#35c48f; --tgl:#a879ff;
+    --up:#2ecc71; --down:#ff6b6b; --amber:#f5b23d; --goal:#c58bff; --budget:#f5b23d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.4;padding:28px 26px 48px;}
+  .wrap{max-width:1160px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:22px}
+  h1{font-size:23px;margin:0;font-weight:650;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px;margin-top:5px}
+  .stamp{text-align:right;font-size:12px;color:var(--dim);line-height:1.7}
+  .stamp b{color:var(--muted);font-weight:600}
+  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);
+    color:var(--muted);border-radius:999px;padding:2px 10px;font-size:11px;margin-left:6px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+  @media(max-width:820px){.cards{grid-template-columns:1fr}}
+  .mcard{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:16px;padding:18px;position:relative;overflow:hidden}
+  .mcard .accentbar{position:absolute;left:0;top:0;bottom:0;width:5px}
+  .mcard .lbl{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;font-weight:700}
+  .mcard .msub{font-size:11px;color:var(--dim);margin-top:2px;min-height:26px}
+  .mcard .big{font-size:31px;font-weight:750;margin:8px 0 2px;letter-spacing:.3px}
+  .mcard .bigsub{font-size:11.5px;color:var(--dim);margin-bottom:13px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+  .stat .t{font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .stat .v{font-size:15px;font-weight:700;margin-top:3px}
+  .stat .s{font-size:10px;color:var(--dim);margin-top:1px}
+  .up{color:var(--up)} .down{color:var(--down)} .amber{color:var(--amber)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 15px;margin-bottom:20px}
+  .panel h2{font-size:14px;margin:0 0 2px;font-weight:600}
+  .panel .cap{font-size:12px;color:var(--dim);margin-bottom:16px}
+  .att{display:flex;flex-direction:column;gap:15px}
+  .arow{display:grid;grid-template-columns:74px 1fr;gap:14px;align-items:center}
+  .arow .k{font-size:12px;font-weight:700;color:var(--muted)}
+  .track{position:relative;height:24px;background:var(--panel2);border:1px solid var(--line);border-radius:7px}
+  .fill{position:absolute;left:0;top:0;bottom:0;border-radius:6px 0 0 6px}
+  .mark{position:absolute;top:-4px;bottom:-4px;width:2px}
+  .mark.g{background:var(--goal)} .mark.b{background:var(--budget)}
+  .mark .cap2{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap}
+  .arow .meta{font-size:11px;color:var(--dim);margin-top:5px;grid-column:2}
+  .arow .meta b{font-weight:600}
+  .chart{display:flex;align-items:flex-end;gap:3px;height:200px;padding-top:8px}
+  .day{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+  .bars{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:1px}
+  .b{width:30%;border-radius:2px 2px 0 0;min-height:1px}
+  .b.r{background:var(--rev)} .b.s{background:var(--sales)} .b.t{background:var(--tgl)}
+  .day .dl{font-size:8.5px;color:var(--dim);margin-top:5px}
+  .day .tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+    background:#0a1119;border:1px solid var(--line);border-radius:7px;padding:5px 8px;font-size:11px;
+    white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:5}
+  .day:hover .tip{opacity:1}
+  .legend{display:flex;gap:16px;font-size:11.5px;color:var(--muted);margin-top:14px;flex-wrap:wrap;align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  footer{color:var(--dim);font-size:11.5px;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+  footer code{color:var(--muted);background:var(--panel2);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Last Month <span class="pill">July 2026 · complete</span></h1>
+      <div class="sub">Comfort by Design — Revenue, Sales &amp; TGL month in review</div>
+    </div>
+    <div class="stamp" id="stamp"></div>
+  </header>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="panel">
+    <h2>Attainment — July 2026</h2>
+    <div class="cap">Full-month actual vs plan · fill = actual, markers = goal &amp; budget</div>
+    <div class="att" id="att"></div>
+    <div class="legend" style="margin-top:18px">
+      <span><i class="sw" style="background:var(--rev)"></i>Revenue</span>
+      <span><i class="sw" style="background:var(--sales)"></i>Sales</span>
+      <span><i class="sw" style="background:var(--tgl)"></i>TGL</span>
+      <span><i class="sw" style="background:var(--goal)"></i>Goal</span>
+      <span><i class="sw" style="background:var(--budget)"></i>Budget</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Daily through July</h2>
+    <div class="cap">Revenue (completed income), Sales (sold estimates) &amp; TGL (tech-generated lead sales) by day · same scale</div>
+    <div class="chart" id="chart"></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--rev)"></i>Revenue</span>
+      <span><i class="sw" style="background:var(--sales)"></i>Sales</span>
+      <span><i class="sw" style="background:var(--tgl)"></i>TGL</span>
+      <span style="color:var(--dim)">weekends/holidays typically $0</span>
+    </div>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+const DATA = {
+  month: "July 2026",
+  generatedAt: "2026-08-03T16:00:00Z",
+  metrics: {
+    revenue: { label:"Revenue", sub:"Completed income · by completion date", cls:"rev",
+      actual:1120028.84, goal:1092226, budget:1050217, lastYear:1039138.01, priorMonth:1198542.16,
+      daily:{"01":43974.5,"02":43440,"03":9854.61,"04":0,"05":0,"06":18896,"07":42837.63,"08":66849.89,"09":32257.1,"10":48916.93,"11":2425.18,"12":0,"13":42922.54,"14":39658.98,"15":32818.05,"16":50713.06,"17":60860.12,"18":2995.5,"19":0,"20":67396.2,"21":41821.35,"22":38491.48,"23":65922.99,"24":62314.18,"25":12421.5,"26":0,"27":20444.12,"28":83965.7,"29":50910.43,"30":54918.79,"31":82002.01} },
+    sales: { label:"Sales", sub:"Sold estimates · 4 sales business units", cls:"sales",
+      actual:952536.38, goal:901259, budget:879002, lastYear:729568.67, priorMonth:933727.14,
+      daily:{"01":29822.8,"02":53056.85,"03":13768.16,"04":20091,"05":0,"06":24127,"07":23164.9,"08":79186.59,"09":29711,"10":41402.16,"11":13284.78,"12":0,"13":50867.8,"14":54192.9,"15":50609.87,"16":32032.28,"17":37599.12,"18":32520,"19":8349,"20":17862.66,"21":23925.71,"22":38459.53,"23":54231.4,"24":20065.5,"25":23527,"26":0,"27":48750,"28":28504.14,"29":5308,"30":35991,"31":62125.23} },
+    tgl: { label:"TGL", sub:"Tech-generated lead sales · lead from a Service BU", cls:"tgl",
+      actual:383878.23, goal:297436.17, budget:null, lastYear:259129.79, priorMonth:427192.61,
+      daily:{"01":10783,"02":28639,"03":259,"04":20091,"05":0,"06":2346.76,"07":13164.9,"08":12058,"09":26931,"10":6532.68,"11":0,"12":0,"13":9877,"14":12985.86,"15":50609.87,"16":9796.63,"17":0,"18":15287,"19":8349,"20":13627.66,"21":2273,"22":18288.64,"23":12955.42,"24":15530,"25":23527,"26":0,"27":28681,"28":3400,"29":2195,"30":0,"31":35689.81} }
+  }
+};
+
+const usd0 = n => "$"+Math.round(n).toLocaleString("en-US");
+const attClass = pct => pct>=100 ? "up" : pct>=95 ? "amber" : "down";
+const signClass = p => p>=0 ? "up" : "down";
+const arrow = p => p>=0 ? "▲" : "▼";
+const accent = cls => cls==="rev"?"var(--rev)":cls==="sales"?"var(--sales)":"var(--tgl)";
+
+document.getElementById("stamp").innerHTML =
+  `<div><b>Month</b> July 2026 (complete)</div>`+
+  `<div><b>Data through</b> Aug 1–2, 2026</div>`+
+  `<div>Revenue · Sales · TGL</div>`;
+
+const order = ["revenue","sales","tgl"];
+document.getElementById("cards").innerHTML = order.map(key=>{
+  const m=DATA.metrics[key];
+  const gp=m.actual/m.goal*100;
+  const bp=m.budget?m.actual/m.budget*100:null;
+  const yoy=(m.actual-m.lastYear)/m.lastYear*100;
+  const mom=(m.actual-m.priorMonth)/m.priorMonth*100;
+  const c=accent(m.cls);
+  const budgetTile = bp!==null
+    ? `<div class="stat"><div class="t">vs Budget</div><div class="v ${attClass(bp)}">${bp.toFixed(1)}%</div><div class="s">${usd0(m.budget)}</div></div>`
+    : `<div class="stat"><div class="t">vs Goal (annual)</div><div class="v">—</div><div class="s">no monthly budget</div></div>`;
+  return `<div class="mcard">
+    <div class="accentbar" style="background:${c}"></div>
+    <div class="lbl" style="color:${c}">${m.label}</div>
+    <div class="msub">${m.sub}</div>
+    <div class="big">${usd0(m.actual)}</div>
+    <div class="bigsub">total for July 2026</div>
+    <div class="grid2">
+      <div class="stat"><div class="t">vs Goal</div><div class="v ${attClass(gp)}">${gp.toFixed(1)}%</div><div class="s">${usd0(m.goal)}</div></div>
+      ${budgetTile}
+      <div class="stat"><div class="t">vs Last Year</div><div class="v ${signClass(yoy)}">${arrow(yoy)} ${Math.abs(yoy).toFixed(1)}%</div><div class="s">Jul '25 · ${usd0(m.lastYear)}</div></div>
+      <div class="stat"><div class="t">vs Prior Month</div><div class="v ${signClass(mom)}">${arrow(mom)} ${Math.abs(mom).toFixed(1)}%</div><div class="s">Jun '26 · ${usd0(m.priorMonth)}</div></div>
+    </div>
+  </div>`;
+}).join("");
+
+document.getElementById("att").innerHTML = order.map(key=>{
+  const m=DATA.metrics[key];
+  const c=accent(m.cls);
+  const scale=Math.max(m.actual,m.goal,m.budget||0)*1.06;
+  const gp=m.actual/m.goal*100;
+  const budgetMark = m.budget ? `<div class="mark b" style="left:${m.budget/scale*100}%"><span class="cap2" style="color:var(--budget)">Bgt</span></div>` : "";
+  return `<div>
+    <div class="arow">
+      <div class="k">${m.label}</div>
+      <div class="track">
+        <div class="fill" style="width:${m.actual/scale*100}%;background:${c}"></div>
+        ${budgetMark}
+        <div class="mark g" style="left:${m.goal/scale*100}%"><span class="cap2" style="color:var(--goal)">Goal</span></div>
+      </div>
+    </div>
+    <div class="arow"><div></div><div class="meta">
+      Actual <b style="color:var(--txt)">${usd0(m.actual)}</b> ·
+      <span class="${attClass(gp)}">${gp.toFixed(1)}% of goal</span> (${usd0(m.goal)})${m.budget?` · ${usd0(m.budget)} budget`:``}
+    </div></div>
+  </div>`;
+}).join("");
+
+const rev=DATA.metrics.revenue.daily, sal=DATA.metrics.sales.daily, tgl=DATA.metrics.tgl.daily;
+const days=Object.keys(rev);
+const max=Math.max(...days.map(d=>Math.max(rev[d],sal[d],tgl[d])));
+document.getElementById("chart").innerHTML = days.map(d=>{
+  const show=["01","08","15","22","29","31"].includes(d);
+  return `<div class="day">
+    <div class="tip"><b>Jul ${d}</b><br><span style="color:var(--rev)">Rev ${usd0(rev[d])}</span><br><span style="color:var(--sales)">Sales ${usd0(sal[d])}</span><br><span style="color:var(--tgl)">TGL ${usd0(tgl[d])}</span></div>
+    <div class="bars">
+      <div class="b r" style="height:${Math.max(1,rev[d]/max*100)}%"></div>
+      <div class="b s" style="height:${Math.max(1,sal[d]/max*100)}%"></div>
+      <div class="b t" style="height:${Math.max(1,tgl[d]/max*100)}%"></div>
+    </div>
+    <div class="dl">${show?d:""}</div>
+  </div>`;
+}).join("");
+
+document.getElementById("footer").innerHTML =
+  `Sources: <code>PBI Completed YTD 4dx.xlsx</code> (Income) · <code>Sales4dx.xlsx</code> (Sales = Estimates Subtotal for 3 sales BUs; TGL = Estimates Subtotal where Lead-Generated-From-BU contains “Service”) · <code>CBD 2026 Revenue Budget.xlsx</code> → Daily Goals (Revenue Goal/Budget; Sales Goal; Install(HVAC/FP) Goal; TGL Sales col J). &nbsp;·&nbsp; `+
+  `July 2026 complete. Goal/Budget are full-month July targets; Last Year = full July 2025; Prior Month = full June 2026. TGL has a goal but no separate monthly budget.`;
+</script>
+</body>
+</html>

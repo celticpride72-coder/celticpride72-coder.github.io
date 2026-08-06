@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 4DX Scoreboard — Comfort by Design</title>
+<style>
+  :root{
+    --bg:#0f1720; --panel:#161f2b; --panel2:#1c2735; --line:#26303f;
+    --txt:#e8eef5; --muted:#93a2b5; --dim:#6b7a8d;
+    --green:#2ecc71; --amber:#f5b23d; --red:#ff6b6b; --gray:#6b7a8d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.4;padding:28px 26px 48px;}
+  .wrap{max-width:1120px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:8px}
+  h1{font-size:23px;margin:0;font-weight:700;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px;margin-top:5px}
+  .stamp{text-align:right;font-size:12px;color:var(--dim);line-height:1.7}
+  .stamp b{color:var(--muted);font-weight:600}
+  .summary{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 22px}
+  .chip{display:flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .wig{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:16px;padding:20px;position:relative;overflow:hidden}
+  .wig .edge{position:absolute;left:0;top:0;bottom:0;width:5px}
+  .wtop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .wnum{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);font-weight:700}
+  .status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .wtitle{font-size:15.5px;font-weight:650;margin:3px 0 2px}
+  .wsourced{font-size:11px;color:var(--dim);margin-bottom:12px}
+  .bt{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:12px}
+  .bt b{color:var(--txt);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:right;font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 0 6px}
+  th:first-child{text-align:left}
+  td{padding:7px 0;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+  td:first-child{text-align:left;color:var(--muted)}
+  td .a{font-weight:700;color:var(--txt)}
+  .up{color:var(--green)} .down{color:var(--red)} .amb{color:var(--amber)} .dim{color:var(--dim)}
+  .note{font-size:10.5px;color:var(--dim);margin-top:10px;font-style:italic}
+  .pending{color:var(--dim);font-size:13px;padding:26px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);text-align:center;margin:4px 0}
+  footer{color:var(--dim);font-size:11.5px;border-top:1px solid var(--line);padding-top:14px;margin-top:22px}
+  footer code{color:var(--muted);background:var(--panel2);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>2026 4DX Scoreboard</h1>
+      <div class="sub">Comfort by Design — 4 Wildly Important Goals · Last Month / MTD / YTD vs Goal &amp; Last Year</div>
+    </div>
+    <div class="stamp" id="stamp"></div>
+  </header>
+  <div class="summary" id="summary"></div>
+  <div class="grid" id="grid"></div>
+  <footer id="footer"></footer>
+</div>
+
+<script>
+const C = {green:"var(--green)",amber:"var(--amber)",red:"var(--red)",gray:"var(--gray)"};
+const DATA = {
+  generatedAt: "2026-08-03T15:00:00Z",
+  wigs: [
+    { n:1, title:"Sales from Tech-Generated Leads", unit:"$", status:"green", statusText:"Ahead of pace",
+      baseline:3243320, baselineText:"2025", target:3750000,
+      source:"Sales4dx · Estimates Subtotal where Lead-Generated-From-BU contains “Service”",
+      periods:[
+        {p:"Last Month · Jul", a:383878, g:297436, ly:259130},
+        {p:"MTD · Aug", a:0, g:13012, ly:0, note:"no August sales posted yet"},
+        {p:"YTD", a:2181785, g:1961878, ly:1618380}
+      ] },
+    { n:2, title:"Sales Closing %", unit:"%", status:"amber", statusText:"Behind target",
+      baseline:60, baselineText:"2025", target:65, flatGoal:65,
+      source:"Power BI HVAC Install · Total Conv CY vs PY · AOP/SVP = Michael Bala",
+      periods:[
+        {p:"Last Month · Jul", a:59.3, ly:null},
+        {p:"MTD · Aug", a:null},
+        {p:"YTD", a:60.6, ly:58.2}
+      ],
+      note:"Last Month = July single-month Conv CY (Power BI, MTD scope). The report provides no single-month prior-year, so month-level “vs Last Yr” is blank; MTD (Aug) has no data yet." },
+    { n:3, title:"Net Promoter Score (NPS)", unit:"pts", status:"red", statusText:"Below target",
+      baseline:83, baselineText:"2025", target:86, flatGoal:86,
+      source:"Qualtrics NPS · Comfort by Design",
+      periods:[
+        {p:"Last Month · Jul", a:69, ly:86, resp:81},
+        {p:"MTD · Aug", a:100, ly:null, resp:3, note:"n=3 — not meaningful"},
+        {p:"YTD", a:81, ly:82, resp:897}
+      ] },
+    { n:4, title:"Fireplace Install Gross Profit %", unit:"%", status:"gray", statusText:"Not started",
+      target:"Beat budget GP%",
+      source:"Power BI GP Summary · CBD Fireplace Install · Act vs Bud",
+      pending:"Goal window Aug–Dec 2026. First official month (August) posts ~Sep 11 — nothing to report yet." }
+  ]
+};
+
+const usd = n => "$"+Math.round(n).toLocaleString("en-US");
+const usdS = n => n>=1e6 ? "$"+(n/1e6).toFixed(2)+"M" : "$"+Math.round(n/1e3)+"K";
+const sgn = (x,suf="") => (x>=0?"+":"−")+Math.abs(x).toFixed(1)+suf;
+
+const counts = {green:0,amber:0,red:0,gray:0};
+DATA.wigs.forEach(w=>counts[w.status]++);
+document.getElementById("summary").innerHTML =
+  `<div class="chip"><span class="dot" style="background:${C.green}"></span>${counts.green} on track</div>`+
+  `<div class="chip"><span class="dot" style="background:${C.amber}"></span>${counts.amber} behind target</div>`+
+  `<div class="chip"><span class="dot" style="background:${C.red}"></span>${counts.red} off track</div>`+
+  `<div class="chip"><span class="dot" style="background:${C.gray}"></span>${counts.gray} not started</div>`;
+document.getElementById("stamp").innerHTML =
+  `<div><b>As of</b> Aug 3, 2026</div><div>Last month = July · MTD = August · YTD = 2026</div>`;
+
+function rows(w){
+  return w.periods.map(pr=>{
+    if(pr.a===null || pr.a===undefined && w.unit!=="$"){
+      if(pr.a===null) return `<tr><td>${pr.p}</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td></tr>`;
+    }
+    let actual, vgoal, vly;
+    if(w.unit==="$"){
+      actual = `<span class="a">${usd(pr.a)}</span>`;
+      if(pr.a>0 && pr.g>0){ const att=pr.a/pr.g*100; vgoal=`<span class="${att>=100?'up':att>=90?'amb':'down'}">${att.toFixed(0)}%</span> <span class="dim">of ${usdS(pr.g)}</span>`; }
+      else vgoal = pr.g>0 ? `<span class="down">0%</span> <span class="dim">of ${usdS(pr.g)}</span>` : `<span class="dim">—</span>`;
+      if(pr.ly>0){ const y=(pr.a-pr.ly)/pr.ly*100; vly=`<span class="${y>=0?'up':'down'}">${sgn(y,"%")}</span>`; }
+      else vly=`<span class="dim">—</span>`;
+    } else {
+      const u = w.unit==="%"?"%":"";
+      actual = `<span class="a">${pr.a.toFixed(1)}${u}</span>${pr.resp?` <span class="dim">(${pr.resp})</span>`:""}`;
+      const gd = pr.a - w.flatGoal;
+      vgoal = `<span class="${gd>=0?'up':'down'}">${sgn(gd," pts")}</span> <span class="dim">vs ${w.flatGoal}${u}</span>`;
+      if(pr.ly!==null && pr.ly!==undefined){ const yd=pr.a-pr.ly; vly=`<span class="${yd>=0?'up':'down'}">${sgn(yd," pts")}</span> <span class="dim">(${pr.ly.toFixed(1)}${u})</span>`; }
+      else vly=`<span class="dim">—</span>`;
+    }
+    return `<tr><td>${pr.p}${pr.note?`<br><span class="dim" style="font-size:10px">${pr.note}</span>`:""}</td><td>${actual}</td><td>${vgoal}</td><td>${vly}</td></tr>`;
+  }).join("");
+}
+
+document.getElementById("grid").innerHTML = DATA.wigs.map(w=>{
+  const col = C[w.status];
+  let body;
+  if(w.pending){
+    body = `<div class="bt"><span>Target: <b>${w.target}</b></span><span>Window: <b>Aug–Dec 2026</b></span></div>
+      <div class="pending">${w.pending}</div>`;
+  } else {
+    const tgt = w.unit==="$" ? usdS(w.target) : (w.target+(w.unit==="%"?"%":""));
+    const base = w.unit==="$" ? usdS(w.baseline) : (w.baseline+(w.unit==="%"?"%":""));
+    body = `<div class="bt"><span>${w.baselineText} baseline: <b>${base}</b></span><span>2026 target: <b>${tgt}</b></span></div>
+      <table><thead><tr><th>Period</th><th>Actual</th><th>vs Goal</th><th>vs Last Yr</th></tr></thead>
+      <tbody>${rows(w)}</tbody></table>
+      ${w.note?`<div class="note">${w.note}</div>`:""}`;
+  }
+  return `<div class="wig"><div class="edge" style="background:${col}"></div>
+    <div class="wtop"><div class="wnum">WIG ${w.n}</div>
+      <div class="status" style="color:${col};background:${col}22">${w.statusText}</div></div>
+    <div class="wtitle">${w.title}</div>
+    <div class="wsourced">${w.source}</div>
+    ${body}</div>`;
+}).join("");
+
+document.getElementById("footer").innerHTML =
+  `Last Month = July 2026, MTD = August 2026 (through Aug 3), YTD = 2026 to date. “vs Goal” for WIG 1 is % of the daily TGL budget; for WIG 2 &amp; 3 it is points vs the flat 2026 target. “vs Last Yr” compares the same period in 2025. `+
+  `WIG 4 begins once August closes and is finalized (~Sep 11). Sources: <code>Sales4dx.xlsx</code>, <code>CBD 2026 Revenue Budget.xlsx</code> (Daily Goals · TGL Sales col J), Power BI, Qualtrics.`;
+</script>
+</body>
+</html>
