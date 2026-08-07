@@ -103,7 +103,7 @@
 
   <div class="panel">
     <h2>Rolling windows</h2>
-    <div class="cap">Trailing 30 / 60 / 90 / 180 days of completed income vs goal, budget &amp; last year · through the latest data date</div>
+    <div class="cap">Trailing 30 / 60 / 90 / 180 / 365 days of completed income vs goal, budget &amp; last year · through the latest data date · 2025 daily goals are not set, so the 365-day window shows the YoY comparison only</div>
     <div class="cards" id="trailing" style="margin-bottom:0"></div>
   </div>
 
@@ -167,12 +167,12 @@
 <script>
 /* ---- Embedded data (refreshed by the daily 8:00 AM task) ---- */
 const DATA = {
-  "generatedAt": "2026-08-07T13:10:50Z",
+  "generatedAt": "2026-08-07T13:55:22Z",
   "dataFrom": "2024-01-01",
   "dataAsOf": "2026-08-06",
   "goalAsOf": "2026-08-06",
-  "rows": 25406,
-  "incomeTotalAll": 27784535,
+  "rows": 25409,
+  "incomeTotalAll": 27816349,
   "today": "2026-08-07",
   "weekStartConvention": "Monday",
   "annualGoal": 7675075,
@@ -222,11 +222,11 @@ const DATA = {
     ]
   },
   "kpi": {
-    "yesterday": 31966.78,
-    "wtd": 110014.23,
-    "mtd": 110093.23,
-    "qtd": 1230122.07,
-    "ytd": 6788664.48
+    "yesterday": 41634.03,
+    "wtd": 141827.83,
+    "mtd": 141906.83,
+    "qtd": 1261935.67,
+    "ytd": 6820478.08
   },
   "goal": {
     "yesterday": 46428.57,
@@ -281,7 +281,7 @@ const DATA = {
     "2026-05": 767888,
     "2026-06": 1198542,
     "2026-07": 1120029,
-    "2026-08": 110093
+    "2026-08": 141907
   },
   "monthlyGoal": {
     "2026-01": 950000,
@@ -291,12 +291,16 @@ const DATA = {
     "2026-05": 975000,
     "2026-06": 1007849,
     "2026-07": 1092226,
-    "2026-08": 975000
+    "2026-08": 975000,
+    "2026-09": 0,
+    "2026-10": 0,
+    "2026-11": 0,
+    "2026-12": 0
   },
   "weekDaily": [
     [
       "2026-08-03",
-      14986.61
+      28525.96
     ],
     [
       "2026-08-04",
@@ -304,11 +308,11 @@ const DATA = {
     ],
     [
       "2026-08-05",
-      38943.07
+      47550.07
     ],
     [
       "2026-08-06",
-      31966.78
+      41634.03
     ],
     [
       "2026-08-07",
@@ -317,7 +321,7 @@ const DATA = {
   ],
   "trailing": {
     "d30": {
-      "actual": 1071119.33,
+      "actual": 1102932.93,
       "goal": 1079353.44,
       "budget": 1033108.72,
       "ly": 1017179.26,
@@ -327,7 +331,7 @@ const DATA = {
       ]
     },
     "d60": {
-      "actual": 2092498.09,
+      "actual": 2124311.69,
       "goal": 2056732.7,
       "budget": 1973186.4,
       "ly": 2017725.85,
@@ -337,7 +341,7 @@ const DATA = {
       ]
     },
     "d90": {
-      "actual": 3010639.64,
+      "actual": 3042453.24,
       "goal": 2968289.4,
       "budget": 2786435.46,
       "ly": 2768987.51,
@@ -347,7 +351,7 @@ const DATA = {
       ]
     },
     "d180": {
-      "actual": 5567492.77,
+      "actual": 5599306.37,
       "goal": 5698289.38,
       "budget": 5284697.75,
       "ly": 5093374.42,
@@ -357,7 +361,7 @@ const DATA = {
       ]
     },
     "d365": {
-      "actual": 11989638.86,
+      "actual": 12021452.46,
       "goal": null,
       "budget": null,
       "ly": 10212256.82,
@@ -369,9 +373,9 @@ const DATA = {
   },
   "breakdowns": {
     "asOf": "2026-08-06",
-    "ytdTotal": 6788664,
-    "count": 6204,
-    "avg": 1094,
+    "ytdTotal": 6820478,
+    "count": 6207,
+    "avg": 1099,
     "byBU": [
       [
         "HVAC-Install-CBD",
@@ -379,15 +383,15 @@ const DATA = {
       ],
       [
         "FIRE-Install-CBD",
-        1191329
+        1213659
       ],
       [
         "FIRE-Install-Com-CBD",
-        720467
+        737205
       ],
       [
         "HVAC-Service-CBD",
-        590298
+        590219
       ],
       [
         "FIRE-Service-CBD",
@@ -399,19 +403,19 @@ const DATA = {
       ],
       [
         "HVAC-Scheduled Service-CBD",
-        147891
+        147786
       ],
       [
         "Shop & Parts-CBD",
         64889
       ],
       [
-        "HVAC-Install-Com-CBD",
-        64456
-      ],
-      [
         "ELEC-Service-CBD",
         58772
+      ],
+      [
+        "HVAC-Install-Com-CBD",
+        57385
       ],
       [
         "PLMB-Install-CBD",
@@ -433,7 +437,7 @@ const DATA = {
       ],
       [
         "FIRE Install",
-        1855246
+        1877576
       ],
       [
         "ELEC Install",
@@ -449,7 +453,11 @@ const DATA = {
       ],
       [
         "HVAC Repair Aged",
-        211207
+        211128
+      ],
+      [
+        "FIRE Com Install",
+        102735
       ],
       [
         "FIRE Inspection",
@@ -457,11 +465,7 @@ const DATA = {
       ],
       [
         "HVAC Membership Visit Aged",
-        88560
-      ],
-      [
-        "FIRE Com Install",
-        85997
+        88455
       ],
       [
         "HVAC Membership Visit",
@@ -469,17 +473,17 @@ const DATA = {
       ],
       [
         "Other",
-        476638
+        469567
       ]
     ],
     "byCampaign": [
       [
         "Other - Main Number",
-        1748404
+        1756906
       ],
       [
         "Other - Referral",
-        914104
+        923772
       ],
       [
         "Digital - GMB/GBP",
@@ -491,7 +495,7 @@ const DATA = {
       ],
       [
         "Other - Retail",
-        441980
+        455703
       ],
       [
         "Digital - Organic",
@@ -499,7 +503,7 @@ const DATA = {
       ],
       [
         "Outbound Efforts",
-        373677
+        373598
       ],
       [
         "Digital - Other",
