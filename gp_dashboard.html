@@ -63,6 +63,7 @@ footer{margin-top:16px;color:var(--dim);font-size:11.5px;line-height:1.6}
 <div class="sub" id="sub"></div>
 <div class="periods" id="periods"></div>
 <div class="kpis" id="kpis"></div>
+<div class="bu" id="trade" style="grid-template-columns:repeat(2,1fr)"></div>
 <div class="bu" id="bu"></div>
 <div class="toolbar">
   <div class="seg" id="seg">
@@ -135,6 +136,19 @@ function render(){
    var dd=(p-tg);var ds=(dd>=0?'+':'')+dd.toFixed(1)+' pts vs '+tg+'% tgt';
    return '<div class="bucard"><div class="t">'+BULAB[b]+'</div><div class="p"><span class="pill '+cls(p,tg)+'">'+pct(p)+'</span></div>'+
      '<div class="m">'+money(x.gp)+' GP &middot; '+money(x.rev)+' rev &middot; '+x.jobs+' jobs</div>'+
+     '<div class="bar"><div class="fill" style="width:'+fillw+'%;background:'+col+'"></div><div class="tgt" style="left:'+tw+'%"></div></div>'+
+     '<div class="m" style="margin-top:5px">'+ds+'</div></div>';
+ }).join('');
+ // trade totals: Fireplace = FR+FC, HVAC = HR+HC
+ var TR={FP:{rev:0,gp:0,jobs:0,tw:0},HVAC:{rev:0,gp:0,jobs:0,tw:0}};
+ items.forEach(function(j){var t=j[2][0]=='F'?'FP':'HVAC';var o=TR[t];o.rev+=j[4];o.gp+=j[5];o.jobs++;o.tw+=(TARGET[j[2]]||0)*j[4];});
+ document.getElementById('trade').innerHTML=[['FP','Fireplace — all installs (Res + Com)'],['HVAC','HVAC — all installs (Res + Com)']].map(function(pr){
+   var o=TR[pr[0]];var p=o.rev?o.gp/o.rev*100:0;var tg=o.rev?o.tw/o.rev:0;
+   var fillw=Math.max(0,Math.min(100,p));var tw=Math.max(0,Math.min(100,tg));
+   var col=cls(p,tg)=='g'?'var(--green)':(cls(p,tg)=='a'?'var(--amber)':'var(--red)');
+   var dd=p-tg;var ds=(dd>=0?'+':'')+dd.toFixed(1)+' pts vs '+tg.toFixed(1)+'% tgt';
+   return '<div class="bucard"><div class="t" style="color:var(--ink);font-weight:750">'+pr[1]+'</div><div class="p" style="font-size:20px"><span class="pill '+cls(p,tg)+'">'+pct(p)+'</span></div>'+
+     '<div class="m">'+money(o.gp)+' GP &middot; '+money(o.rev)+' rev &middot; '+o.jobs+' jobs</div>'+
      '<div class="bar"><div class="fill" style="width:'+fillw+'%;background:'+col+'"></div><div class="tgt" style="left:'+tw+'%"></div></div>'+
      '<div class="m" style="margin-top:5px">'+ds+'</div></div>';
  }).join('');
