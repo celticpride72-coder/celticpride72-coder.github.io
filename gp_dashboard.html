@@ -19,38 +19,44 @@ h1{font-size:20px;margin:0 0 2px;font-weight:750}
 .kpi .lab{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
 .kpi .val{font-size:20px;font-weight:750;margin-top:3px}
 .kpi .val.sm{font-size:17px}
+.kpi .vt{font-size:11px;margin-top:3px;color:var(--dim)}
 .bu{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
 @media(max-width:700px){.bu{grid-template-columns:repeat(2,1fr)}}
-.bucard{background:var(--panel2);border:1px solid var(--edge);border-radius:10px;padding:10px 12px}
+.bucard{background:var(--panel2);border:1px solid var(--edge);border-radius:10px;padding:10px 12px;position:relative;overflow:hidden}
 .bucard .t{font-size:12px;color:var(--dim);font-weight:650}
 .bucard .p{font-size:18px;font-weight:750;margin-top:2px}
 .bucard .m{font-size:11.5px;color:var(--dim);margin-top:2px}
-.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.toolbar h2{font-size:14px;margin:0;font-weight:700}
+.bar{height:6px;border-radius:4px;background:#0d1218;margin-top:8px;position:relative;overflow:visible}
+.bar .fill{height:100%;border-radius:4px}
+.bar .tgt{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff;opacity:.85}
+.seg{display:inline-flex;border:1px solid var(--edge);border-radius:9px;overflow:hidden;margin-bottom:0}
+.seg button{background:var(--panel);color:var(--dim);border:0;padding:7px 13px;cursor:pointer;font-weight:650;font-size:12.5px}
+.seg button.active{background:var(--accent);color:#fff}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0 8px;flex-wrap:wrap}
 .search{background:var(--panel);border:1px solid var(--edge);color:var(--ink);border-radius:8px;padding:7px 10px;font-size:12.5px;width:230px;max-width:55vw}
 table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--edge);border-radius:10px;overflow:hidden}
 th,td{padding:8px 10px;text-align:right;font-size:12.5px;border-bottom:1px solid var(--edge)}
 th:first-child,td:first-child{text-align:left}
-th{background:#12161d;color:var(--dim);font-weight:650;cursor:pointer;user-select:none;white-space:nowrap;position:sticky;top:0}
+th{background:#12161d;color:var(--dim);font-weight:650;cursor:pointer;user-select:none;white-space:nowrap}
 th.s-asc::after{content:" \25B2";color:var(--accent)}
 th.s-desc::after{content:" \25BC";color:var(--accent)}
-tbody tr.loc{cursor:pointer}
-tbody tr.loc:hover{background:#1a212b}
+tbody tr.grp{cursor:pointer}
+tbody tr.grp:hover{background:#1a212b}
 .pill{display:inline-block;padding:2px 8px;border-radius:20px;font-weight:700;font-size:11.5px}
 .g{background:rgba(56,211,159,.15);color:var(--green)}
 .a{background:rgba(245,183,78,.15);color:var(--amber)}
 .r{background:rgba(255,107,107,.15);color:var(--red)}
-.loc .tw{color:var(--dim);font-size:11px;font-weight:500}
+.tw{color:var(--dim);font-size:11px;font-weight:500}
 .jobwrap{background:#10151c}
 .jobwrap td{padding:0}
 .jobtbl{width:100%;border-collapse:collapse;background:#10151c}
-.jobtbl th{background:#0d1218;position:static;cursor:default}
+.jobtbl th{background:#0d1218;cursor:default}
 .jobtbl td,.jobtbl th{font-size:11.5px;padding:6px 10px;border-bottom:1px solid #1a2029}
-.muted{color:var(--dim)}
 .chev{display:inline-block;width:12px;color:var(--dim);transition:.12s}
-tr.loc.open .chev{transform:rotate(90deg);color:var(--accent)}
+tr.grp.open .chev{transform:rotate(90deg);color:var(--accent)}
 footer{margin-top:16px;color:var(--dim);font-size:11.5px;line-height:1.6}
 .badge{display:inline-block;background:var(--panel2);border:1px solid var(--edge);border-radius:6px;padding:1px 6px;font-size:10.5px;color:var(--dim);margin-left:4px}
+.tgtnote{color:var(--dim);font-size:11px}
 </style></head>
 <body><div class="wrap">
 <h1>Gross Profit &mdash; Fireplace &amp; HVAC Installs</h1>
@@ -58,17 +64,16 @@ footer{margin-top:16px;color:var(--dim);font-size:11.5px;line-height:1.6}
 <div class="periods" id="periods"></div>
 <div class="kpis" id="kpis"></div>
 <div class="bu" id="bu"></div>
-<div class="toolbar"><h2>By Location ID <span class="badge" id="loccount"></span></h2>
-<input class="search" id="search" placeholder="Filter by location name or ID..."></div>
-<table id="tbl"><thead><tr>
-<th data-k="name">Location</th>
-<th data-k="jobs">Jobs</th>
-<th data-k="rev">Revenue</th>
-<th data-k="gp">Gross Profit $</th>
-<th data-k="gpp">GP %</th>
-<th data-k="sold">Sales</th>
-<th data-k="tech">Lead Tech</th>
-</tr></thead><tbody id="tb"></tbody></table>
+<div class="toolbar">
+  <div class="seg" id="seg">
+    <button data-m="loc" class="active">By Location ID</button>
+    <button data-m="sold">By Sales Person</button>
+    <button data-m="tech">By Lead Tech</button>
+  </div>
+  <input class="search" id="search" placeholder="Filter...">
+</div>
+<div class="tgtnote" id="tgtnote" style="margin-bottom:6px"></div>
+<table id="tbl"><thead id="th"></thead><tbody id="tb"></tbody></table>
 <footer id="foot"></footer>
 </div>
 <script>
@@ -76,16 +81,14 @@ var D={"jobs":[["148322892","1/2/2026","FR","143859502",5180,3513,"Aaron Fischer
 var JOBS=D.jobs, LOCS=D.locs;
 var BULAB={FR:"Fireplace Install (Res)",FC:"Fireplace Install (Com)",HR:"HVAC Install (Res)",HC:"HVAC Install (Com)"};
 var BUSHORT={FR:"FP-Res",FC:"FP-Com",HR:"HVAC-Res",HC:"HVAC-Com"};
+var TARGET={FR:48,FC:44,HR:53,HC:53};
 var TODAY=new Date(2026,7,8);
 function pd(s){var a=s.split('/');return new Date(+a[2],+a[0]-1,+a[1]);}
-// precompute date objects
 JOBS.forEach(function(j){j._d=pd(j[1]);});
 function roll(n){var s=new Date(TODAY);s.setDate(s.getDate()-n);return function(d){return d>=s&&d<=TODAY;};}
 var PERIODS=[
- {k:'30',l:'Last 30 days',f:roll(30)},
- {k:'60',l:'Last 60 days',f:roll(60)},
- {k:'90',l:'Last 90 days',f:roll(90)},
- {k:'180',l:'Last 180 days',f:roll(180)},
+ {k:'30',l:'Last 30 days',f:roll(30)},{k:'60',l:'Last 60 days',f:roll(60)},
+ {k:'90',l:'Last 90 days',f:roll(90)},{k:'180',l:'Last 180 days',f:roll(180)},
  {k:'360',l:'Last 360 days',f:roll(360)},
  {k:'mtd',l:'MTD',f:function(d){return d.getFullYear()==2026&&d.getMonth()==TODAY.getMonth();}},
  {k:'q1',l:'Q1',f:function(d){return d.getMonth()<=2;}},
@@ -94,78 +97,107 @@ var PERIODS=[
  {k:'q4',l:'Q4',f:function(d){return d.getMonth()>=9;}},
  {k:'2026',l:'2026 YTD',f:function(d){return true;}}
 ];
-var cur='90', sortK='gp', sortDir=-1, search='';
+var cur='90', mode='loc', sortK='gp', sortDir=-1, search='';
 function money(n){return '$'+Math.round(n).toLocaleString();}
 function pct(n){return n.toFixed(1)+'%';}
-function cls(p){return p<0?'r':(p<40?'a':'g');}
+function cls(gpp,tgt){if(tgt==null)tgt=40;if(gpp>=tgt)return 'g';if(gpp>=tgt-5)return 'a';return 'r';}
 function uniq(a){var o=[],s={};a.forEach(function(x){if(x&&!s[x]){s[x]=1;o.push(x);}});return o;}
+function curJobs(){var f=PERIODS.find(function(p){return p.k==cur;}).f;return JOBS.filter(function(j){return f(j._d);});}
 
-function compute(){
- var f=PERIODS.find(function(p){return p.k==cur;}).f;
- var rows={},tot={rev:0,gp:0,n:0},bu={};
- JOBS.forEach(function(j){
-   if(!f(j._d))return;
-   var loc=j[3];
-   var r=rows[loc]||(rows[loc]={loc:loc,name:LOCS[loc]||('#'+loc),rev:0,gp:0,jobs:0,sold:[],tech:[],items:[]});
-   r.rev+=j[4];r.gp+=j[5];r.jobs++;if(j[6])r.sold.push(j[6]);if(j[7])r.tech.push(j[7]);
-   r.items.push(j);
-   tot.rev+=j[4];tot.gp+=j[5];tot.n++;
-   var b=bu[j[2]]||(bu[j[2]]={rev:0,gp:0,n:0});b.rev+=j[4];b.gp+=j[5];b.n++;
+function groupBy(items,keyFn,nameFn){
+ var m={};
+ items.forEach(function(j){
+   var k=keyFn(j); if(k==null||k==='')k='(unassigned)';
+   var r=m[k]||(m[k]={key:k,name:nameFn?nameFn(k,j):k,rev:0,gp:0,jobs:0,tgtw:0,sold:[],tech:[],items:[]});
+   r.rev+=j[4];r.gp+=j[5];r.jobs++;r.tgtw+=(TARGET[j[2]]||0)*j[4];
+   if(j[6])r.sold.push(j[6]); if(j[7])r.tech.push(j[7]); r.items.push(j);
  });
- var arr=Object.keys(rows).map(function(k){var r=rows[k];r.gpp=r.rev?r.gp/r.rev*100:0;r.soldU=uniq(r.sold);r.techU=uniq(r.tech);return r;});
- return {arr:arr,tot:tot,bu:bu};
+ return Object.keys(m).map(function(k){var r=m[k];r.gpp=r.rev?r.gp/r.rev*100:0;r.tgt=r.rev?r.tgtw/r.rev:null;r.soldU=uniq(r.sold);r.techU=uniq(r.tech);return r;});
 }
 function render(){
- var c=compute();
+ var items=curJobs();
  // KPIs
- var t=c.tot, blended=t.rev?t.gp/t.rev*100:0, avg=t.n?t.gp/t.n:0;
+ var rev=0,gp=0,tgtw=0;items.forEach(function(j){rev+=j[4];gp+=j[5];tgtw+=(TARGET[j[2]]||0)*j[4];});
+ var blended=rev?gp/rev*100:0, btgt=rev?tgtw/rev:0, avg=items.length?gp/items.length:0;
+ var nLoc=groupBy(items,function(j){return j[3];}).length;
+ var d=blended-btgt, ds=(d>=0?'+':'')+d.toFixed(1)+' pts vs '+btgt.toFixed(1)+'% tgt';
  document.getElementById('kpis').innerHTML=
-  kpi('Revenue',money(t.rev))+kpi('Gross Profit $',money(t.gp))+
-  kpi('Blended GP %',pct(blended),'sm')+kpi('Jobs',t.n.toLocaleString())+
-  kpi('Locations',c.arr.length.toLocaleString())+kpi('Avg GP $ / job',money(avg),'sm');
- // BU
+  kpi('Revenue',money(rev))+kpi('Gross Profit $',money(gp))+
+  kpi('Blended GP %','<span class="pill '+cls(blended,btgt)+'">'+pct(blended)+'</span>','sm',ds)+
+  kpi('Jobs',items.length.toLocaleString())+kpi('Locations',nLoc.toLocaleString())+kpi('Avg GP $ / job',money(avg),'sm');
+ // BU cards with target markers
  var order=['FR','FC','HR','HC'];
+ var bg=groupBy(items,function(j){return j[2];});var bm={};bg.forEach(function(g){bm[g.key]=g;});
  document.getElementById('bu').innerHTML=order.map(function(b){
-   var x=c.bu[b]||{rev:0,gp:0,n:0};var p=x.rev?x.gp/x.rev*100:0;
-   return '<div class="bucard"><div class="t">'+BULAB[b]+'</div><div class="p"><span class="pill '+cls(p)+'">'+pct(p)+'</span></div>'+
-     '<div class="m">'+money(x.gp)+' GP &middot; '+money(x.rev)+' rev &middot; '+x.n+' jobs</div></div>';
+   var x=bm[b]||{rev:0,gp:0,jobs:0,gpp:0};var tg=TARGET[b];var p=x.gpp||0;
+   var fillw=Math.max(0,Math.min(100,p));var tw=Math.max(0,Math.min(100,tg));
+   var col=cls(p,tg)=='g'?'var(--green)':(cls(p,tg)=='a'?'var(--amber)':'var(--red)');
+   var dd=(p-tg);var ds=(dd>=0?'+':'')+dd.toFixed(1)+' pts vs '+tg+'% tgt';
+   return '<div class="bucard"><div class="t">'+BULAB[b]+'</div><div class="p"><span class="pill '+cls(p,tg)+'">'+pct(p)+'</span></div>'+
+     '<div class="m">'+money(x.gp)+' GP &middot; '+money(x.rev)+' rev &middot; '+x.jobs+' jobs</div>'+
+     '<div class="bar"><div class="fill" style="width:'+fillw+'%;background:'+col+'"></div><div class="tgt" style="left:'+tw+'%"></div></div>'+
+     '<div class="m" style="margin-top:5px">'+ds+'</div></div>';
  }).join('');
- // table
- var arr=c.arr.filter(function(r){if(!search)return true;var s=search.toLowerCase();return r.name.toLowerCase().indexOf(s)>=0||r.loc.indexOf(s)>=0;});
- arr.sort(function(a,b){var v;if(sortK=='name')v=a.name.localeCompare(b.name);else if(sortK=='sold')v=(a.soldU.join()).localeCompare(b.soldU.join());else if(sortK=='tech')v=(a.techU.join()).localeCompare(b.techU.join());else v=a[sortK]-b[sortK];return v*sortDir;});
- document.getElementById('loccount').textContent=arr.length+' shown';
+ renderTable(items);
+}
+var COLS={
+ loc:[['name','Location'],['jobs','Jobs'],['rev','Revenue'],['gp','Gross Profit $'],['gpp','GP %'],['tgt','Target'],['sold','Sales'],['tech','Lead Tech']],
+ sold:[['name','Sales Person'],['jobs','Jobs'],['rev','Revenue'],['gp','Gross Profit $'],['gpp','GP %'],['tgt','Target'],['tech','Techs used']],
+ tech:[['name','Lead Tech'],['jobs','Jobs'],['rev','Revenue'],['gp','Gross Profit $'],['gpp','GP %'],['tgt','Target'],['sold','Sold by']]
+};
+function renderTable(items){
+ var groups;
+ if(mode=='loc')groups=groupBy(items,function(j){return j[3];},function(k){return LOCS[k]||('#'+k);});
+ else if(mode=='sold')groups=groupBy(items,function(j){return j[6];});
+ else groups=groupBy(items,function(j){return j[7];});
+ // header
+ var cols=COLS[mode];
+ document.getElementById('th').innerHTML='<tr>'+cols.map(function(c){return '<th data-k="'+c[0]+'">'+c[1]+'</th>';}).join('')+'</tr>';
+ [].forEach.call(document.querySelectorAll('#th th'),function(th){
+   if(th.dataset.k==sortK)th.classList.add(sortDir>0?'s-asc':'s-desc');
+   th.onclick=function(){var k=th.dataset.k;if(sortK==k)sortDir*=-1;else{sortK=k;sortDir=(k=='name')?1:-1;}render();};
+ });
+ var arr=groups.filter(function(r){if(!search)return true;var s=search.toLowerCase();return (''+r.name).toLowerCase().indexOf(s)>=0||(''+r.key).indexOf(s)>=0;});
+ arr.sort(function(a,b){var v;if(sortK=='name')v=(''+a.name).localeCompare(''+b.name);else if(sortK=='sold')v=a.soldU.join().localeCompare(b.soldU.join());else if(sortK=='tech')v=a.techU.join().localeCompare(b.techU.join());else v=(a[sortK]||0)-(b[sortK]||0);return v*sortDir;});
+ document.getElementById('tgtnote').innerHTML='Targets: FP-Res 48% &middot; FP-Com 44% &middot; HVAC 53%. GP% pill = green at/above target, amber within 5 pts, red below. '+(mode=='loc'?'Location':(mode=='sold'?'Sales-person':'Lead-tech'))+' target = revenue-weighted blend of its jobs’ BU targets. '+arr.length+' shown.';
  var tb=document.getElementById('tb');tb.innerHTML='';
- arr.forEach(function(r,i){
-   var tr=document.createElement('tr');tr.className='loc';tr.dataset.i=i;
-   tr.innerHTML='<td><span class="chev">&#9654;</span> <b>'+r.loc+'</b> <span class="tw">'+esc(r.name)+'</span></td>'+
-     '<td>'+r.jobs+'</td><td>'+money(r.rev)+'</td><td>'+money(r.gp)+'</td>'+
-     '<td><span class="pill '+cls(r.gpp)+'">'+pct(r.gpp)+'</span></td>'+
-     '<td class="tw">'+esc(r.soldU.join(', ')||'&mdash;')+'</td><td class="tw">'+esc(r.techU.join(', ')||'&mdash;')+'</td>';
+ arr.forEach(function(r){
+   var tr=document.createElement('tr');tr.className='grp';
+   var cells=cols.map(function(c){
+     var k=c[0];
+     if(k=='name'){var extra=mode=='loc'?(' <span class="tw">'+esc(r.name)+'</span>'):'';var label=mode=='loc'?('<b>'+r.key+'</b>'):('<b>'+esc(r.name)+'</b>');return '<td><span class="chev">&#9654;</span> '+label+extra+'</td>';}
+     if(k=='jobs')return '<td>'+r.jobs+'</td>';
+     if(k=='rev')return '<td>'+money(r.rev)+'</td>';
+     if(k=='gp')return '<td>'+money(r.gp)+'</td>';
+     if(k=='gpp')return '<td><span class="pill '+cls(r.gpp,r.tgt)+'">'+pct(r.gpp)+'</span></td>';
+     if(k=='tgt')return '<td class="tw">'+(r.tgt!=null?r.tgt.toFixed(0)+'%':'&mdash;')+'</td>';
+     if(k=='sold')return '<td class="tw">'+esc(r.soldU.join(', ')||'&mdash;')+'</td>';
+     if(k=='tech')return '<td class="tw">'+esc(r.techU.join(', ')||'&mdash;')+'</td>';
+     return '<td></td>';
+   }).join('');
+   tr.innerHTML=cells;
    var det=document.createElement('tr');det.className='jobwrap';det.style.display='none';
-   det.innerHTML='<td colspan="7">'+jobTable(r)+'</td>';
+   det.innerHTML='<td colspan="'+cols.length+'">'+jobTable(r)+'</td>';
    tr.onclick=function(){var open=det.style.display!='none';det.style.display=open?'none':'';tr.classList.toggle('open',!open);};
    tb.appendChild(tr);tb.appendChild(det);
  });
 }
 function jobTable(r){
  var items=r.items.slice().sort(function(a,b){return b._d-a._d;});
- var rows=items.map(function(j){var p=j[4]?j[5]/j[4]*100:0;
+ var rows=items.map(function(j){var p=j[4]?j[5]/j[4]*100:0;var tg=TARGET[j[2]];
    return '<tr><td>'+j[0]+'</td><td>'+j[1]+'</td><td>'+BUSHORT[j[2]]+'</td><td>'+money(j[4])+'</td><td>'+money(j[5])+'</td>'+
-     '<td><span class="pill '+cls(p)+'">'+pct(p)+'</span></td><td>'+esc(j[6]||'&mdash;')+'</td><td>'+esc(j[7]||'&mdash;')+'</td></tr>';
+     '<td><span class="pill '+cls(p,tg)+'">'+pct(p)+'</span></td><td class="tw">'+tg+'%</td><td>'+esc(j[6]||'&mdash;')+'</td><td>'+esc(j[7]||'&mdash;')+'</td></tr>';
  }).join('');
- return '<table class="jobtbl"><thead><tr><th style="text-align:left">Job #</th><th style="text-align:left">Completed</th><th style="text-align:left">Type</th><th>Revenue</th><th>GP $</th><th>GP %</th><th style="text-align:left">Sales</th><th style="text-align:left">Lead Tech</th></tr></thead><tbody>'+rows+'</tbody></table>';
+ return '<table class="jobtbl"><thead><tr><th style="text-align:left">Job #</th><th style="text-align:left">Completed</th><th style="text-align:left">Type</th><th>Revenue</th><th>GP $</th><th>GP %</th><th>Tgt</th><th style="text-align:left">Sales</th><th style="text-align:left">Lead Tech</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
-function kpi(l,v,sm){return '<div class="kpi"><div class="lab">'+l+'</div><div class="val'+(sm?' sm':'')+'">'+v+'</div></div>';}
+function kpi(l,v,sm,vt){return '<div class="kpi"><div class="lab">'+l+'</div><div class="val'+(sm?' sm':'')+'">'+v+'</div>'+(vt?'<div class="vt">'+vt+'</div>':'')+'</div>';}
 function esc(s){return (''+s).replace(/&(?!mdash;|amp;)/g,'&amp;').replace(/</g,'&lt;');}
-// period buttons
 var pc=document.getElementById('periods');
 PERIODS.forEach(function(p){var b=document.createElement('button');b.className='pbtn'+(p.k==cur?' active':'');b.textContent=p.l;b.onclick=function(){cur=p.k;[].forEach.call(pc.children,function(x){x.classList.remove('active');});b.classList.add('active');render();};pc.appendChild(b);});
-// sort headers
-[].forEach.call(document.querySelectorAll('#tbl thead th'),function(th){th.onclick=function(){var k=th.dataset.k;if(sortK==k)sortDir*=-1;else{sortK=k;sortDir=(k=='name')?1:-1;}[].forEach.call(document.querySelectorAll('#tbl thead th'),function(x){x.classList.remove('s-asc','s-desc');});th.classList.add(sortDir>0?'s-asc':'s-desc');render();};});
+[].forEach.call(document.querySelectorAll('#seg button'),function(b){b.onclick=function(){mode=b.dataset.m;[].forEach.call(document.querySelectorAll('#seg button'),function(x){x.classList.remove('active');});b.classList.add('active');sortK='gp';sortDir=-1;render();};});
 document.getElementById('search').oninput=function(e){search=e.target.value;render();};
-// subtitle
 var maxd=JOBS.reduce(function(m,j){return j._d>m?j._d:m;},new Date(2000,0,1));
 document.getElementById('sub').innerHTML='Completed install jobs, 2026 &middot; excludes jobs closed in the last 5 days &middot; data through '+(maxd.getMonth()+1)+'/'+maxd.getDate()+'/'+maxd.getFullYear()+' &middot; '+JOBS.length+' jobs';
-document.getElementById('foot').innerHTML='<b>Scope:</b> Fireplace &amp; HVAC install business units only (FP Res/Com, HVAC Res/Com). <b>Gross Profit</b> = Jobs Gross Margin $ from the completed spreadsheet; <b>GP %</b> = revenue-weighted (Σ GP $ ÷ Σ Revenue). Rolling windows count backward from '+((TODAY.getMonth()+1)+'/'+TODAY.getDate()+'/'+TODAY.getFullYear())+'. Quarters and MTD are calendar 2026 (current quarter/month partial). GP % shading (red &lt;0, amber &lt;40, green &ge;40) is a visual guide only. Click any location to see its jobs.';
+document.getElementById('foot').innerHTML='<b>Scope:</b> Fireplace &amp; HVAC install business units only (FP Res/Com, HVAC Res/Com). <b>Gross Profit</b> = Jobs Gross Margin $ from the completed spreadsheet; <b>GP %</b> = revenue-weighted (Σ GP $ ÷ Σ Revenue). <b>Targets:</b> FP-Res 48%, FP-Com 44%, HVAC 53%; blended targets are revenue-weighted across the underlying jobs. Rolling windows count backward from '+((TODAY.getMonth()+1)+'/'+TODAY.getDate()+'/'+TODAY.getFullYear())+'; quarters/MTD are calendar 2026 (current quarter/month partial). Click any row to see its jobs.';
 render();
 </script></body></html>
