@@ -82,7 +82,7 @@ var D={"jobs":[["148322892","1/2/2026","FR","143859502",5180,3513,"Aaron Fischer
 var JOBS=D.jobs, LOCS=D.locs;
 var BULAB={FR:"Fireplace Install (Res)",FC:"Fireplace Install (Com)",HR:"HVAC Install (Res)",HC:"HVAC Install (Com)"};
 var BUSHORT={FR:"FP-Res",FC:"FP-Com",HR:"HVAC-Res",HC:"HVAC-Com"};
-var TARGET={FR:48,FC:44,HR:53,HC:53};
+var TARGET={FR:50,FC:44,HR:55,HC:55};
 var TODAY=new Date(2026,7,8);
 function pd(s){var a=s.split('/');return new Date(+a[2],+a[0]-1,+a[1]);}
 JOBS.forEach(function(j){j._d=pd(j[1]);});
@@ -173,7 +173,7 @@ function renderTable(items){
  });
  var arr=groups.filter(function(r){if(!search)return true;var s=search.toLowerCase();return (''+r.name).toLowerCase().indexOf(s)>=0||(''+r.key).indexOf(s)>=0;});
  arr.sort(function(a,b){var v;if(sortK=='name')v=(''+a.name).localeCompare(''+b.name);else if(sortK=='sold')v=a.soldU.join().localeCompare(b.soldU.join());else if(sortK=='tech')v=a.techU.join().localeCompare(b.techU.join());else v=(a[sortK]||0)-(b[sortK]||0);return v*sortDir;});
- document.getElementById('tgtnote').innerHTML='Targets: FP-Res 48% &middot; FP-Com 44% &middot; HVAC 53%. GP% pill = green at/above target, amber within 5 pts, red below. '+(mode=='loc'?'Location':(mode=='sold'?'Sales-person':'Lead-tech'))+' target = revenue-weighted blend of its jobs’ BU targets. '+arr.length+' shown.';
+ document.getElementById('tgtnote').innerHTML='Targets: FP-Res 50% &middot; FP-Com 44% &middot; HVAC 55%. GP% pill = green at/above target, amber within 5 pts, red below. '+(mode=='loc'?'Location':(mode=='sold'?'Sales-person':'Lead-tech'))+' target = revenue-weighted blend of its jobs’ BU targets. '+arr.length+' shown.';
  var tb=document.getElementById('tb');tb.innerHTML='';
  arr.forEach(function(r){
    var tr=document.createElement('tr');tr.className='grp';
@@ -212,6 +212,6 @@ PERIODS.forEach(function(p){var b=document.createElement('button');b.className='
 document.getElementById('search').oninput=function(e){search=e.target.value;render();};
 var maxd=JOBS.reduce(function(m,j){return j._d>m?j._d:m;},new Date(2000,0,1));
 document.getElementById('sub').innerHTML='Completed install jobs, 2026 &middot; excludes jobs closed in the last 5 days &middot; data through '+(maxd.getMonth()+1)+'/'+maxd.getDate()+'/'+maxd.getFullYear()+' &middot; '+JOBS.length+' jobs';
-document.getElementById('foot').innerHTML='<b>Scope:</b> Fireplace &amp; HVAC install business units only (FP Res/Com, HVAC Res/Com). <b>Gross Profit</b> = Jobs Gross Margin $ from the completed spreadsheet; <b>GP %</b> = revenue-weighted (Σ GP $ ÷ Σ Revenue). <b>Targets:</b> FP-Res 48%, FP-Com 44%, HVAC 53%; blended targets are revenue-weighted across the underlying jobs. Rolling windows count backward from '+((TODAY.getMonth()+1)+'/'+TODAY.getDate()+'/'+TODAY.getFullYear())+'; quarters/MTD are calendar 2026 (current quarter/month partial). Click any row to see its jobs.';
+document.getElementById('foot').innerHTML='<b>Scope:</b> Fireplace &amp; HVAC install business units only (FP Res/Com, HVAC Res/Com). <b>Gross Profit</b> = Jobs Gross Margin $ from the completed spreadsheet; <b>GP %</b> = revenue-weighted (Σ GP $ ÷ Σ Revenue). <b>Targets:</b> FP-Res 50%, FP-Com 44%, HVAC 55%; blended targets are revenue-weighted across the underlying jobs. Rolling windows count backward from '+((TODAY.getMonth()+1)+'/'+TODAY.getDate()+'/'+TODAY.getFullYear())+'; quarters/MTD are calendar 2026 (current quarter/month partial). Click any row to see its jobs.';
 render();
 </script></body></html>
