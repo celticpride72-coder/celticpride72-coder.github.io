@@ -39,6 +39,7 @@ footer{margin-top:18px;color:var(--dim);font-size:11.5px;line-height:1.6}
  <div class="card"><h3>Service Revenue by Tech</h3><table class="bt" id="v_rev"></table></div>
  <div class="card"><h3>TGL Sales by Tech <span class="muted">(lead generator)</span></h3><table class="bt" id="v_tgls"></table></div>
  <div class="card"><h3>TGL % by Tech <span class="muted">(leads &divide; service visits)</span></h3><table class="bt" id="v_tglp"></table></div>
+ <div class="card"><h3>Avg Ticket by Tech <span class="muted">(rev &divide; jobs w/ rev)</span></h3><table class="bt" id="v_avg"></table></div>
 </div>
 <footer id="foot"></footer>
 </div>
@@ -85,6 +86,7 @@ function render(){
  // TGL% by tech: leads(count) / visits(n)
  var tp={};Object.keys(s.byTech).forEach(function(tk){var visits=s.byTech[tk].n;var leads=(t.byTech[tk]||{}).count||0;if(visits>=3)tp[tk]=leads/visits*100;});
  techBars('v_tglp',tp,function(x){return x.toFixed(1)+'%';},true);
+ var av={};Object.keys(s.byTech).forEach(function(tk){var x=s.byTech[tk];if(x.nRev>=3)av[tk]=x.rev/x.nRev;});techBars('v_avg',av,money,true);
 }
 function mapObj(o,f){var r={};Object.keys(o).forEach(function(k){r[k]=f(o[k]);});return r;}
 function techBars(id,obj,fmt,desc){
