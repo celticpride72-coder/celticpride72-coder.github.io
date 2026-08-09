@@ -39,7 +39,6 @@ footer{margin-top:18px;color:var(--dim);font-size:11.5px;line-height:1.6}
  <div class="card"><h3>Service Revenue by Tech</h3><table class="bt" id="v_rev"></table></div>
  <div class="card"><h3>TGL Sales by Tech <span class="muted">(lead generator)</span></h3><table class="bt" id="v_tgls"></table></div>
  <div class="card"><h3>TGL % by Tech <span class="muted">(leads &divide; service visits)</span></h3><table class="bt" id="v_tglp"></table></div>
- <div class="card"><h3>NPS by Primary Tech</h3><div class="pending" id="v_nps">Pending — pulling from Qualtrics.</div></div>
 </div>
 <footer id="foot"></footer>
 </div>
@@ -64,7 +63,6 @@ function render(){
   kpi('Service Revenue',money(rev),[gTag(goal?rev/goal*100:0),yTag(yoy(rev,sly.rev))])+
   kpi('TGL Sales',money(t.sales),[yTag(yoy(t.sales,tly.sales)),'<span class="tag n">'+t.count+' sold est</span>'])+
   kpi('TGL %',tglPct.toFixed(1)+'%',[yTag(tglPct-tglPctLY),'<span class="tag n">'+t.count+' leads / '+jobs+' visits</span>'])+
-  kpi('Service NPS',(NPS&&NPS[cur]!=null?NPS[cur].toFixed(0):'&mdash;'),[NPS?yTag(NPS[cur]-NPS[LY[cur]]):'<span class="tag a">pending</span>'])+
   kpi('Avg Ticket <span class="muted">(rev jobs)</span>',money(avgTicket),[yTag(yoy(avgTicket,avgTicketLY))])+
   kpi('Avg Job Revenue <span class="muted">(all jobs)</span>',money(avgJob),[yTag(yoy(avgJob,avgJobLY))])+
   kpi('Service Jobs',jobs.toLocaleString(),[yTag(yoy(jobs,sly.n)),'<span class="tag n">'+jrev+' w/ revenue</span>'])+
@@ -100,6 +98,6 @@ function techBars(id,obj,fmt,desc){
 function esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 [].forEach.call(document.querySelectorAll('#seg button'),function(b){b.onclick=function(){cur=b.dataset.p;[].forEach.call(document.querySelectorAll('#seg button'),function(x){x.classList.remove('active');});b.classList.add('active');render();};});
 document.getElementById('sub').innerHTML='Fireplace &amp; HVAC service, maintenance &amp; scheduled-service units &middot; MTD / Last Month / YTD with prior-year (2025) comparison &middot; data as of 8/8/2026';
-document.getElementById('foot').innerHTML='<b>Service dept</b> = FIRE-Service, FIRE-Scheduled Service, Fireplace-Service-Residential, Fireplace-Maintenance, HVAC-Service, HVAC-Service-Residential, HVAC-Scheduled Service, HVAC-Maintenance (2026 &amp; 2025 naming). <b>Revenue / tickets / jobs</b> from the completed-jobs workbook (Assigned/Primary tech). <b>Avg Ticket</b> = revenue &divide; jobs with revenue; <b>Avg Job Revenue</b> = revenue &divide; all completed jobs. <b>Service Goal</b> from Daily Goals (Service Goal). <b>TGL</b> = sold estimates whose lead was generated from a service BU (Sales4dx, by Sold On); <b>TGL %</b> = TGL count &divide; service visits; TGL-by-tech credited to the lead generator. <b>NPS</b> pulled from Qualtrics (all HVAC + fireplace service/maintenance), by primary tech. Prior-year uses the same calendar window in 2025.';
+document.getElementById('foot').innerHTML='<b>Service dept</b> = FIRE-Service, FIRE-Scheduled Service, Fireplace-Service-Residential, Fireplace-Maintenance, HVAC-Service, HVAC-Service-Residential, HVAC-Scheduled Service, HVAC-Maintenance (2026 &amp; 2025 naming). <b>Revenue / tickets / jobs</b> from the completed-jobs workbook (Assigned/Primary tech). <b>Avg Ticket</b> = revenue &divide; jobs with revenue; <b>Avg Job Revenue</b> = revenue &divide; all completed jobs. <b>Service Goal</b> from Daily Goals (Service Goal). <b>TGL</b> = sold estimates whose lead was generated from a service BU (Sales4dx, by Sold On); <b>TGL %</b> = TGL count &divide; service visits; TGL-by-tech credited to the lead generator. Prior-year uses the same calendar window in 2025.';
 render();
 </script></body></html>
