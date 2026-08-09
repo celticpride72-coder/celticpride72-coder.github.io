@@ -1,0 +1,105 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Service Dashboard</title>
+<style>
+:root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--accent:#2bd4a7;--blue:#4c8dff;--red:#ff6b6b;--amber:#f5b74e;--green:#38d39f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 18px 60px}
+h1{font-size:20px;margin:0 0 2px;font-weight:750}.sub{color:var(--dim);font-size:12.5px;margin-bottom:14px}
+.seg{display:inline-flex;border:1px solid var(--edge);border-radius:9px;overflow:hidden;margin-bottom:16px}
+.seg button{background:var(--panel);color:var(--dim);border:0;padding:8px 16px;cursor:pointer;font-weight:650;font-size:13px}
+.seg button.active{background:var(--accent);color:#06231b}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:12px 13px}
+.kpi .lab{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.kpi .val{font-size:22px;font-weight:750;margin-top:3px}
+.kpi .row{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px}
+.g{background:rgba(56,211,159,.15);color:var(--green)}.a{background:rgba(245,183,78,.15);color:var(--amber)}.r{background:rgba(255,107,107,.15);color:var(--red)}.n{background:#222c38;color:var(--dim)}
+h2{font-size:14px;margin:16px 0 8px;font-weight:700}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--edge);border-radius:10px;overflow:hidden}
+th,td{padding:8px 10px;text-align:right;font-size:12.5px;border-bottom:1px solid var(--edge)}th:first-child,td:first-child{text-align:left}
+th{background:#12161d;color:var(--dim);font-weight:650}
+tr.tot td{font-weight:750;background:#12161d}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:4px 0 8px}
+.card h3{font-size:13px;margin:10px 12px 6px;font-weight:700}
+.bar{height:16px;background:var(--accent);border-radius:3px;display:inline-block;vertical-align:middle;opacity:.85}
+.bt{width:100%;border:0}.bt td,.bt th{border-bottom:1px solid var(--edge);font-size:12px;padding:6px 12px}
+.muted{color:var(--dim)}.pending{color:var(--amber);font-size:12px;padding:10px 12px}
+footer{margin-top:18px;color:var(--dim);font-size:11.5px;line-height:1.6}
+</style></head><body><div class="wrap">
+<h1>Service Department Dashboard</h1><div class="sub" id="sub"></div>
+<div class="seg" id="seg"><button data-p="mtd" class="active">MTD</button><button data-p="lm">Last Month</button><button data-p="ytd">YTD</button></div>
+<div class="kpis" id="kpis"></div>
+<h2>By Business Unit <span class="muted" id="buper" style="font-weight:400;font-size:12px"></span></h2>
+<table id="butbl"><thead><tr><th>Business Unit</th><th>Revenue</th><th>Jobs</th><th>Jobs w/ rev</th><th>Avg Ticket</th><th>Avg Job Rev</th></tr></thead><tbody id="butb"></tbody></table>
+<h2>By Service Tech (Primary)</h2>
+<div class="grid2">
+ <div class="card"><h3>Service Revenue by Tech</h3><table class="bt" id="v_rev"></table></div>
+ <div class="card"><h3>TGL Sales by Tech <span class="muted">(lead generator)</span></h3><table class="bt" id="v_tgls"></table></div>
+ <div class="card"><h3>TGL % by Tech <span class="muted">(leads &divide; service visits)</span></h3><table class="bt" id="v_tglp"></table></div>
+ <div class="card"><h3>NPS by Primary Tech</h3><div class="pending" id="v_nps">Pending — pulling from Qualtrics.</div></div>
+</div>
+<footer id="foot"></footer>
+</div>
+<script>
+var D={"svc":{"mtd":{"rev":21643.63,"n":78,"nRev":60,"byBU":{"HVAC-Service-CBD":{"rev":13712.76,"n":46,"nRev":35},"FIRE-Service-CBD":{"rev":3539.15,"n":15,"nRev":10},"HVAC-Scheduled Service-CBD":{"rev":2921.72,"n":8,"nRev":8},"FIRE-Scheduled Service-CBD":{"rev":1470,"n":9,"nRev":7}},"byTech":{"Kurtis K":{"rev":2132.12,"n":9,"nRev":7},"Jesse T":{"rev":4775,"n":13,"nRev":12},"Michael K":{"rev":3116.42,"n":13,"nRev":10},"Mike R":{"rev":5517.09,"n":12,"nRev":11},"Robert J":{"rev":2201,"n":10,"nRev":8},"Isaiah R":{"rev":560,"n":8,"nRev":3},"Lee P":{"rev":2914,"n":9,"nRev":7},"Chuck F":{"rev":428,"n":4,"nRev":2}}},"lm":{"rev":116867.46,"n":436,"nRev":338,"byBU":{"HVAC-Service-CBD":{"rev":102947.38,"n":365,"nRev":284},"HVAC-Scheduled Service-CBD":{"rev":4990.2,"n":29,"nRev":29},"FIRE-Service-CBD":{"rev":8168.88,"n":39,"nRev":22},"FIRE-Scheduled Service-CBD":{"rev":761,"n":3,"nRev":3}},"byTech":{"Brock H":{"rev":7588.6,"n":28,"nRev":22},"Mike R":{"rev":9126.72,"n":39,"nRev":26},"Robert J":{"rev":10219.33,"n":49,"nRev":37},"Buck S":{"rev":174.25,"n":1,"nRev":1},"Kurtis K":{"rev":16959.81,"n":40,"nRev":36},"Jacob S":{"rev":10206.76,"n":29,"nRev":26},"Michael K":{"rev":22975.46,"n":70,"nRev":57},"Andrew R":{"rev":7259.42,"n":41,"nRev":34},"Isaiah R":{"rev":14579.14,"n":55,"nRev":39},"Jesse T":{"rev":14572.54,"n":58,"nRev":46},"Lee P":{"rev":2011,"n":15,"nRev":9},"Chuck F":{"rev":873,"n":8,"nRev":3},"1. Install Tech":{"rev":321.43,"n":2,"nRev":2},"Jason L":{"rev":0,"n":1,"nRev":0}}},"ytd":{"rev":1103716.87,"n":4032,"nRev":3286,"byBU":{"HVAC-Service-CBD":{"rev":590219.23,"n":1914,"nRev":1434},"FIRE-Service-CBD":{"rev":323290.94,"n":1166,"nRev":918},"FIRE-Scheduled Service-CBD":{"rev":42421.01,"n":156,"nRev":152},"HVAC-Scheduled Service-CBD":{"rev":147785.69,"n":796,"nRev":782}},"byTech":{"Tom T":{"rev":4598.6,"n":18,"nRev":10},"Isaiah R":{"rev":125039.97,"n":436,"nRev":367},"Robert J":{"rev":104505.14,"n":449,"nRev":386},"Jacob S":{"rev":133886.71,"n":400,"nRev":353},"Lee P":{"rev":82131.93,"n":375,"nRev":249},"Ethan E":{"rev":73367.83,"n":264,"nRev":227},"Michael K":{"rev":125639.34,"n":454,"nRev":393},"Kurtis K":{"rev":110311.18,"n":392,"nRev":315},"Jesse T":{"rev":104652.19,"n":460,"nRev":379},"Chuck F":{"rev":118387.71,"n":259,"nRev":179},"1. Install Tech":{"rev":1471.55,"n":10,"nRev":6},"Chris B":{"rev":1564.3,"n":1,"nRev":1},"Brock H":{"rev":62629.9,"n":249,"nRev":212},"Luke H":{"rev":1586,"n":2,"nRev":2},"Aaron Fischer":{"rev":406,"n":2,"nRev":1},"Garrett G":{"rev":903.71,"n":5,"nRev":1},"Jeremy P":{"rev":480,"n":3,"nRev":1},"Buck S":{"rev":947.25,"n":4,"nRev":3},"Jason L":{"rev":799,"n":3,"nRev":1},"Mitch L":{"rev":1386,"n":1,"nRev":1},"Howard B":{"rev":0,"n":1,"nRev":0},"Joe H":{"rev":0,"n":4,"nRev":0},"Andrew Ryan":{"rev":148,"n":1,"nRev":1},"Andrew R":{"rev":26101.53,"n":155,"nRev":136},"Micah G":{"rev":0,"n":1,"nRev":0},"Mike R":{"rev":22773.03,"n":83,"nRev":62}}},"mtd_ly":{"rev":30836.64,"n":137,"nRev":108},"lm_ly":{"rev":131473.78,"n":456,"nRev":359},"ytd_ly":{"rev":1008947.59,"n":3670,"nRev":2918}},"tgl":{"mtd":{"sales":57545.47,"count":7,"byTech":{"Robert J":{"sales":31610.6,"count":4},"Lee P":{"sales":20672.2,"count":2},"Michael K":{"sales":5262.67,"count":1}}},"lm":{"sales":383878.23,"count":41,"byTech":{"Lee P":{"sales":13342.68,"count":2},"Mike R":{"sales":7507.92,"count":3},"Michael K":{"sales":142664.29,"count":16},"Isaiah R":{"sales":34652.64,"count":2},"Kurtis K":{"sales":69828.56,"count":5},"Brock H":{"sales":9877,"count":1},"Jacob S":{"sales":32560.2,"count":4},"Jesse T":{"sales":34698,"count":4},"Robert J":{"sales":38746.94,"count":4}}},"ytd":{"sales":2239330.08,"count":264,"byTech":{"Michael K":{"sales":632803.22,"count":71},"Robert J":{"sales":377573.62,"count":44},"Tom T":{"sales":16556,"count":1},"Lee P":{"sales":129876.77,"count":19},"Isaiah R":{"sales":108580.62,"count":12},"Jesse T":{"sales":261282.63,"count":34},"Kurtis K":{"sales":285950.51,"count":30},"Jacob S":{"sales":249761.32,"count":28},"Chuck F":{"sales":65832.77,"count":5},"Jake P":{"sales":1013,"count":1},"Ethan E":{"sales":31518.09,"count":4},"Brock H":{"sales":34210.56,"count":8},"Andrew R":{"sales":16864.05,"count":3},"Mike R":{"sales":27506.92,"count":4}}},"mtd_ly":{"sales":115251.47,"count":9},"lm_ly":{"sales":259129.79,"count":27},"ytd_ly":{"sales":1732431.65,"count":171}},"goal":{"mtd":32143,"lm":150000,"ytd":1090143},"nps":null};var SVC=D.svc,TGL=D.tgl,GOAL=D.goal,NPS=D.nps;
+var cur='mtd';
+var LY={mtd:'mtd_ly',lm:'lm_ly',ytd:'ytd_ly'};
+var PLAB={mtd:'Month-to-date (Aug 2026)',lm:'Last Month (July 2026)',ytd:'Year-to-date 2026'};
+function money(n){return '$'+Math.round(n).toLocaleString();}
+function pct(n){return (n>=0?'':'')+n.toFixed(1)+'%';}
+function yoy(cur,ly){if(ly==null||ly===0)return null;return (cur-ly)/Math.abs(ly)*100;}
+function yTag(v){if(v==null)return '<span class="tag n">n/a LY</span>';var c=v>=0?'g':'r';return '<span class="tag '+c+'">'+(v>=0?'+':'')+v.toFixed(1)+'% vs LY</span>';}
+function gTag(p){var c=p>=100?'g':(p>=95?'a':'r');return '<span class="tag '+c+'">'+p.toFixed(0)+'% of goal</span>';}
+function kpi(lab,val,tags){return '<div class="kpi"><div class="lab">'+lab+'</div><div class="val">'+val+'</div><div class="row">'+tags.join('')+'</div></div>';}
+function render(){
+ var s=SVC[cur],sly=SVC[LY[cur]],t=TGL[cur],tly=TGL[LY[cur]],goal=GOAL[cur];
+ var rev=s.rev,jobs=s.n,jrev=s.nRev;
+ var avgTicket=jrev?rev/jrev:0, avgJob=jobs?rev/jobs:0;
+ var avgTicketLY=sly.nRev?sly.rev/sly.nRev:0, avgJobLY=sly.n?sly.rev/sly.n:0;
+ var tglPct=jobs?t.count/jobs*100:0, tglPctLY=sly.n?tly.count/sly.n*100:0;
+ document.getElementById('kpis').innerHTML=
+  kpi('Service Revenue',money(rev),[gTag(goal?rev/goal*100:0),yTag(yoy(rev,sly.rev))])+
+  kpi('TGL Sales',money(t.sales),[yTag(yoy(t.sales,tly.sales)),'<span class="tag n">'+t.count+' sold est</span>'])+
+  kpi('TGL %',tglPct.toFixed(1)+'%',[yTag(tglPct-tglPctLY),'<span class="tag n">'+t.count+' leads / '+jobs+' visits</span>'])+
+  kpi('Service NPS',(NPS&&NPS[cur]!=null?NPS[cur].toFixed(0):'&mdash;'),[NPS?yTag(NPS[cur]-NPS[LY[cur]]):'<span class="tag a">pending</span>'])+
+  kpi('Avg Ticket <span class="muted">(rev jobs)</span>',money(avgTicket),[yTag(yoy(avgTicket,avgTicketLY))])+
+  kpi('Avg Job Revenue <span class="muted">(all jobs)</span>',money(avgJob),[yTag(yoy(avgJob,avgJobLY))])+
+  kpi('Service Jobs',jobs.toLocaleString(),[yTag(yoy(jobs,sly.n)),'<span class="tag n">'+jrev+' w/ revenue</span>'])+
+  kpi('Service Goal',money(goal),['<span class="tag '+(rev>=goal?'g':'r')+'">'+money(rev-goal)+' vs goal</span>']);
+ // BU table + trade totals
+ document.getElementById('buper').textContent='— '+PLAB[cur];
+ var bus=Object.keys(s.byBU).sort(function(a,b){return s.byBU[b].rev-s.byBU[a].rev;});
+ var tb=document.getElementById('butb');tb.innerHTML='';
+ function burow(name,x,tot){var at=x.nRev?x.rev/x.nRev:0,aj=x.n?x.rev/x.n:0;
+   return '<tr'+(tot?' class="tot"':'')+'><td>'+name+'</td><td>'+money(x.rev)+'</td><td>'+x.n+'</td><td>'+x.nRev+'</td><td>'+money(at)+'</td><td>'+money(aj)+'</td></tr>';}
+ // trade totals
+ var fp={rev:0,n:0,nRev:0},hv={rev:0,n:0,nRev:0};
+ bus.forEach(function(b){var x=s.byBU[b];var o=/^FIRE|^Fireplace/i.test(b)?fp:hv;o.rev+=x.rev;o.n+=x.n;o.nRev+=x.nRev;});
+ tb.innerHTML+=burow('Fireplace — all service',fp,true)+burow('HVAC — all service',hv,true);
+ bus.forEach(function(b){tb.innerHTML+=burow(b,s.byBU[b]);});
+ tb.innerHTML+=burow('TOTAL',{rev:rev,n:jobs,nRev:jrev},true);
+ // tech visuals
+ techBars('v_rev',mapObj(s.byTech,function(v){return v.rev;}),money,true);
+ techBars('v_tgls',mapObj(t.byTech,function(v){return v.sales;}),money,true);
+ // TGL% by tech: leads(count) / visits(n)
+ var tp={};Object.keys(s.byTech).forEach(function(tk){var visits=s.byTech[tk].n;var leads=(t.byTech[tk]||{}).count||0;if(visits>=3)tp[tk]=leads/visits*100;});
+ techBars('v_tglp',tp,function(x){return x.toFixed(1)+'%';},true);
+}
+function mapObj(o,f){var r={};Object.keys(o).forEach(function(k){r[k]=f(o[k]);});return r;}
+function techBars(id,obj,fmt,desc){
+ var arr=Object.keys(obj).map(function(k){return [k,obj[k]];}).filter(function(x){return x[1]>0;});
+ arr.sort(function(a,b){return b[1]-a[1];});arr=arr.slice(0,12);
+ var max=arr.length?arr[0][1]:1;
+ var html=arr.map(function(x){var w=Math.max(2,x[1]/max*120);
+   return '<tr><td style="width:34%">'+esc(x[0])+'</td><td style="text-align:right;width:22%">'+fmt(x[1])+'</td><td><span class="bar" style="width:'+w+'px"></span></td></tr>';}).join('');
+ document.getElementById(id).innerHTML=html||'<tr><td class="muted" style="padding:10px 12px">No data this period.</td></tr>';
+}
+function esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+[].forEach.call(document.querySelectorAll('#seg button'),function(b){b.onclick=function(){cur=b.dataset.p;[].forEach.call(document.querySelectorAll('#seg button'),function(x){x.classList.remove('active');});b.classList.add('active');render();};});
+document.getElementById('sub').innerHTML='Fireplace &amp; HVAC service, maintenance &amp; scheduled-service units &middot; MTD / Last Month / YTD with prior-year (2025) comparison &middot; data as of 8/8/2026';
+document.getElementById('foot').innerHTML='<b>Service dept</b> = FIRE-Service, FIRE-Scheduled Service, Fireplace-Service-Residential, Fireplace-Maintenance, HVAC-Service, HVAC-Service-Residential, HVAC-Scheduled Service, HVAC-Maintenance (2026 &amp; 2025 naming). <b>Revenue / tickets / jobs</b> from the completed-jobs workbook (Assigned/Primary tech). <b>Avg Ticket</b> = revenue &divide; jobs with revenue; <b>Avg Job Revenue</b> = revenue &divide; all completed jobs. <b>Service Goal</b> from Daily Goals (Service Goal). <b>TGL</b> = sold estimates whose lead was generated from a service BU (Sales4dx, by Sold On); <b>TGL %</b> = TGL count &divide; service visits; TGL-by-tech credited to the lead generator. <b>NPS</b> pulled from Qualtrics (all HVAC + fireplace service/maintenance), by primary tech. Prior-year uses the same calendar window in 2025.';
+render();
+</script></body></html>
