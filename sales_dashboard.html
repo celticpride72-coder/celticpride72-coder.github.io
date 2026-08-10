@@ -1,273 +1,266 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CBD Sales Dashboard</title>
 <style>
-:root{--bg:#0d1117;--panel:#151b23;--panel2:#1b2230;--line:#2a3240;--txt:#e6edf3;--dim:#8b98a8;--good:#3fb950;--warn:#d29922;--bad:#f85149;--acc:#58a6ff}
+:root{
+  --bg:#0f1218; --panel:#171c26; --panel2:#1d2430; --line:#2a3342;
+  --txt:#e8edf5; --muted:#93a1b5; --dim:#6b7a90;
+  --green:#22c55e; --amber:#f59e0b; --red:#ef4444; --blue:#3b82f6; --violet:#8b5cf6;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:1240px;margin:0 auto;padding:22px 18px 46px}
-header{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:6px}
-h1{font-size:22px;margin:0;letter-spacing:-.3px}
-.sub{color:var(--dim);font-size:12.5px}
-h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--dim);margin:26px 0 10px;font-weight:600}
-.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px 13px}
-.card-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--acc);font-weight:700}
-.card-range{font-size:10.5px;color:var(--dim);margin-top:1px}
-.card-value{font-size:22px;font-weight:650;margin:7px 0 9px;letter-spacing:-.5px}
-.metrics{display:flex;flex-direction:column;gap:3px;border-top:1px solid var(--line);padding-top:8px}
-.metric{display:grid;grid-template-columns:46px 1fr auto;align-items:center;gap:5px;font-size:11.5px}
-.mlabel{color:var(--dim)}
-.mval{font-weight:700;font-variant-numeric:tabular-nums}
-.mtgt{color:#6d7987;font-size:10.5px;font-variant-numeric:tabular-nums}
-.good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)} .neu{color:var(--dim)}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px}
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-th,td{padding:6px 8px;text-align:right;font-variant-numeric:tabular-nums;border-bottom:1px solid var(--line)}
-thead th{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--dim);font-weight:600}
-tbody th,tfoot th{text-align:left;font-weight:600}
-tr.roll th{color:var(--dim)}
-tr.roll:first-of-type td,tr.roll:first-of-type th{border-top:2px solid var(--line)}
-tfoot th,tfoot td{border-bottom:none;border-top:1px solid var(--line);color:var(--dim)}
-.chartwrap{position:relative}
-.chart{width:100%;height:300px;display:block}
-.bar{opacity:.95}
-.b2024{fill:#30475e} .b2025{fill:#3d6fa8} .b2026{fill:#58a6ff}
-.hatched{fill:url(#hatch)}
-.gtick{stroke:#f0c674;stroke-width:2;stroke-dasharray:5 3}
-.grid{stroke:#222a35;stroke-width:1}
-.gl{fill:#5b6674;font-size:9px}
-.mlabels{display:grid;grid-template-columns:repeat(32,1fr);margin-top:4px}
-.mlab{font-size:9px;color:var(--dim);text-align:center;line-height:1.15}
-.mlab span{display:block;font-size:8px;opacity:.65}
-.mlab.cur{color:var(--acc);font-weight:700}
-.legend{display:flex;gap:14px;font-size:10.5px;color:var(--dim);margin-top:9px;flex-wrap:wrap}
-.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
-.week{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.day{background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:9px;text-align:center}
-.dow{font-size:10.5px;color:var(--acc);font-weight:700;letter-spacing:.05em}
-.dnum{font-size:10px;color:var(--dim)}
-.dval{font-size:14.5px;font-weight:650;margin:5px 0 2px}
-.dpct{font-size:11.5px;font-weight:700}
-.dgoal{font-size:9.5px;color:#6d7987;margin-top:2px}
-.bds{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
-.bd h3{font-size:12px;margin:0 0 8px;color:var(--txt);font-weight:650}
-.bdt th:first-child{max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.shcell{width:110px;position:relative}
-.shbar{position:absolute;left:8px;top:50%;transform:translateY(-50%);height:8px;background:#2d5a86;border-radius:2px;max-width:72px}
-.shtxt{position:relative;padding-left:80px;color:var(--dim);font-size:11px}
-footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);color:var(--dim);font-size:11.5px;line-height:1.6}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.week{grid-template-columns:repeat(3,1fr)}}
-</style></head><body>
+body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1500px;margin:0 auto;padding:28px 22px 60px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+h1{font-size:24px;margin:0;letter-spacing:-.3px}
+.sub{color:var(--muted);font-size:13px}
+.asof{color:var(--dim);font-size:12.5px;margin:4px 0 22px}
+h2{font-size:14px;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);margin:30px 0 12px;font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px}
+.card .lbl{font-size:11.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card .rng{font-size:10.5px;color:var(--dim);margin-top:3px}
+.card .val{font-size:26px;font-weight:700;margin:10px 0 12px;letter-spacing:-.6px}
+.metrics{display:flex;flex-direction:column;gap:7px}
+.m{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.m .k{color:var(--muted)}
+.m .v{font-weight:700;font-variant-numeric:tabular-nums}
+.g{color:var(--green)} .a{color:var(--amber)} .r{color:var(--red)} .n{color:var(--dim)}
+.bar{height:5px;border-radius:3px;background:#232b38;overflow:hidden;margin-top:2px}
+.bar>i{display:block;height:100%;border-radius:3px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);font-weight:600}
+tbody tr:last-child td{border-bottom:none}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 18px 12px}
+.bars{display:flex;align-items:flex-end;gap:5px;height:230px;padding-top:6px;overflow-x:auto}
+.col{flex:1 1 0;min-width:22px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
+.col .b{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#4d8ef7,#2b5fbf);position:relative}
+.col.cur .b{background:repeating-linear-gradient(135deg,#4d8ef7,#4d8ef7 5px,#2b5fbf 5px,#2b5fbf 10px)}
+.col .gt{position:absolute;left:0;right:0;border-top:2px dashed #f59e0b;z-index:2}
+.col .cap{font-size:9.5px;color:var(--dim);margin-top:6px;white-space:nowrap;transform:rotate(-60deg);transform-origin:center;height:34px}
+.legend{display:flex;gap:18px;font-size:11.5px;color:var(--muted);margin-top:30px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.day{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:11px 10px}
+.day .d{font-size:11px;color:var(--muted);font-weight:600}
+.day .dt{font-size:10px;color:var(--dim);margin-bottom:7px}
+.day .amt{font-size:15px;font-weight:700}
+.day .gl{font-size:10.5px;color:var(--dim);margin-top:3px}
+.day.future{opacity:.35}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+footer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font-size:11.5px;line-height:1.7}
+.note{background:#1a2230;border:1px solid #2c3a4f;border-left:3px solid var(--amber);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--muted);margin:14px 0 0}
+@media(max-width:1200px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}.grid3{grid-template-columns:1fr}}
+@media(max-width:760px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.week{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
 <div class="wrap">
   <header>
-    <div>
-      <h1>Comfort By Design &mdash; Sales Dashboard</h1>
-      <div class="sub">Sold estimates vs Goal, Budget &amp; Last Year &nbsp;&middot;&nbsp; data as of <strong>2026-08-06</strong> &nbsp;&middot;&nbsp; generated Aug 7, 2026 8:07 AM</div>
-    </div>
+    <h1>Comfort By Design &mdash; Sales Dashboard</h1>
+    <div class="sub">Sold estimates vs Goal, Budget &amp; Last Year</div>
   </header>
+  <div class="asof" id="asof"></div>
 
   <h2>Period to date</h2>
-  <div class="cards">
-      <div class="card">
-        <div class="card-label">Yesterday</div>
-        <div class="card-range">8/6</div>
-        <div class="card-value">$42,176</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval good">105.4%</span><span class="mtgt">$40,000</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">112.4%</span><span class="mtgt">$37,530</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+12.2%</span><span class="mtgt">$37,606</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">WTD</div>
-        <div class="card-range">8/3 &ndash; 8/7</div>
-        <div class="card-value">$527,559</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval good">329.7%</span><span class="mtgt">$160,000</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">351.4%</span><span class="mtgt">$150,121</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+211.9%</span><span class="mtgt">$169,166</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">MTD</div>
-        <div class="card-range">8/1 &ndash; 8/7</div>
-        <div class="card-value">$537,421</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval good">335.9%</span><span class="mtgt">$160,000</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">358.0%</span><span class="mtgt">$150,121</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+217.7%</span><span class="mtgt">$169,166</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">QTD</div>
-        <div class="card-range">7/1 &ndash; 8/7</div>
-        <div class="card-value">$1,489,957</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval good">140.4%</span><span class="mtgt">$1,061,259</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">144.8%</span><span class="mtgt">$1,029,123</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+67.9%</span><span class="mtgt">$887,223</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">YTD</div>
-        <div class="card-range">1/1 &ndash; 8/7</div>
-        <div class="card-value">$5,728,201</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval warn">97.7%</span><span class="mtgt">$5,862,161</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">106.1%</span><span class="mtgt">$5,399,895</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+25.2%</span><span class="mtgt">$4,575,118</span></div>
-        </div>
-      </div>
-  </div>
+  <div class="cards" id="kpiCards"></div>
 
-  <h2>Rolling windows (anchored at 2026-08-06)</h2>
-  <div class="cards">
-      <div class="card">
-        <div class="card-label">Last 30</div>
-        <div class="card-range">7/8 &ndash; 8/6</div>
-        <div class="card-value">$1,325,926</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval good">147.8%</span><span class="mtgt">$897,394</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">152.5%</span><span class="mtgt">$869,304</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+76.8%</span><span class="mtgt">$750,155</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">Last 60</div>
-        <div class="card-range">6/8 &ndash; 8/6</div>
-        <div class="card-value">$2,187,500</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval good">127.1%</span><span class="mtgt">$1,721,052</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">132.2%</span><span class="mtgt">$1,654,664</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+31.6%</span><span class="mtgt">$1,661,871</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">Last 90</div>
-        <div class="card-range">5/9 &ndash; 8/6</div>
-        <div class="card-value">$3,105,432</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval good">123.6%</span><span class="mtgt">$2,512,209</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">129.7%</span><span class="mtgt">$2,394,122</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+36.1%</span><span class="mtgt">$2,281,568</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">Last 180</div>
-        <div class="card-range">2/8 &ndash; 8/6</div>
-        <div class="card-value">$4,681,363</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval warn">95.3%</span><span class="mtgt">$4,911,411</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval good">103.0%</span><span class="mtgt">$4,544,852</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+17.7%</span><span class="mtgt">$3,978,563</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-label">Last 365</div>
-        <div class="card-range">8/7 &ndash; 8/6</div>
-        <div class="card-value">$10,041,356</div>
-        <div class="metrics">
-          <div class="metric"><span class="mlabel">Goal</span><span class="mval neu">&mdash;</span><span class="mtgt">&mdash;</span></div>
-          <div class="metric"><span class="mlabel">Budget</span><span class="mval neu">&mdash;</span><span class="mtgt">&mdash;</span></div>
-          <div class="metric"><span class="mlabel">vs LY</span><span class="mval good">+40.2%</span><span class="mtgt">$7,161,549</span></div>
-        </div>
-      </div>
-  </div>
+  <h2>Rolling windows</h2>
+  <div class="cards" id="rollCards"></div>
 
   <h2>Attainment to date</h2>
   <div class="panel">
-    <table>
-      <thead><tr><th>Period</th><th>Actual</th><th>Goal</th><th>% Goal</th><th>+/&minus; Goal</th><th>Budget</th><th>% Budget</th><th>Last Yr</th><th>YoY</th></tr></thead>
-      <tbody>
-        <tr><th>Yesterday</th><td>$42,176</td><td>$40,000</td><td class='good'>105.4%</td><td class='good'>$2,176</td><td>$37,530</td><td class='good'>112.4%</td><td>$37,606</td><td class='good'>+12.2%</td></tr>
-        <tr><th>WTD</th><td>$527,559</td><td>$160,000</td><td class='good'>329.7%</td><td class='good'>$367,559</td><td>$150,121</td><td class='good'>351.4%</td><td>$169,166</td><td class='good'>+211.9%</td></tr>
-        <tr><th>MTD</th><td>$537,421</td><td>$160,000</td><td class='good'>335.9%</td><td class='good'>$377,421</td><td>$150,121</td><td class='good'>358.0%</td><td>$169,166</td><td class='good'>+217.7%</td></tr>
-        <tr><th>QTD</th><td>$1,489,957</td><td>$1,061,259</td><td class='good'>140.4%</td><td class='good'>$428,698</td><td>$1,029,123</td><td class='good'>144.8%</td><td>$887,223</td><td class='good'>+67.9%</td></tr>
-        <tr><th>YTD</th><td>$5,728,201</td><td>$5,862,161</td><td class='warn'>97.7%</td><td class='bad'>$-133,961</td><td>$5,399,895</td><td class='good'>106.1%</td><td>$4,575,118</td><td class='good'>+25.2%</td></tr>
-        <tr class='roll'><th>Last 30 days</th><td>$1,325,926</td><td>$897,394</td><td class='good'>147.8%</td><td class='good'>$428,532</td><td>$869,304</td><td class='good'>152.5%</td><td>$750,155</td><td class='good'>+76.8%</td></tr>
-        <tr class='roll'><th>Last 60 days</th><td>$2,187,500</td><td>$1,721,052</td><td class='good'>127.1%</td><td class='good'>$466,448</td><td>$1,654,664</td><td class='good'>132.2%</td><td>$1,661,871</td><td class='good'>+31.6%</td></tr>
-        <tr class='roll'><th>Last 90 days</th><td>$3,105,432</td><td>$2,512,209</td><td class='good'>123.6%</td><td class='good'>$593,224</td><td>$2,394,122</td><td class='good'>129.7%</td><td>$2,281,568</td><td class='good'>+36.1%</td></tr>
-        <tr class='roll'><th>Last 180 days</th><td>$4,681,363</td><td>$4,911,411</td><td class='warn'>95.3%</td><td class='bad'>$-230,049</td><td>$4,544,852</td><td class='good'>103.0%</td><td>$3,978,563</td><td class='good'>+17.7%</td></tr>
-        <tr class='roll'><th>Last 365 days</th><td>$10,041,356</td><td>&mdash;</td><td class='neu'>&mdash;</td><td class='neu'>&mdash;</td><td>&mdash;</td><td class='neu'>&mdash;</td><td>$7,161,549</td><td class='good'>+40.2%</td></tr>
-      </tbody>
+    <table id="attTable">
+      <thead><tr><th>Period</th><th>Range</th><th>Actual</th><th>Goal</th><th>% of Goal</th><th>Budget</th><th>% of Budget</th><th>Last Year</th><th>YoY</th></tr></thead>
+      <tbody></tbody>
     </table>
   </div>
 
   <h2>Monthly trend</h2>
-  <div class="panel">
-    <div class="chartwrap">
-      <svg width="0" height="0" style="position:absolute"><defs><pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="#58a6ff" opacity=".35"/><line x1="0" y1="0" x2="0" y2="6" stroke="#58a6ff" stroke-width="3"/></pattern></defs></svg>
-      <svg viewBox="0 0 1160 300" preserveAspectRatio="none" class="chart"><line class="grid" x1="0" y1="300.0" x2="1160" y2="300.0"/><text class="gl" x="2" y="297.0"></text><line class="grid" x1="0" y1="234.4" x2="1160" y2="234.4"/><text class="gl" x="2" y="231.4">$250k</text><line class="grid" x1="0" y1="168.9" x2="1160" y2="168.9"/><text class="gl" x="2" y="165.9">$500k</text><line class="grid" x1="0" y1="103.3" x2="1160" y2="103.3"/><text class="gl" x="2" y="100.3">$750k</text><line class="grid" x1="0" y1="37.7" x2="1160" y2="37.7"/><text class="gl" x="2" y="34.7">$1,000k</text><rect class="bar b2024" x="5.1" y="167.4" width="26.1" height="132.6" rx="2"><title>Jan 2024: $505,499</title></rect><rect class="bar b2024" x="41.3" y="226.7" width="26.1" height="73.3" rx="2"><title>Feb 2024: $279,320</title></rect><rect class="bar b2024" x="77.6" y="214.3" width="26.1" height="85.7" rx="2"><title>Mar 2024: $326,823</title></rect><rect class="bar b2024" x="113.8" y="225.6" width="26.1" height="74.4" rx="2"><title>Apr 2024: $283,538</title></rect><rect class="bar b2024" x="150.1" y="150.0" width="26.1" height="150.0" rx="2"><title>May 2024: $572,078</title></rect><rect class="bar b2024" x="186.3" y="160.9" width="26.1" height="139.1" rx="2"><title>Jun 2024: $530,315</title></rect><rect class="bar b2024" x="222.6" y="145.2" width="26.1" height="154.8" rx="2"><title>Jul 2024: $590,277</title></rect><rect class="bar b2024" x="258.8" y="187.4" width="26.1" height="112.6" rx="2"><title>Aug 2024: $429,146</title></rect><rect class="bar b2024" x="295.1" y="101.7" width="26.1" height="198.3" rx="2"><title>Sep 2024: $756,210</title></rect><rect class="bar b2024" x="331.3" y="152.6" width="26.1" height="147.4" rx="2"><title>Oct 2024: $561,905</title></rect><rect class="bar b2024" x="367.6" y="181.3" width="26.1" height="118.7" rx="2"><title>Nov 2024: $452,582</title></rect><rect class="bar b2024" x="403.8" y="169.4" width="26.1" height="130.6" rx="2"><title>Dec 2024: $497,866</title></rect><rect class="bar b2025" x="440.1" y="172.2" width="26.1" height="127.8" rx="2"><title>Jan 2025: $487,213</title></rect><rect class="bar b2025" x="476.3" y="175.3" width="26.1" height="124.7" rx="2"><title>Feb 2025: $475,289</title></rect><rect class="bar b2025" x="512.6" y="170.0" width="26.1" height="130.0" rx="2"><title>Mar 2025: $495,622</title></rect><rect class="bar b2025" x="548.8" y="123.4" width="26.1" height="176.6" rx="2"><title>Apr 2025: $673,500</title></rect><rect class="bar b2025" x="585.1" y="126.8" width="26.1" height="173.2" rx="2"><title>May 2025: $660,351</title></rect><rect class="bar b2025" x="621.3" y="75.7" width="26.1" height="224.3" rx="2"><title>Jun 2025: $855,181</title></rect><rect class="bar b2025" x="657.6" y="108.7" width="26.1" height="191.3" rx="2"><title>Jul 2025: $729,569</title></rect><rect class="bar b2025" x="693.8" y="151.0" width="26.1" height="149.0" rx="2"><title>Aug 2025: $568,014</title></rect><rect class="bar b2025" x="730.1" y="25.2" width="26.1" height="274.8" rx="2"><title>Sep 2025: $1,047,646</title></rect><rect class="bar b2025" x="766.3" y="22.2" width="26.1" height="277.8" rx="2"><title>Oct 2025: $1,059,139</title></rect><rect class="bar b2025" x="802.6" y="66.9" width="26.1" height="233.1" rx="2"><title>Nov 2025: $888,977</title></rect><rect class="bar b2025" x="838.8" y="61.3" width="26.1" height="238.7" rx="2"><title>Dec 2025: $910,168</title></rect><rect class="bar b2026" x="875.1" y="74.7" width="26.1" height="225.3" rx="2"><title>Jan 2026: $858,925</title></rect><line class="gtick" x1="872.2" y1="100.7" x2="904.1" y2="100.7"><title>Goal Jan 2026: $760,000</title></line><rect class="bar b2026" x="911.3" y="134.2" width="26.1" height="165.8" rx="2"><title>Feb 2026: $632,359</title></rect><line class="gtick" x1="908.4" y1="99.9" x2="940.3" y2="99.9"><title>Goal Feb 2026: $763,000</title></line><rect class="bar b2026" x="947.6" y="183.0" width="26.1" height="117.0" rx="2"><title>Mar 2026: $446,246</title></rect><line class="gtick" x1="944.7" y1="105.6" x2="976.6" y2="105.6"><title>Goal Mar 2026: $741,053</title></line><rect class="bar b2026" x="983.8" y="170.6" width="26.1" height="129.4" rx="2"><title>Apr 2026: $493,484</title></rect><line class="gtick" x1="980.9" y1="82.3" x2="1012.8" y2="82.3"><title>Goal Apr 2026: $830,000</title></line><rect class="bar b2026" x="1020.1" y="70.9" width="26.1" height="229.1" rx="2"><title>May 2026: $873,503</title></rect><line class="gtick" x1="1017.2" y1="76.3" x2="1049.1" y2="76.3"><title>Goal May 2026: $853,000</title></line><rect class="bar b2026" x="1056.3" y="55.1" width="26.1" height="244.9" rx="2"><title>Jun 2026: $933,727</title></rect><line class="gtick" x1="1053.4" y1="76.1" x2="1085.3" y2="76.1"><title>Goal Jun 2026: $853,849</title></line><rect class="bar b2026" x="1092.6" y="50.2" width="26.1" height="249.8" rx="2"><title>Jul 2026: $952,536</title></rect><line class="gtick" x1="1089.7" y1="63.6" x2="1121.6" y2="63.6"><title>Goal Jul 2026: $901,259</title></line><rect class="bar b2026 hatched" x="1128.8" y="159.1" width="26.1" height="140.9" rx="2"><title>Aug 2026: $537,421</title></rect><line class="gtick" x1="1125.9" y1="79.7" x2="1157.8" y2="79.7"><title>Goal Aug 2026: $840,000</title></line></svg>
-      <div class="mlabels"><div class="mlab">Jan<span>24</span></div><div class="mlab">Feb<span>24</span></div><div class="mlab">Mar<span>24</span></div><div class="mlab">Apr<span>24</span></div><div class="mlab">May<span>24</span></div><div class="mlab">Jun<span>24</span></div><div class="mlab">Jul<span>24</span></div><div class="mlab">Aug<span>24</span></div><div class="mlab">Sep<span>24</span></div><div class="mlab">Oct<span>24</span></div><div class="mlab">Nov<span>24</span></div><div class="mlab">Dec<span>24</span></div><div class="mlab">Jan<span>25</span></div><div class="mlab">Feb<span>25</span></div><div class="mlab">Mar<span>25</span></div><div class="mlab">Apr<span>25</span></div><div class="mlab">May<span>25</span></div><div class="mlab">Jun<span>25</span></div><div class="mlab">Jul<span>25</span></div><div class="mlab">Aug<span>25</span></div><div class="mlab">Sep<span>25</span></div><div class="mlab">Oct<span>25</span></div><div class="mlab">Nov<span>25</span></div><div class="mlab">Dec<span>25</span></div><div class="mlab">Jan<span>26</span></div><div class="mlab">Feb<span>26</span></div><div class="mlab">Mar<span>26</span></div><div class="mlab">Apr<span>26</span></div><div class="mlab">May<span>26</span></div><div class="mlab">Jun<span>26</span></div><div class="mlab">Jul<span>26</span></div><div class="mlab cur">Aug<span>26</span></div></div>
-    </div>
+  <div class="chart">
+    <div class="bars" id="monthly"></div>
     <div class="legend">
-      <span><span class="sw" style="background:#30475e"></span>2024</span>
-      <span><span class="sw" style="background:#3d6fa8"></span>2025</span>
-      <span><span class="sw" style="background:#58a6ff"></span>2026</span>
-      <span><span class="sw" style="background:repeating-linear-gradient(45deg,#58a6ff,#58a6ff 2px,transparent 2px,transparent 4px)"></span>current month (partial)</span>
-      <span><span class="sw" style="background:#f0c674;height:3px;border-radius:0"></span>2026 Sales Goal</span>
+      <span><i class="sw" style="background:#3b74d6"></i> Monthly sold estimates</span>
+      <span><i class="sw" style="background:repeating-linear-gradient(135deg,#4d8ef7,#4d8ef7 4px,#2b5fbf 4px,#2b5fbf 8px)"></i> Current month (partial)</span>
+      <span><i class="sw" style="border-top:2px dashed #f59e0b;background:none;height:2px;border-radius:0"></i> 2026 monthly Sales Goal</span>
     </div>
   </div>
 
   <h2>This week (Monday start)</h2>
-  <div class="week">
-      <div class="day">
-        <div class="dow">Mon</div>
-        <div class="dnum">8/3</div>
-        <div class="dval">$8,422</div>
-        <div class="dpct bad">21.1%</div>
-        <div class="dgoal">goal $40,000</div>
-      </div>
-      <div class="day">
-        <div class="dow">Tue</div>
-        <div class="dnum">8/4</div>
-        <div class="dval">$413,433</div>
-        <div class="dpct good">1033.6%</div>
-        <div class="dgoal">goal $40,000</div>
-      </div>
-      <div class="day">
-        <div class="dow">Wed</div>
-        <div class="dnum">8/5</div>
-        <div class="dval">$63,527</div>
-        <div class="dpct good">158.8%</div>
-        <div class="dgoal">goal $40,000</div>
-      </div>
-      <div class="day">
-        <div class="dow">Thu</div>
-        <div class="dnum">8/6</div>
-        <div class="dval">$42,176</div>
-        <div class="dpct good">105.4%</div>
-        <div class="dgoal">goal $40,000</div>
-      </div>
-      <div class="day">
-        <div class="dow">Fri</div>
-        <div class="dnum">8/7</div>
-        <div class="dval">$0</div>
-        <div class="dpct bad">0.0%</div>
-        <div class="dgoal">goal $40,000</div>
-      </div>
-  </div>
+  <div class="week" id="week"></div>
 
   <h2>Additional data &mdash; YTD 2026 breakdowns</h2>
-  <div class="bds"><div class="bd">
-        <h3>By business unit</h3>
-        <table class="bdt"><thead><tr><th>&nbsp;</th><th>YTD 2026</th><th>Share</th></tr></thead><tbody><tr><th>HVAC-Sales-CBD</th><td>$3,164,254</td><td class='shcell'><span class='shbar' style='width:55.2%'></span><span class='shtxt'>55.2%</span></td></tr><tr><th>FIRE-Sales-CBD</th><td>$1,144,966</td><td class='shcell'><span class='shbar' style='width:20.0%'></span><span class='shtxt'>20.0%</span></td></tr><tr><th>HVAC-Sales-Com-CBD</th><td>$726,781</td><td class='shcell'><span class='shbar' style='width:12.7%'></span><span class='shtxt'>12.7%</span></td></tr><tr><th>FIRE-Sales-Com-CBD</th><td>$692,199</td><td class='shcell'><span class='shbar' style='width:12.1%'></span><span class='shtxt'>12.1%</span></td></tr></tbody>
-        <tfoot><tr><th>Total</th><td>$5,728,201</td><td></td></tr></tfoot></table>
-      </div><div class="bd">
-        <h3>By sales rep</h3>
-        <table class="bdt"><thead><tr><th>&nbsp;</th><th>YTD 2026</th><th>Share</th></tr></thead><tbody><tr><th>Aaron Fischer</th><td>$3,661,949</td><td class='shcell'><span class='shbar' style='width:63.9%'></span><span class='shtxt'>63.9%</span></td></tr><tr><th>Noah Fischer</th><td>$1,972,401</td><td class='shcell'><span class='shbar' style='width:34.4%'></span><span class='shtxt'>34.4%</span></td></tr><tr><th>Michael K</th><td>$57,087</td><td class='shcell'><span class='shbar' style='width:1.0%'></span><span class='shtxt'>1.0%</span></td></tr><tr><th>Lee P</th><td>$31,499</td><td class='shcell'><span class='shbar' style='width:0.5%'></span><span class='shtxt'>0.5%</span></td></tr><tr><th>Collin Lieffort</th><td>$5,185</td><td class='shcell'><span class='shbar' style='width:0.1%'></span><span class='shtxt'>0.1%</span></td></tr><tr><th>Kurtis K</th><td>$79</td><td class='shcell'><span class='shbar' style='width:0.0%'></span><span class='shtxt'>0.0%</span></td></tr></tbody>
-        <tfoot><tr><th>Total</th><td>$5,728,201</td><td></td></tr></tfoot></table>
-      </div><div class="bd">
-        <h3>By lead source (lead job type)</h3>
-        <table class="bdt"><thead><tr><th>&nbsp;</th><th>YTD 2026</th><th>Share</th></tr></thead><tbody><tr><th>(no lead job — self-generated)</th><td>$3,548,668</td><td class='shcell'><span class='shbar' style='width:62.0%'></span><span class='shtxt'>62.0%</span></td></tr><tr><th>HVAC Repair Aged</th><td>$925,821</td><td class='shcell'><span class='shbar' style='width:16.2%'></span><span class='shtxt'>16.2%</span></td></tr><tr><th>HVAC Repair</th><td>$463,231</td><td class='shcell'><span class='shbar' style='width:8.1%'></span><span class='shtxt'>8.1%</span></td></tr><tr><th>HVAC Membership Visit Aged</th><td>$281,744</td><td class='shcell'><span class='shbar' style='width:4.9%'></span><span class='shtxt'>4.9%</span></td></tr><tr><th>FIRE Repair</th><td>$137,946</td><td class='shcell'><span class='shbar' style='width:2.4%'></span><span class='shtxt'>2.4%</span></td></tr><tr><th>FIRE Inspection</th><td>$96,815</td><td class='shcell'><span class='shbar' style='width:1.7%'></span><span class='shtxt'>1.7%</span></td></tr><tr><th>HVAC Membership Visit</th><td>$94,851</td><td class='shcell'><span class='shbar' style='width:1.7%'></span><span class='shtxt'>1.7%</span></td></tr><tr><th>HVAC System Check Aged</th><td>$93,521</td><td class='shcell'><span class='shbar' style='width:1.6%'></span><span class='shtxt'>1.6%</span></td></tr><tr><th>HVAC System Check</th><td>$71,307</td><td class='shcell'><span class='shbar' style='width:1.2%'></span><span class='shtxt'>1.2%</span></td></tr><tr><th>PLMB Repair</th><td>$11,627</td><td class='shcell'><span class='shbar' style='width:0.2%'></span><span class='shtxt'>0.2%</span></td></tr><tr><th>FIRE Membership Visit</th><td>$2,670</td><td class='shcell'><span class='shbar' style='width:0.0%'></span><span class='shtxt'>0.0%</span></td></tr></tbody>
-        <tfoot><tr><th>Total</th><td>$5,728,201</td><td></td></tr></tfoot></table>
-      </div></div>
+  <div class="grid3">
+    <div class="panel"><table id="tblBU"><thead><tr><th>Business unit</th><th>YTD 2026</th><th>%</th></tr></thead><tbody></tbody></table></div>
+    <div class="panel"><table id="tblRep"><thead><tr><th>Sales rep</th><th>YTD 2026</th><th>%</th></tr></thead><tbody></tbody></table></div>
+    <div class="panel"><table id="tblSrc"><thead><tr><th>Lead source</th><th>YTD 2026</th><th>%</th></tr></thead><tbody></tbody></table></div>
+  </div>
 
-  <footer>
-    <strong>Sales</strong> = sum of <em>Estimates Subtotal</em> dated by <em>Sold On</em> for the four sales business units: HVAC-Sales-CBD, FIRE-Sales-CBD, HVAC-Sales-Com-CBD, FIRE-Sales-Com-CBD.<br>
-    Goal = <em>Sales Goal</em>; Budget = <em>Install(HVAC/FP) Goal</em> (CBD 2026 Revenue Budget &rarr; Daily Goals). Weeks start Monday. Goal/Budget/Last-Year are anchored to the last populated Sold On date (2026-08-06); &ldquo;Yesterday&rdquo; is that same day.<br>
-    Last 365 days shows no Goal/Budget because 2025 Daily Goals are not populated. Attainment colors: green &ge;100%, amber 95&ndash;99.9%, red &lt;95%. YoY: green &ge;0%, red &lt;0%. &ldquo;&mdash;&rdquo; = no target for the period.
-  </footer>
+  <footer id="foot"></footer>
 </div>
-</body></html>
+
+<script>
+const DATA = {
+  today: "2026-08-10",
+  dataAsOf: "2026-08-07",
+  monday: "2026-08-10",
+  kpi:      {yesterday:15293.76, wtd:0, mtd:552714.28, qtd:1505250.66, ytd:5743494.32},
+  goal:     {yesterday:40000,    wtd:0, mtd:200000,    qtd:1101259.3460869566, ytd:5902161.417665898},
+  budget:   {yesterday:37530.19047619047, wtd:0, mtd:187650.95238095237, qtd:1066652.9941200828, ytd:5437425.434120076},
+  lastYear: {yesterday:7503,     wtd:0, mtd:176669,    qtd:894726.05, ytd:4582621.27},
+  ranges:   {yesterday:["2026-08-07","2026-08-07"], wtd:["2026-08-10","2026-08-10"], mtd:["2026-08-01","2026-08-10"], qtd:["2026-07-01","2026-08-10"], ytd:["2026-01-01","2026-08-10"]},
+  trailing: {
+    d30 :{actual:1262033.36,  goal:896427.6765217392,  budget:866879.8028157351,  lastYear:733569.15,        range:["2026-07-09","2026-08-07"]},
+    d60 :{actual:2139615.30,  goal:1722240.7569960463, budget:1655398.0413928097, lastYear:1614558.07,       range:["2026-06-09","2026-08-07"]},
+    d90 :{actual:3113782.16,  goal:2552208.786086955,  budget:2431651.934120082,  lastYear:2289070.93,       range:["2026-05-10","2026-08-07"]},
+    d180:{actual:4696656.45,  goal:4951411.4176659025, budget:4582381.934120082,  lastYear:3986066.21,       range:["2026-02-09","2026-08-07"]},
+    d365:{actual:10019044.18, goal:null,               budget:null,               lastYear:7156694.69,       range:["2025-08-08","2026-08-07"]}
+  },
+  monthly: {"2024-01":505499.09,"2024-02":279319.95,"2024-03":326822.98,"2024-04":283537.71,"2024-05":572078.31,"2024-06":530314.93,"2024-07":590277.14,"2024-08":429146.31,"2024-09":756209.92,"2024-10":561904.93,"2024-11":452581.50,"2024-12":497865.81,"2025-01":487212.78,"2025-02":475288.64,"2025-03":495621.85,"2025-04":673499.71,"2025-05":660351.22,"2025-06":855181.12,"2025-07":729568.67,"2025-08":568014.04,"2025-09":1047646.03,"2025-10":1059139.44,"2025-11":888977.05,"2025-12":910167.58,"2026-01":858925.30,"2026-02":632359.01,"2026-03":446245.73,"2026-04":493483.67,"2026-05":873502.81,"2026-06":933727.14,"2026-07":952536.38,"2026-08":552714.28},
+  monthlyGoal: {"2026-01":760000.00,"2026-02":763000,"2026-03":741052.631578947,"2026-04":829999.99,"2026-05":853000,"2026-06":853849.44,"2026-07":901259.3460869567,"2026-08":840000},
+  weekDaily: [{date:"2026-08-10",dow:"Mon",actual:0,goal:40000}],
+  buAgg:  {"HVAC-Sales-CBD":3179548.07,"FIRE-Sales-CBD":1144966.18,"HVAC-Sales-Com-CBD":726781.26,"FIRE-Sales-Com-CBD":692198.81},
+  repAgg: {"Aaron Fischer":3669978.52,"Noah Fischer":1979665.43,"Michael K":57087.22,"Lee P":31498.88,"Collin Lieffort":5185.27,"Kurtis K":79},
+  srcAgg: {"Self-generated / no lead source":3548667.85,"HVAC-Service-CBD":1577696.54,"HVAC-Scheduled Service-CBD":349823.43,"FIRE-Service-CBD":264636.50,"FIRE-Scheduled Service-CBD":2670}
+};
+
+const usd = n => "$" + Math.round(n).toLocaleString("en-US");
+const usdK = n => n>=1e6 ? "$"+(n/1e6).toFixed(2)+"M" : "$"+Math.round(n/1e3)+"K";
+const fmtD = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString("en-US",{month:"short",day:"numeric"}); };
+const fmtDY = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric"}); };
+const attCls = p => p===null ? "n" : (p>=100 ? "g" : (p>=95 ? "a" : "r"));
+const attCol = p => p===null ? "#6b7a90" : (p>=100 ? "#22c55e" : (p>=95 ? "#f59e0b" : "#ef4444"));
+const pct = (a,t) => (t===null||t===undefined||t===0) ? null : a/t*100;
+const yoy = (a,l) => (l===null||l===undefined||l===0) ? null : (a-l)/l*100;
+const pctTxt = p => p===null ? "&mdash;" : p.toFixed(1)+"%";
+const yoyTxt = p => p===null ? "&mdash;" : (p>=0?"+":"")+p.toFixed(1)+"%";
+const yoyCls = p => p===null ? "n" : (p>=0 ? "g" : "r");
+
+document.getElementById("asof").innerHTML =
+  "Data as of <b>"+fmtDY(DATA.dataAsOf)+"</b> (last populated Sold On date) &nbsp;&middot;&nbsp; report generated "+fmtDY(DATA.today)+
+  " &nbsp;&middot;&nbsp; goal / budget / last-year comparisons anchored to the data-as-of date";
+
+/* ---------- KPI cards ---------- */
+const periods = [
+  {k:"yesterday", label:"Yesterday"},
+  {k:"wtd", label:"Week to date"},
+  {k:"mtd", label:"Month to date"},
+  {k:"qtd", label:"Quarter to date"},
+  {k:"ytd", label:"Year to date"}
+];
+function cardHTML(label, range, actual, goal, budget, ly){
+  const pg = pct(actual, goal), pb = pct(actual, budget), py = yoy(actual, ly);
+  const w = pg===null ? 0 : Math.max(2, Math.min(100, pg));
+  return '<div class="card">'
+    + '<div class="lbl">'+label+'</div>'
+    + '<div class="rng">'+range+'</div>'
+    + '<div class="val">'+usd(actual)+'</div>'
+    + '<div class="bar"><i style="width:'+w+'%;background:'+attCol(pg)+'"></i></div>'
+    + '<div class="metrics" style="margin-top:10px">'
+    +   '<div class="m"><span class="k">vs Goal '+(goal===null?"":"("+usdK(goal)+")")+'</span><span class="v '+attCls(pg)+'">'+pctTxt(pg)+'</span></div>'
+    +   '<div class="m"><span class="k">vs Budget '+(budget===null?"":"("+usdK(budget)+")")+'</span><span class="v '+attCls(pb)+'">'+pctTxt(pb)+'</span></div>'
+    +   '<div class="m"><span class="k">vs Last yr '+(ly?"("+usdK(ly)+")":"")+'</span><span class="v '+yoyCls(py)+'">'+yoyTxt(py)+'</span></div>'
+    + '</div></div>';
+}
+document.getElementById("kpiCards").innerHTML = periods.map(p=>{
+  const r = DATA.ranges[p.k];
+  const rng = r[0]===r[1] ? fmtD(r[0]) : fmtD(r[0])+" – "+fmtD(r[1]);
+  return cardHTML(p.label, rng, DATA.kpi[p.k], DATA.goal[p.k], DATA.budget[p.k], DATA.lastYear[p.k]);
+}).join("");
+
+/* ---------- Rolling ---------- */
+const rolls = [["d30","Last 30 days"],["d60","Last 60 days"],["d90","Last 90 days"],["d180","Last 180 days"],["d365","Last 365 days"]];
+document.getElementById("rollCards").innerHTML = rolls.map(([k,label])=>{
+  const t = DATA.trailing[k];
+  return cardHTML(label, fmtD(t.range[0])+" – "+fmtD(t.range[1]), t.actual, t.goal, t.budget, t.lastYear);
+}).join("");
+
+/* ---------- Attainment table ---------- */
+const attRows = periods.map(p=>({
+  name: p.label, range: DATA.ranges[p.k], actual: DATA.kpi[p.k], goal: DATA.goal[p.k], budget: DATA.budget[p.k], ly: DATA.lastYear[p.k]
+})).concat(rolls.map(([k,label])=>{
+  const t=DATA.trailing[k];
+  return {name:label, range:t.range, actual:t.actual, goal:t.goal, budget:t.budget, ly:t.lastYear};
+}));
+document.querySelector("#attTable tbody").innerHTML = attRows.map(r=>{
+  const pg=pct(r.actual,r.goal), pb=pct(r.actual,r.budget), py=yoy(r.actual,r.ly);
+  const rng = r.range[0]===r.range[1] ? fmtD(r.range[0]) : fmtD(r.range[0])+" – "+fmtD(r.range[1]);
+  return "<tr><td><b>"+r.name+"</b></td><td style='text-align:left;color:var(--dim);font-size:12px'>"+rng+"</td>"
+    +"<td>"+usd(r.actual)+"</td>"
+    +"<td>"+(r.goal===null?"&mdash;":usd(r.goal))+"</td>"
+    +"<td class='"+attCls(pg)+"'><b>"+pctTxt(pg)+"</b></td>"
+    +"<td>"+(r.budget===null?"&mdash;":usd(r.budget))+"</td>"
+    +"<td class='"+attCls(pb)+"'><b>"+pctTxt(pb)+"</b></td>"
+    +"<td>"+(r.ly?usd(r.ly):"&mdash;")+"</td>"
+    +"<td class='"+yoyCls(py)+"'><b>"+yoyTxt(py)+"</b></td></tr>";
+}).join("");
+
+/* ---------- Monthly chart ---------- */
+const months = Object.keys(DATA.monthly).sort();
+const curMonth = DATA.today.slice(0,7);
+const maxV = Math.max.apply(null, months.map(m=>Math.max(DATA.monthly[m], DATA.monthlyGoal[m]||0)));
+document.getElementById("monthly").innerHTML = months.map(m=>{
+  const v = DATA.monthly[m], g = DATA.monthlyGoal[m];
+  const h = (v/maxV*100).toFixed(1);
+  const gh = g ? (g/maxV*100).toFixed(1) : null;
+  const [y,mm] = m.split("-");
+  const lab = new Date(+y, +mm-1, 1).toLocaleDateString("en-US",{month:"short"}) + " " + y.slice(2);
+  return '<div class="col'+(m===curMonth?" cur":"")+'" title="'+m+": "+usd(v)+(g?"  |  goal "+usd(g):"")+'">'
+    + (gh ? '<div class="gt" style="bottom:'+gh+'%"></div>' : '')
+    + '<div class="b" style="height:'+h+'%"></div>'
+    + '<div class="cap">'+lab+'</div></div>';
+}).join("");
+
+/* ---------- Week strip ---------- */
+const dows = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const byDow = {}; DATA.weekDaily.forEach(d=>byDow[d.dow]=d);
+document.getElementById("week").innerHTML = dows.map(dw=>{
+  const d = byDow[dw];
+  if(!d) return '<div class="day future"><div class="d">'+dw+'</div><div class="dt">&mdash;</div><div class="amt">&mdash;</div><div class="gl">upcoming</div></div>';
+  const p = pct(d.actual, d.goal);
+  return '<div class="day"><div class="d">'+dw+'</div><div class="dt">'+fmtD(d.date)+'</div>'
+    + '<div class="amt '+attCls(p)+'">'+usd(d.actual)+'</div>'
+    + '<div class="gl">goal '+(d.goal?usd(d.goal):"&mdash;")+' &middot; '+pctTxt(p)+'</div></div>';
+}).join("");
+
+/* ---------- Breakdown tables ---------- */
+function fillTable(sel, obj){
+  const entries = Object.entries(obj).sort((a,b)=>b[1]-a[1]);
+  const tot = entries.reduce((s,e)=>s+e[1],0);
+  document.querySelector(sel+" tbody").innerHTML = entries.map(([k,v])=>
+    "<tr><td>"+k+"</td><td>"+usd(v)+"</td><td style='color:var(--muted)'>"+(tot?(v/tot*100).toFixed(1):"0.0")+"%</td></tr>"
+  ).join("") + "<tr><td><b>Total</b></td><td><b>"+usd(tot)+"</b></td><td style='color:var(--muted)'><b>100.0%</b></td></tr>";
+}
+fillTable("#tblBU", DATA.buAgg);
+fillTable("#tblRep", DATA.repAgg);
+fillTable("#tblSrc", DATA.srcAgg);
+
+/* ---------- Footer ---------- */
+document.getElementById("foot").innerHTML =
+  "<b>Sales</b> = sum of <i>Estimates Subtotal</i> dated by <i>Sold On</i>, limited to the four sales business units: "
+  + "<b>HVAC-Sales-CBD, FIRE-Sales-CBD, HVAC-Sales-Com-CBD, FIRE-Sales-Com-CBD</b>.<br>"
+  + "<b>Goal</b> = <i>Sales Goal</i> and <b>Budget</b> = <i>Install(HVAC/FP) Goal</i> from the <i>Daily Goals</i> tab of CBD 2026 Revenue Budget.xlsx. "
+  + "2025 daily goals are not populated, so the Last 365 days window shows Goal and Budget as &mdash; and reports YoY only.<br>"
+  + "Weeks start Monday. Goal, Budget and Last-Year figures are summed over the same elapsed window ending at the data-as-of date ("
+  + fmtDY(DATA.dataAsOf) + "); “Yesterday” is that same single day. Last year is aligned 364 days back to preserve weekday alignment.<br>"
+  + "Attainment colours: <span class='g'>green ≥100%</span>, <span class='a'>amber 95–99.9%</span>, <span class='r'>red &lt;95%</span>. YoY: <span class='g'>green ≥0%</span>, <span class='r'>red &lt;0%</span>. A dash (&mdash;) means no target exists for that window.<br>"
+  + "Sources: Sales4dx.xlsx (Sheet1) and CBD 2026 Revenue Budget.xlsx (Daily Goals), SharePoint / comfortbydesign.com.";
+
+/* Note if the actuals file is behind the current week */
+if(DATA.dataAsOf < DATA.monday){
+  const n = document.createElement("div");
+  n.className = "note";
+  n.innerHTML = "<b>Heads up:</b> the actuals file was last populated " + fmtDY(DATA.dataAsOf)
+    + ", which is before the start of the current week (" + fmtDY(DATA.monday)
+    + "). Week-to-date therefore shows $0 with no target window — the sales export has not refreshed since then.";
+  document.getElementById("kpiCards").after(n);
+}
+</script>
+</body>
+</html>
