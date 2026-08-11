@@ -1,131 +1,174 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Booked Jobs Dashboard — Comfort By Design</title>
 <style>
+:root{--accent:#ff7a18;--bg:#0e0e11;--panel:#17171c;--panel2:#1d1d23;--line:#2a2a32;--txt:#e9e9ee;--mut:#8a8a96;--good:#3fbf6f;--warn:#e0a92b;--bad:#e5484d;}
 *{box-sizing:border-box}
-body{margin:0;background:#12151a;color:#e8eaed;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
-h1{font-size:26px;margin:0 0 4px;letter-spacing:-.4px}
-h1 span{color:#e8730c}
-.sub{color:#9aa3ad;font-size:13px;margin-bottom:24px}
-h2{font-size:13px;text-transform:uppercase;letter-spacing:1.4px;color:#9aa3ad;margin:34px 0 12px;font-weight:600}
-.hero{display:flex;gap:28px;background:linear-gradient(135deg,#1b1f26,#171b21);border:1px solid #2a3038;border-left:4px solid #e8730c;border-radius:12px;padding:22px 24px;flex-wrap:wrap}
-.heroL{flex:0 0 250px}
-.heroR{flex:1;min-width:420px}
-.hlabel{font-size:12px;text-transform:uppercase;letter-spacing:1.6px;color:#e8730c;font-weight:700}
-.hday{font-size:30px;font-weight:700;margin:6px 0 0;letter-spacing:-.5px}
-.hnum{font-size:72px;font-weight:800;line-height:1;margin:4px 0 2px;letter-spacing:-3px}
-.hdate{color:#8b939d;font-size:13px;margin-bottom:14px}
-.hchips{display:flex;flex-direction:column;gap:7px}
-.hchip{display:inline-block;padding:6px 11px;border-radius:6px;font-size:12.5px;font-weight:600;border:1px solid transparent}
-.dim{opacity:.62;font-weight:500}
-.good{color:#4ade80} .bad{color:#f87171} .warn{color:#fbbf24} .neu{color:#8b939d}
-.hchip.good{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3)}
-.hchip.bad{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3)}
-.hchip.warn{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)}
-.hchip.neu{background:rgba(139,147,157,.1);border-color:rgba(139,147,157,.28)}
-.sparkt{font-size:11.5px;color:#8b939d;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:2px}
-svg text.bl{fill:#aeb6bf;font-size:10.5px;text-anchor:middle;font-weight:600}
-svg text.blx{fill:#e8730c;font-size:12px;font-weight:800}
-svg text.ax{fill:#7b838d;font-size:9.5px;text-anchor:middle}
-svg text.ax2{fill:#5f676f;font-size:9px;text-anchor:middle}
-svg text.gl{fill:#ff9a3c;font-size:9.5px;opacity:.9}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
-.card{background:#1a1e25;border:1px solid #2a3038;border-radius:10px;padding:15px 16px}
-.ct{font-size:11px;letter-spacing:1.4px;color:#e8730c;font-weight:700;text-transform:uppercase}
-.cn{font-size:34px;font-weight:800;margin:5px 0 1px;letter-spacing:-1.2px}
-.cs{font-size:11.5px;color:#7b838d;margin-bottom:10px}
-.chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{font-size:11.5px;padding:3px 8px;border-radius:5px;background:#232830;font-weight:600}
-.cf{margin-top:9px;font-size:11px;color:#6f777f;border-top:1px solid #262c34;padding-top:8px}
-.panel{background:#1a1e25;border:1px solid #2a3038;border-radius:10px;padding:18px 20px}
-.rows{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
-.rw{background:#20252c;border-radius:8px;padding:13px 14px}
-.rl{font-size:11px;letter-spacing:1.2px;color:#9aa3ad;text-transform:uppercase;font-weight:600}
-.rv{font-size:26px;font-weight:800;margin:3px 0 7px;letter-spacing:-.9px}
-.rb{display:flex;gap:6px}
-.rf{margin-top:8px;font-size:10.5px;color:#6f777f}
-.ar{display:flex;align-items:center;gap:14px;margin-bottom:11px}
-.an{flex:0 0 46px;font-size:12px;font-weight:700;color:#9aa3ad;letter-spacing:.8px}
-.at{flex:1}
-.track{position:relative;height:20px;background:#232830;border-radius:4px;overflow:visible}
-.fill{height:100%;border-radius:4px}
-.fill.good{background:linear-gradient(90deg,#22c55e,#4ade80)}
-.fill.warn{background:linear-gradient(90deg,#d97706,#fbbf24)}
-.fill.bad{background:linear-gradient(90deg,#dc2626,#f87171)}
-.gmark{position:absolute;top:-4px;bottom:-4px;width:2px;background:#ff9a3c}
-.av{flex:0 0 78px;text-align:right;font-size:14px;font-weight:700}
-.week{display:flex;gap:9px;flex-wrap:wrap}
-.wd{flex:1;min-width:92px;background:#20252c;border-radius:8px;padding:11px 10px;text-align:center}
-.wdn{font-size:11px;color:#9aa3ad;font-weight:700;letter-spacing:.8px}
-.wdd{font-size:10px;color:#6f777f}
-.wdv{font-size:24px;font-weight:800;margin:5px 0 1px}
-.wdg{font-size:10px;color:#6f777f}
-.legend{font-size:11px;color:#6f777f;margin-top:8px}
-footer{margin-top:38px;border-top:1px solid #262c34;padding-top:16px;font-size:11.5px;color:#6f777f;line-height:1.75}
-@media(max-width:840px){.grid,.rows{grid-template-columns:repeat(2,1fr)}.heroR{min-width:100%}}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:26px 22px 40px}
+.wrap{max-width:1160px;margin:0 auto}
+h1{font-size:22px;margin:0 0 3px;letter-spacing:-.3px}
+h1 span{color:var(--accent)}
+.sub{color:var(--mut);font-size:12.5px;margin-bottom:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:18px}
+.ptitle{font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:var(--mut);margin-bottom:14px;font-weight:700}
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(240px,330px) 1fr;gap:26px;align-items:center;
+  background:linear-gradient(135deg,#1c1a19,#17171c 55%);border:1px solid #34291f;border-left:4px solid var(--accent)}
+.hday{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hnum{font-size:76px;font-weight:800;line-height:1;margin:6px 0 2px;letter-spacing:-3px}
+.hnum.good{color:var(--good)}.hnum.warn{color:var(--warn)}.hnum.bad{color:var(--bad)}.hnum.na{color:var(--txt)}
+.hjobs{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.hdate{font-size:13px;color:var(--mut);margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-size:11.5px;color:var(--mut);display:flex;flex-direction:column;gap:2px}
+.chip b{font-size:15px;font-weight:700}
+.chip i{font-style:normal;font-size:10px;color:#6f6f7a}
+.chip.good b{color:var(--good)}.chip.warn b{color:var(--warn)}.chip.bad b{color:var(--bad)}
+.await{margin-top:10px;font-size:11.5px;color:var(--warn)}
+/* kpi */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card,.rcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+.klab,.rlab{font-size:11px;letter-spacing:1.4px;color:var(--mut);font-weight:700;text-transform:uppercase}
+.kval,.rval{font-size:34px;font-weight:800;letter-spacing:-1.4px;margin:5px 0 1px}
+.ksub{font-size:10.5px;color:#6f6f7a;margin-bottom:9px}
+.krow{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 7px}
+.tag{font-size:10.5px;font-weight:700;padding:3px 7px;border-radius:5px;background:#232329;color:var(--mut)}
+.tag.good{background:rgba(63,191,111,.15);color:var(--good)}
+.tag.warn{background:rgba(224,169,43,.15);color:var(--warn)}
+.tag.bad{background:rgba(229,72,77,.15);color:var(--bad)}
+.kfoot{font-size:10px;color:#6f6f7a}
+/* attainment */
+.arow{display:grid;grid-template-columns:52px 1fr 62px;align-items:center;gap:12px;margin-bottom:16px}
+.alab{font-size:11.5px;font-weight:700;color:var(--mut)}
+.atrack{position:relative;height:22px;background:#212127;border-radius:5px;overflow:visible}
+.afill{height:100%;border-radius:5px;background:var(--accent)}
+.afill.good{background:var(--good)}.afill.warn{background:var(--warn)}.afill.bad{background:var(--bad)}
+.gmark{position:absolute;top:-4px;bottom:-4px;width:2px;background:#c9a227}
+.gmark span{position:absolute;top:-14px;left:4px;font-size:9px;color:#c9a227;white-space:nowrap}
+.aval{text-align:right;font-size:13.5px;font-weight:700}
+.aval.good{color:var(--good)}.aval.warn{color:var(--warn)}.aval.bad{color:var(--bad)}
+/* week */
+.wstrip{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}
+.wcell{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 6px;text-align:center}
+.wcell.wend{opacity:.55}
+.wd{font-size:10px;letter-spacing:1px;color:var(--mut);font-weight:700}
+.wn{font-size:24px;font-weight:800;margin:3px 0}
+.wn.good{color:var(--good)}.wn.warn{color:var(--warn)}.wn.bad{color:var(--bad)}
+.wg{font-size:9.5px;color:#6f6f7a}
+.wdt{font-size:9px;color:#5a5a64;margin-top:2px}
+.legend{font-size:10.5px;color:#6f6f7a;margin-top:10px;display:flex;gap:16px;flex-wrap:wrap}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+footer{color:#6f6f7a;font-size:10.5px;line-height:1.7;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+@media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.wstrip{grid-template-columns:repeat(4,1fr)}}
 </style></head><body><div class="wrap">
 <h1>Booked <span>Jobs</span> Dashboard</h1>
-<div class="sub">Comfort By Design · count of booked jobs vs Booked Jobs Goal and same period last year · generated Monday, August 10, 2026 · data through <strong style="color:#c9d1d9">Aug 9, 2026</strong></div>
+<div class="sub">Comfort By Design · count of booked jobs vs Booked Jobs Goal and same period last year · generated 2026-08-11 · data through 2026-08-10</div>
 
-<div class="hero">
-  <div class="heroL">
-    <div class="hlabel">Yesterday</div>
-    <div class="hday">Sunday</div>
-    <div class="hnum neu">1</div>
-    <div class="hdate">August 9, 2026 · booked jobs</div>
-    <div class="hchips">
-      <span class="hchip neu">no goal set / non-business day</span>
-      <span class="hchip neu">Last Yr 0 <span class="dim">(no YoY base)</span> <span class="dim">· Aug 10, 2025</span></span>
-    </div>
+<div class="panel hero">
+  <div>
+    <div class="hday">Monday</div>
+    <div class="hnum good">46</div>
+    <div class="hjobs">booked jobs</div>
+    <div class="hdate">August 10, 2026</div>
+    <div class="chips"><span class="chip good">vs Goal <b>110.1%</b><i>goal 41.8</i></span><span class="chip bad">vs Last Yr <b>-4.2%</b><i>LY 48 · 2025-08-11</i></span></div>
+    
   </div>
-  <div class="heroR">
-    <div class="sparkt">Last 14 days</div>
-    <svg viewBox="0 0 560 190" width="100%" preserveAspectRatio="xMidYMid meet"><line x1="0" x2="560" y1="80.4" y2="80.4" stroke="#ff9a3c" stroke-width="1.5" stroke-dasharray="5 4" opacity=".85"/><text x="558" y="75.4" text-anchor="end" class="gl">avg goal 41</text><rect x="6.4" y="66.3" width="27.2" height="89.7" rx="2" fill="#6b7280"/><text x="20.0" y="62.3" class="bl ">49</text><text x="20.0" y="170.0" class="ax">27</text><text x="20.0" y="181.0" class="ax2">M</text><rect x="46.4" y="90.1" width="27.2" height="65.9" rx="2" fill="#6b7280"/><text x="60.0" y="86.1" class="bl ">36</text><text x="60.0" y="170.0" class="ax">28</text><text x="60.0" y="181.0" class="ax2">T</text><rect x="86.4" y="95.6" width="27.2" height="60.4" rx="2" fill="#6b7280"/><text x="100.0" y="91.6" class="bl ">33</text><text x="100.0" y="170.0" class="ax">29</text><text x="100.0" y="181.0" class="ax2">W</text><rect x="126.4" y="99.2" width="27.2" height="56.8" rx="2" fill="#6b7280"/><text x="140.0" y="95.2" class="bl ">31</text><text x="140.0" y="170.0" class="ax">30</text><text x="140.0" y="181.0" class="ax2">T</text><rect x="166.4" y="95.6" width="27.2" height="60.4" rx="2" fill="#6b7280"/><text x="180.0" y="91.6" class="bl ">33</text><text x="180.0" y="170.0" class="ax">31</text><text x="180.0" y="181.0" class="ax2">F</text><rect x="206.4" y="152.3" width="27.2" height="3.7" rx="2" fill="#3a3f47"/><text x="220.0" y="148.3" class="bl ">2</text><text x="220.0" y="170.0" class="ax">1</text><text x="220.0" y="181.0" class="ax2">S</text><rect x="246.4" y="143.2" width="27.2" height="12.8" rx="2" fill="#3a3f47"/><text x="260.0" y="139.2" class="bl ">7</text><text x="260.0" y="170.0" class="ax">2</text><text x="260.0" y="181.0" class="ax2">S</text><rect x="286.4" y="80.9" width="27.2" height="75.1" rx="2" fill="#6b7280"/><text x="300.0" y="76.9" class="bl ">41</text><text x="300.0" y="170.0" class="ax">3</text><text x="300.0" y="181.0" class="ax2">M</text><rect x="326.4" y="42.4" width="27.2" height="113.6" rx="2" fill="#6b7280"/><text x="340.0" y="38.4" class="bl ">62</text><text x="340.0" y="170.0" class="ax">4</text><text x="340.0" y="181.0" class="ax2">T</text><rect x="366.4" y="71.7" width="27.2" height="84.3" rx="2" fill="#6b7280"/><text x="380.0" y="67.7" class="bl ">46</text><text x="380.0" y="170.0" class="ax">5</text><text x="380.0" y="181.0" class="ax2">W</text><rect x="406.4" y="90.1" width="27.2" height="65.9" rx="2" fill="#6b7280"/><text x="420.0" y="86.1" class="bl ">36</text><text x="420.0" y="170.0" class="ax">6</text><text x="420.0" y="181.0" class="ax2">T</text><rect x="446.4" y="68.1" width="27.2" height="87.9" rx="2" fill="#6b7280"/><text x="460.0" y="64.1" class="bl ">48</text><text x="460.0" y="170.0" class="ax">7</text><text x="460.0" y="181.0" class="ax2">F</text><rect x="486.4" y="154.2" width="27.2" height="1.8" rx="2" fill="#3a3f47"/><text x="500.0" y="150.2" class="bl ">1</text><text x="500.0" y="170.0" class="ax">8</text><text x="500.0" y="181.0" class="ax2">S</text><rect x="526.4" y="154.2" width="27.2" height="1.8" rx="2" fill="#e8730c"/><text x="540.0" y="150.2" class="bl blx">1</text><text x="540.0" y="170.0" class="ax">9</text><text x="540.0" y="181.0" class="ax2">S</text></svg>
+  <div>
+    <div class="ptitle" style="margin-bottom:6px">Last 14 days</div>
+    <svg viewBox="0 0 560 190" width="100%" preserveAspectRatio="xMidYMid meet"><line x1="0" y1="66.5" x2="560" y2="66.5" stroke="#c9a227" stroke-width="1.4" stroke-dasharray="5 4"/><text x="558" y="62.5" text-anchor="end" font-size="9" fill="#c9a227">avg daily goal 41.4</text><rect x="6.4" y="79.2" width="27.2" height="84.8" rx="2" fill="#8a8a96"/><text x="20.0" y="75.2" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">36</text><text x="20.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/28</text><rect x="46.4" y="86.3" width="27.2" height="77.7" rx="2" fill="#8a8a96"/><text x="60.0" y="82.3" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">33</text><text x="60.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/29</text><rect x="86.4" y="91.0" width="27.2" height="73.0" rx="2" fill="#8a8a96"/><text x="100.0" y="87.0" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">31</text><text x="100.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/30</text><rect x="126.4" y="86.3" width="27.2" height="77.7" rx="2" fill="#8a8a96"/><text x="140.0" y="82.3" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">33</text><text x="140.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/31</text><rect x="166.4" y="159.3" width="27.2" height="4.7" rx="2" fill="#4a4a52"/><text x="180.0" y="155.3" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">2</text><text x="180.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/01</text><rect x="206.4" y="147.5" width="27.2" height="16.5" rx="2" fill="#4a4a52"/><text x="220.0" y="143.5" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">7</text><text x="220.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/02</text><rect x="246.4" y="67.5" width="27.2" height="96.5" rx="2" fill="#8a8a96"/><text x="260.0" y="63.5" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">41</text><text x="260.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/03</text><rect x="286.4" y="18.0" width="27.2" height="146.0" rx="2" fill="#8a8a96"/><text x="300.0" y="14.0" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">62</text><text x="300.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/04</text><rect x="326.4" y="55.7" width="27.2" height="108.3" rx="2" fill="#8a8a96"/><text x="340.0" y="51.7" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">46</text><text x="340.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/05</text><rect x="366.4" y="79.2" width="27.2" height="84.8" rx="2" fill="#8a8a96"/><text x="380.0" y="75.2" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">36</text><text x="380.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/06</text><rect x="406.4" y="51.0" width="27.2" height="113.0" rx="2" fill="#8a8a96"/><text x="420.0" y="47.0" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">48</text><text x="420.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/07</text><rect x="446.4" y="161.6" width="27.2" height="2.4" rx="2" fill="#4a4a52"/><text x="460.0" y="157.6" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">1</text><text x="460.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/08</text><rect x="486.4" y="161.6" width="27.2" height="2.4" rx="2" fill="#4a4a52"/><text x="500.0" y="157.6" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">1</text><text x="500.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/09</text><rect x="526.4" y="55.7" width="27.2" height="108.3" rx="2" fill="var(--accent)"/><text x="540.0" y="51.7" text-anchor="middle" font-size="9.5" fill="var(--accent)" font-weight="700">46</text><text x="540.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/10</text></svg>
   </div>
 </div>
 
-<h2>Period to date</h2>
-<div class="grid"><div class="card"><div class="ct">WTD</div><div class="cn">0</div><div class="cs">week just started</div>
-<div class="chips"><span class="chip neu">vs Goal n/a</span><span class="chip neu">vs LY —</span></div>
-<div class="cf">Goal — &nbsp;·&nbsp; LY 0</div></div><div class="card"><div class="ct">MTD</div><div class="cn">244</div><div class="cs">since Aug 1</div>
-<div class="chips"><span class="chip good">vs Goal 116.8%</span><span class="chip good">vs LY +24.5%</span></div>
-<div class="cf">Goal 209 &nbsp;·&nbsp; LY 196</div></div><div class="card"><div class="ct">QTD</div><div class="cn">1,138</div><div class="cs">since Jul 1</div>
-<div class="chips"><span class="chip good">vs Goal 102.8%</span><span class="chip good">vs LY +5.3%</span></div>
-<div class="cf">Goal 1,107 &nbsp;·&nbsp; LY 1,081</div></div><div class="card"><div class="ct">YTD</div><div class="cn">6,334</div><div class="cs">since Jan 1</div>
-<div class="chips"><span class="chip good">vs Goal 104.1%</span><span class="chip good">vs LY +8.6%</span></div>
-<div class="cf">Goal 6,085 &nbsp;·&nbsp; LY 5,835</div></div></div>
+<div class="grid4" style="margin-bottom:18px"><div class="card">
+      <div class="klab">WTD</div>
+      <div class="kval">46</div>
+      <div class="ksub">since 2026-08-10</div>
+      <div class="krow"><span class="tag good">Goal 110.1%</span><span class="tag bad">YoY -4.2%</span></div>
+      <div class="kfoot">goal 42 · LY 48</div>
+    </div><div class="card">
+      <div class="klab">MTD</div>
+      <div class="kval">290</div>
+      <div class="ksub">since 2026-08-01</div>
+      <div class="krow"><span class="tag good">Goal 115.7%</span><span class="tag good">YoY +48.0%</span></div>
+      <div class="kfoot">goal 251 · LY 196</div>
+    </div><div class="card">
+      <div class="klab">QTD</div>
+      <div class="kval">1,184</div>
+      <div class="ksub">since 2026-07-01</div>
+      <div class="krow"><span class="tag good">Goal 103.1%</span><span class="tag good">YoY +9.5%</span></div>
+      <div class="kfoot">goal 1,148 · LY 1,081</div>
+    </div><div class="card">
+      <div class="klab">YTD</div>
+      <div class="kval">6,380</div>
+      <div class="ksub">since 2026-01-01</div>
+      <div class="krow"><span class="tag good">Goal 104.1%</span><span class="tag good">YoY +9.3%</span></div>
+      <div class="kfoot">goal 6,127 · LY 5,835</div>
+    </div></div>
 
-<h2>Rolling windows <span style="text-transform:none;letter-spacing:0;font-weight:400">(anchored at Aug 9)</span></h2>
-<div class="panel"><div class="rows"><div class="rw"><div class="rl">Last 30</div><div class="rv">858</div>
-<div class="rb"><span class="chip good">104.5%</span><span class="chip good">+10.0%</span></div>
-<div class="rf">Goal 821 · LY 780</div></div><div class="rw"><div class="rl">Last 60</div><div class="rv">1,700</div>
-<div class="rb"><span class="chip good">101.3%</span><span class="chip good">+2.8%</span></div>
-<div class="rf">Goal 1,678 · LY 1,654</div></div><div class="rw"><div class="rl">Last 90</div><div class="rv">2,627</div>
-<div class="rb"><span class="chip good">103.3%</span><span class="chip good">+8.0%</span></div>
-<div class="rf">Goal 2,543 · LY 2,433</div></div><div class="rw"><div class="rl">Last 180</div><div class="rv">4,909</div>
-<div class="rb"><span class="chip good">101.3%</span><span class="chip good">+5.7%</span></div>
-<div class="rf">Goal 4,848 · LY 4,646</div></div></div></div>
+<div class="panel"><div class="ptitle">Rolling windows (anchored at 2026-08-10)</div>
+<div class="grid4"><div class="rcard">
+      <div class="rlab">Last 30 days</div>
+      <div class="rval">891</div>
+      <div class="krow"><span class="tag good">Goal 103.3%</span><span class="tag good">YoY +7.9%</span></div>
+      <div class="kfoot">2026-07-12 → 2026-08-10 · goal 863 · LY 826</div>
+    </div><div class="rcard">
+      <div class="rlab">Last 60 days</div>
+      <div class="rval">1,709</div>
+      <div class="krow"><span class="tag good">Goal 101.8%</span><span class="tag good">YoY +1.7%</span></div>
+      <div class="kfoot">2026-06-12 → 2026-08-10 · goal 1,679 · LY 1,680</div>
+    </div><div class="rcard">
+      <div class="rlab">Last 90 days</div>
+      <div class="rval">2,645</div>
+      <div class="krow"><span class="tag good">Goal 104.0%</span><span class="tag good">YoY +8.9%</span></div>
+      <div class="kfoot">2026-05-13 → 2026-08-10 · goal 2,544 · LY 2,428</div>
+    </div><div class="rcard">
+      <div class="rlab">Last 180 days</div>
+      <div class="rval">4,926</div>
+      <div class="krow"><span class="tag good">Goal 101.6%</span><span class="tag good">YoY +5.9%</span></div>
+      <div class="kfoot">2026-02-12 → 2026-08-10 · goal 4,849 · LY 4,653</div>
+    </div></div></div>
 
-<h2>Attainment to date</h2>
-<div class="panel"><div class="ar"><div class="an">WTD</div><div class="at"><div class="track"></div></div><div class="av neu">no goal yet</div></div><div class="ar"><div class="an">MTD</div>
-<div class="at"><div class="track"><div class="fill good" style="width:89.8%"></div><div class="gmark" style="left:76.9%"></div></div></div>
-<div class="av good">116.8%</div></div><div class="ar"><div class="an">QTD</div>
-<div class="at"><div class="track"><div class="fill good" style="width:79.1%"></div><div class="gmark" style="left:76.9%"></div></div></div>
-<div class="av good">102.8%</div></div><div class="ar"><div class="an">YTD</div>
-<div class="at"><div class="track"><div class="fill good" style="width:80.1%"></div><div class="gmark" style="left:76.9%"></div></div></div>
-<div class="av good">104.1%</div></div><div class="legend">Bar = actual jobs as % of goal. Orange marker = 100% of Booked Jobs Goal. Scale caps at 130%.</div></div>
+<div class="panel"><div class="ptitle">Attainment to date</div><div class="arow">
+      <div class="alab">WTD</div>
+      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:81.10%"><span>Goal 42</span></div></div>
+      <div class="aval good">110.1%</div>
+    </div><div class="arow">
+      <div class="alab">MTD</div>
+      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:77.18%"><span>Goal 251</span></div></div>
+      <div class="aval good">115.7%</div>
+    </div><div class="arow">
+      <div class="alab">QTD</div>
+      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:86.60%"><span>Goal 1,148</span></div></div>
+      <div class="aval good">103.1%</div>
+    </div><div class="arow">
+      <div class="alab">YTD</div>
+      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:85.74%"><span>Goal 6,127</span></div></div>
+      <div class="aval good">104.1%</div>
+    </div></div>
 
-<h2>Monthly booked jobs</h2>
-<div class="panel"><svg viewBox="0 0 1080 280" width="100%" preserveAspectRatio="xMidYMid meet"><defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#e8730c" opacity=".28"/><line x1="0" y1="0" x2="0" y2="6" stroke="#e8730c" stroke-width="3"/></pattern></defs><rect x="8.1" y="106.7" width="37.8" height="131.3" rx="2" fill="#5a6570"/><text x="27.0" y="101.7" class="bl">918</text><text x="27.0" y="253.0" class="ax">Jan</text><text x="27.0" y="266.0" class="ax2">2025</text><rect x="62.1" y="124.7" width="37.8" height="113.3" rx="2" fill="#5a6570"/><text x="81.0" y="119.7" class="bl">792</text><text x="81.0" y="253.0" class="ax">Feb</text><rect x="116.1" y="137.6" width="37.8" height="100.4" rx="2" fill="#5a6570"/><text x="135.0" y="132.6" class="bl">702</text><text x="135.0" y="253.0" class="ax">Mar</text><rect x="170.1" y="135.0" width="37.8" height="103.0" rx="2" fill="#5a6570"/><text x="189.0" y="130.0" class="bl">720</text><text x="189.0" y="253.0" class="ax">Apr</text><rect x="224.1" y="127.2" width="37.8" height="110.8" rx="2" fill="#5a6570"/><text x="243.0" y="122.2" class="bl">775</text><text x="243.0" y="253.0" class="ax">May</text><rect x="278.1" y="116.9" width="37.8" height="121.1" rx="2" fill="#5a6570"/><text x="297.0" y="111.9" class="bl">847</text><text x="297.0" y="253.0" class="ax">Jun</text><rect x="332.1" y="111.4" width="37.8" height="126.6" rx="2" fill="#5a6570"/><text x="351.0" y="106.4" class="bl">885</text><text x="351.0" y="253.0" class="ax">Jul</text><rect x="386.1" y="120.7" width="37.8" height="117.3" rx="2" fill="#5a6570"/><text x="405.0" y="115.7" class="bl">820</text><text x="405.0" y="253.0" class="ax">Aug</text><rect x="440.1" y="95.6" width="37.8" height="142.4" rx="2" fill="#5a6570"/><text x="459.0" y="90.6" class="bl">996</text><text x="459.0" y="253.0" class="ax">Sep</text><rect x="494.1" y="39.8" width="37.8" height="198.2" rx="2" fill="#5a6570"/><text x="513.0" y="34.8" class="bl">1386</text><text x="513.0" y="253.0" class="ax">Oct</text><rect x="548.1" y="83.7" width="37.8" height="154.3" rx="2" fill="#5a6570"/><text x="567.0" y="78.7" class="bl">1079</text><text x="567.0" y="253.0" class="ax">Nov</text><rect x="602.1" y="82.4" width="37.8" height="155.6" rx="2" fill="#5a6570"/><text x="621.0" y="77.4" class="bl">1088</text><text x="621.0" y="253.0" class="ax">Dec</text><rect x="656.1" y="72.5" width="37.8" height="165.5" rx="2" fill="#e8730c"/><text x="675.0" y="67.5" class="bl">1157</text><text x="675.0" y="253.0" class="ax">Jan</text><text x="675.0" y="266.0" class="ax2">2026</text><line x1="655.1" x2="694.9" y1="102.8" y2="102.8" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/><rect x="710.1" y="141.5" width="37.8" height="96.5" rx="2" fill="#e8730c"/><text x="729.0" y="136.5" class="bl">675</text><text x="729.0" y="253.0" class="ax">Feb</text><line x1="709.1" x2="748.9" y1="119.1" y2="119.1" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/><rect x="764.1" y="128.0" width="37.8" height="110.0" rx="2" fill="#e8730c"/><text x="783.0" y="123.0" class="bl">769</text><text x="783.0" y="253.0" class="ax">Mar</text><line x1="763.1" x2="802.9" y1="132.6" y2="132.6" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/><rect x="818.1" y="112.1" width="37.8" height="125.9" rx="2" fill="#e8730c"/><text x="837.0" y="107.1" class="bl">880</text><text x="837.0" y="253.0" class="ax">Apr</text><line x1="817.1" x2="856.9" y1="132.6" y2="132.6" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/><rect x="872.1" y="120.7" width="37.8" height="117.3" rx="2" fill="#e8730c"/><text x="891.0" y="115.7" class="bl">820</text><text x="891.0" y="253.0" class="ax">May</text><line x1="871.1" x2="910.9" y1="119.4" y2="119.4" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/><rect x="926.1" y="110.0" width="37.8" height="128.0" rx="2" fill="#e8730c"/><text x="945.0" y="105.0" class="bl">895</text><text x="945.0" y="253.0" class="ax">Jun</text><line x1="925.1" x2="964.9" y1="109.6" y2="109.6" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/><rect x="980.1" y="110.1" width="37.8" height="127.9" rx="2" fill="#e8730c"/><text x="999.0" y="105.1" class="bl">894</text><text x="999.0" y="253.0" class="ax">Jul</text><line x1="979.1" x2="1018.9" y1="109.6" y2="109.6" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/><rect x="1034.1" y="203.1" width="37.8" height="34.9" rx="2" fill="url(#hatch)"/><text x="1053.0" y="198.1" class="bl">244</text><text x="1053.0" y="253.0" class="ax">Aug</text><line x1="1033.1" x2="1072.9" y1="112.5" y2="112.5" stroke="#ff9a3c" stroke-width="2" stroke-dasharray="4 3"/></svg>
-<div class="legend">Grey = 2025 · orange = 2026 · hatched = current (partial) month · dashed orange tick = 2026 monthly Booked Jobs Goal.</div></div>
+<div class="panel"><div class="ptitle">Monthly booked jobs</div><svg viewBox="0 0 1080 300" width="100%" preserveAspectRatio="xMidYMid meet"><rect x="8.1" y="100.4" width="37.8" height="165.6" rx="2" fill="#6b6b78"/><text x="27.0" y="96.4" text-anchor="middle" font-size="9" fill="#9a9aa6">918</text><text x="27.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">01</text><text x="8.1" y="295.0" font-size="9.5" fill="#8a8a96" font-weight="600">2025</text><rect x="62.1" y="123.1" width="37.8" height="142.9" rx="2" fill="#6b6b78"/><text x="81.0" y="119.1" text-anchor="middle" font-size="9" fill="#9a9aa6">792</text><text x="81.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">02</text><rect x="116.1" y="139.4" width="37.8" height="126.6" rx="2" fill="#6b6b78"/><text x="135.0" y="135.4" text-anchor="middle" font-size="9" fill="#9a9aa6">702</text><text x="135.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">03</text><rect x="170.1" y="136.1" width="37.8" height="129.9" rx="2" fill="#6b6b78"/><text x="189.0" y="132.1" text-anchor="middle" font-size="9" fill="#9a9aa6">720</text><text x="189.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">04</text><rect x="224.1" y="126.2" width="37.8" height="139.8" rx="2" fill="#6b6b78"/><text x="243.0" y="122.2" text-anchor="middle" font-size="9" fill="#9a9aa6">775</text><text x="243.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">05</text><rect x="278.1" y="113.2" width="37.8" height="152.8" rx="2" fill="#6b6b78"/><text x="297.0" y="109.2" text-anchor="middle" font-size="9" fill="#9a9aa6">847</text><text x="297.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">06</text><rect x="332.1" y="106.4" width="37.8" height="159.6" rx="2" fill="#6b6b78"/><text x="351.0" y="102.4" text-anchor="middle" font-size="9" fill="#9a9aa6">885</text><text x="351.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07</text><rect x="386.1" y="118.1" width="37.8" height="147.9" rx="2" fill="#6b6b78"/><text x="405.0" y="114.1" text-anchor="middle" font-size="9" fill="#9a9aa6">820</text><text x="405.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08</text><rect x="440.1" y="86.3" width="37.8" height="179.7" rx="2" fill="#6b6b78"/><text x="459.0" y="82.3" text-anchor="middle" font-size="9" fill="#9a9aa6">996</text><text x="459.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">09</text><rect x="494.1" y="16.0" width="37.8" height="250.0" rx="2" fill="#6b6b78"/><text x="513.0" y="12.0" text-anchor="middle" font-size="9" fill="#9a9aa6">1386</text><text x="513.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">10</text><rect x="548.1" y="71.4" width="37.8" height="194.6" rx="2" fill="#6b6b78"/><text x="567.0" y="67.4" text-anchor="middle" font-size="9" fill="#9a9aa6">1079</text><text x="567.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">11</text><rect x="602.1" y="69.8" width="37.8" height="196.2" rx="2" fill="#6b6b78"/><text x="621.0" y="65.8" text-anchor="middle" font-size="9" fill="#9a9aa6">1088</text><text x="621.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">12</text><rect x="656.1" y="57.3" width="37.8" height="208.7" rx="2" fill="var(--accent)"/><text x="675.0" y="53.3" text-anchor="middle" font-size="9" fill="#9a9aa6">1157</text><text x="675.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">01</text><text x="656.1" y="295.0" font-size="9.5" fill="#8a8a96" font-weight="600">2026</text><line x1="655.1" y1="95.4" x2="694.9" y2="95.4" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="710.1" y="144.2" width="37.8" height="121.8" rx="2" fill="var(--accent)"/><text x="729.0" y="140.2" text-anchor="middle" font-size="9" fill="#9a9aa6">675</text><text x="729.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">02</text><line x1="709.1" y1="116.0" x2="748.9" y2="116.0" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="764.1" y="127.3" width="37.8" height="138.7" rx="2" fill="var(--accent)"/><text x="783.0" y="123.3" text-anchor="middle" font-size="9" fill="#9a9aa6">769</text><text x="783.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">03</text><line x1="763.1" y1="133.0" x2="802.9" y2="133.0" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="818.1" y="107.3" width="37.8" height="158.7" rx="2" fill="var(--accent)"/><text x="837.0" y="103.3" text-anchor="middle" font-size="9" fill="#9a9aa6">880</text><text x="837.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">04</text><line x1="817.1" y1="133.0" x2="856.9" y2="133.0" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="872.1" y="118.1" width="37.8" height="147.9" rx="2" fill="var(--accent)"/><text x="891.0" y="114.1" text-anchor="middle" font-size="9" fill="#9a9aa6">820</text><text x="891.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">05</text><line x1="871.1" y1="116.4" x2="910.9" y2="116.4" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="926.1" y="104.6" width="37.8" height="161.4" rx="2" fill="var(--accent)"/><text x="945.0" y="100.6" text-anchor="middle" font-size="9" fill="#9a9aa6">895</text><text x="945.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">06</text><line x1="925.1" y1="104.1" x2="964.9" y2="104.1" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="980.1" y="104.7" width="37.8" height="161.3" rx="2" fill="var(--accent)"/><text x="999.0" y="100.7" text-anchor="middle" font-size="9" fill="#9a9aa6">894</text><text x="999.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07</text><line x1="979.1" y1="104.1" x2="1018.9" y2="104.1" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="1034.1" y="213.7" width="37.8" height="52.3" rx="2" fill="var(--accent)" fill-opacity="0.55" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 2"/><text x="1053.0" y="209.7" text-anchor="middle" font-size="9" fill="#9a9aa6">290</text><text x="1053.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08</text><line x1="1033.1" y1="107.7" x2="1072.9" y2="107.7" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/></svg>
+<div class="legend"><span><span class="sw" style="background:#6b6b78"></span>2025</span>
+<span><span class="sw" style="background:var(--accent)"></span>2026</span>
+<span><span class="sw" style="background:transparent;border:1px dashed var(--accent)"></span>current month (partial)</span>
+<span><span class="sw" style="background:#c9a227"></span>2026 Booked Jobs Goal</span></div></div>
 
-<h2>This week (Monday start)</h2>
-<div class="panel"><div class="week"><div class="wd"><div class="wdn">Mon</div><div class="wdd">8/10</div>
-<div class="wdv bad">0</div><div class="wdg">goal 42</div></div></div></div>
+<div class="panel"><div class="ptitle">This week (Monday start)</div><div class="wstrip"><div class="wcell">
+      <div class="wd">Mon</div>
+      <div class="wn good">46</div>
+      <div class="wg">goal 42</div>
+      <div class="wdt">08-10</div>
+    </div><div class="wcell">
+      <div class="wd">Tue</div>
+      <div class="wn bad">0</div>
+      <div class="wg">goal 42</div>
+      <div class="wdt">08-11</div>
+    </div></div></div>
 
 <footer>
-<strong>Sources:</strong> Booking PBI 4DX.xlsx (Sheet1) — metric is the count of rows grouped by <em>Created Date</em>; every row with a Created Date counts as one booked job (17,342 dated rows; 262 rows had no Created Date and were excluded). Goal = <em>Booked Jobs Goal</em> column on the "Daily Goals" tab of CBD 2026 Revenue Budget.xlsx.<br>
-<strong>Yesterday</strong> = the prior calendar day (August 9, 2026). Last-year comparison uses a 364-day shift (Aug 10, 2025) so the weekday matches.<br>
-<strong>Goal coverage:</strong> the Booked Jobs Goal column is populated on business days only and currently runs Jan 2 – Aug 31, 2026. Weekends, holidays, and unbudgeted months carry no goal — those days show no goal marker rather than a zero goal. Goal and last-year figures anchor to the actuals' last Created Date (Aug 9, 2026).
+Source: <b>Booking PBI 4DX.xlsx</b> (Sheet1) — metric is the count of rows grouped by <b>Created Date</b>. Goal: <b>CBD 2026 Revenue Budget.xlsx</b> → Daily Goals → <b>Booked Jobs Goal</b>.<br/>
+<b>Yesterday</b> = the prior calendar day (2026-08-10); last-year comparison uses a 364-day shift (2025-08-11) so the weekday matches. Weeks start Monday.<br/>
+<b>Goal coverage:</b> the Booked Jobs Goal column is populated on business days only and currently runs Jan 2 – Aug 31, 2026. Weekends, holidays and unbudgeted months have no goal and are omitted from goal sums rather than counted as zero. Goal and last-year figures anchor to the actuals' last Created Date (2026-08-10).<br/>
+Attainment: ≥100% green · 95–99.9% amber · &lt;95% red. YoY: ≥0% green.
 </footer>
 </div></body></html>
