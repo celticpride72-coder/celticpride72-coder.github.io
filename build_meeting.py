@@ -47,7 +47,7 @@ for b in segs[1:4]:
 # ---- SERVICE data (embed, render client-side; exclude TGL%) ----
 sv=open(f'{SRC}/service_dashboard.html',encoding='utf-8').read()
 SD=json.loads(balanced(sv,sv.find('var D=')))
-SVCDATA=json.dumps({'svc':SD['svc'],'tgl':SD['tgl'],'goal':SD['goal']},separators=(',',':'))
+SVCDATA=json.dumps({'svc':SD['svc'],'tgl':SD['tgl'],'goal':SD['goal'],'tglp':SD.get('tglp',{})},separators=(',',':'))
 
 # review month = previous calendar month
 today=datetime.date.today()
@@ -108,7 +108,7 @@ footer{margin-top:22px;color:var(--dim);font-size:11px}
 <footer>%FOOT%</footer>
 </div>
 <script>
-var SD=%SVCDATA%;var SVC=SD.svc,TGL=SD.tgl,GOAL=SD.goal;var cur='lm';var LY={mtd:'mtd_ly',lm:'lm_ly'};
+var SD=%SVCDATA%;var SVC=SD.svc,TGL=SD.tgl,GOAL=SD.goal,TGLP=SD.tglp;var cur='lm';var LY={mtd:'mtd_ly',lm:'lm_ly'};
 function money(n){return '$'+Math.round(n).toLocaleString();}
 function yoy(a,b){return (b==null||b===0)?null:(a-b)/Math.abs(b)*100;}
 function yTag(v){if(v==null)return '<span class="tag n">n/a</span>';var c=v>=0?'g':'r';return '<span class="tag '+c+'">'+(v>=0?'+':'')+v.toFixed(1)+'% YoY</span>';}
@@ -116,11 +116,12 @@ function kpi(l,v,tags){return '<div class="kpi"><div class="lab">'+l+'</div><div
 function esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 function techBars(id,obj,fmt){var arr=Object.keys(obj).map(function(k){return [k,obj[k]];}).filter(function(x){return x[1]>0;});arr.sort(function(a,b){return b[1]-a[1];});arr=arr.slice(0,12);var mx=arr.length?arr[0][1]:1;document.getElementById(id).innerHTML=arr.map(function(x){var w=Math.max(2,x[1]/mx*110);return '<tr><td style="width:36%">'+esc(x[0])+'</td><td style="text-align:right;width:24%">'+fmt(x[1])+'</td><td><span class="bar" style="width:'+w+'px"></span></td></tr>';}).join('')||'<tr><td style="padding:9px 11px;color:var(--dim)">No data.</td></tr>';}
 function render(){var s=SVC[cur],sly=SVC[LY[cur]],t=TGL[cur],tly=TGL[LY[cur]],goal=GOAL[cur];
- var rev=s.rev,jobs=s.n,jrev=s.nRev,at=jrev?rev/jrev:0,aj=jobs?rev/jobs:0;
+ var rev=s.rev,jobs=s.n,jrev=s.nRev,at=jrev?rev/jrev:0,aj=jobs?rev/jobs:0;var tp=jobs?(TGLP[cur].numer/jobs*100):0,tpLY=sly.n?(TGLP[LY[cur]].numer/sly.n*100):0,tpd=tp-tpLY;
  var atly=sly.nRev?sly.rev/sly.nRev:0,ajly=sly.n?sly.rev/sly.n:0;
  document.getElementById('skpis').innerHTML=
   kpi('Service Revenue',money(rev),['<span class="tag '+(rev>=goal?'g':'r')+'">'+(goal?Math.round(rev/goal*100):0)+'% of goal</span>',yTag(yoy(rev,sly.rev))])+
   kpi('TGL Sales',money(t.sales),[yTag(yoy(t.sales,tly.sales)),'<span class="tag n">'+t.count+' est</span>'])+
+  kpi('TGL %',tp.toFixed(1)+'%',['<span class="tag '+(tpd>=0?'g':'r')+'">'+(tpd>=0?'+':'')+tpd.toFixed(1)+' pts YoY</span>','<span class="tag n">'+TGLP[cur].numer+' of '+jobs+' visits</span>'])+
   kpi('Avg Ticket',money(at),[yTag(yoy(at,atly))])+
   kpi('Avg Job Revenue',money(aj),[yTag(yoy(aj,ajly))])+
   kpi('Service Jobs',jobs.toLocaleString(),[yTag(yoy(jobs,sly.n)),'<span class="tag n">'+jrev+' w/ rev</span>'])+
@@ -140,6 +141,6 @@ render();
 </script></body></html>'''
 html=(html.replace('%MON%',MON).replace('%PREP%',today.strftime('%b %-d, %Y'))
  .replace('%WIGS%',wig_html).replace('%REV%',rev_html).replace('%SVCDATA%',SVCDATA)
- .replace('%FOOT%','Sources: 4DX Scoreboard (WIG 1–3), Revenue dashboard (rolling 30/60/90/365), Service dashboard (MTD & Last Month, TGL% intentionally omitted). Auto-assembled from the published dashboards; figures reflect their most recent daily refresh.'))
+ .replace('%FOOT%','Sources: 4DX Scoreboard (WIG 1–3), Revenue dashboard (rolling 30/60/90/365), Service dashboard (MTD & Last Month, incl. TGL %). Auto-assembled from the published dashboards; figures reflect their most recent daily refresh.'))
 open(OUT,'w',encoding='utf-8').write(html)
 print('wrote',OUT,'bytes',len(html),'| review month',MON)
