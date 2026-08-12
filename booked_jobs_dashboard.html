@@ -1,174 +1,313 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Booked Jobs Dashboard — Comfort By Design</title>
 <style>
-:root{--accent:#ff7a18;--bg:#0e0e11;--panel:#17171c;--panel2:#1d1d23;--line:#2a2a32;--txt:#e9e9ee;--mut:#8a8a96;--good:#3fbf6f;--warn:#e0a92b;--bad:#e5484d;}
+:root{
+  --accent:#F26B21; --accent-soft:#FDE7D8; --accent-dk:#C24F12;
+  --bg:#F6F7F9; --card:#FFFFFF; --ink:#141A22; --muted:#6B7683; --line:#E4E8ED;
+  --green:#1E9E5A; --amber:#D99100; --red:#D64545; --y25:#9AA6B2; --y26:#F26B21;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:26px 22px 40px}
-.wrap{max-width:1160px;margin:0 auto}
-h1{font-size:22px;margin:0 0 3px;letter-spacing:-.3px}
-h1 span{color:var(--accent)}
-.sub{color:var(--mut);font-size:12.5px;margin-bottom:20px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:18px}
-.ptitle{font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:var(--mut);margin-bottom:14px;font-weight:700}
-/* hero */
-.hero{display:grid;grid-template-columns:minmax(240px,330px) 1fr;gap:26px;align-items:center;
-  background:linear-gradient(135deg,#1c1a19,#17171c 55%);border:1px solid #34291f;border-left:4px solid var(--accent)}
-.hday{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700}
-.hnum{font-size:76px;font-weight:800;line-height:1;margin:6px 0 2px;letter-spacing:-3px}
-.hnum.good{color:var(--good)}.hnum.warn{color:var(--warn)}.hnum.bad{color:var(--bad)}.hnum.na{color:var(--txt)}
-.hjobs{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
-.hdate{font-size:13px;color:var(--mut);margin-bottom:14px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-size:11.5px;color:var(--mut);display:flex;flex-direction:column;gap:2px}
-.chip b{font-size:15px;font-weight:700}
-.chip i{font-style:normal;font-size:10px;color:#6f6f7a}
-.chip.good b{color:var(--good)}.chip.warn b{color:var(--warn)}.chip.bad b{color:var(--bad)}
-.await{margin-top:10px;font-size:11.5px;color:var(--warn)}
-/* kpi */
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.card,.rcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
-.klab,.rlab{font-size:11px;letter-spacing:1.4px;color:var(--mut);font-weight:700;text-transform:uppercase}
-.kval,.rval{font-size:34px;font-weight:800;letter-spacing:-1.4px;margin:5px 0 1px}
-.ksub{font-size:10.5px;color:#6f6f7a;margin-bottom:9px}
-.krow{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 7px}
-.tag{font-size:10.5px;font-weight:700;padding:3px 7px;border-radius:5px;background:#232329;color:var(--mut)}
-.tag.good{background:rgba(63,191,111,.15);color:var(--good)}
-.tag.warn{background:rgba(224,169,43,.15);color:var(--warn)}
-.tag.bad{background:rgba(229,72,77,.15);color:var(--bad)}
-.kfoot{font-size:10px;color:#6f6f7a}
-/* attainment */
-.arow{display:grid;grid-template-columns:52px 1fr 62px;align-items:center;gap:12px;margin-bottom:16px}
-.alab{font-size:11.5px;font-weight:700;color:var(--mut)}
-.atrack{position:relative;height:22px;background:#212127;border-radius:5px;overflow:visible}
-.afill{height:100%;border-radius:5px;background:var(--accent)}
-.afill.good{background:var(--good)}.afill.warn{background:var(--warn)}.afill.bad{background:var(--bad)}
-.gmark{position:absolute;top:-4px;bottom:-4px;width:2px;background:#c9a227}
-.gmark span{position:absolute;top:-14px;left:4px;font-size:9px;color:#c9a227;white-space:nowrap}
-.aval{text-align:right;font-size:13.5px;font-weight:700}
-.aval.good{color:var(--good)}.aval.warn{color:var(--warn)}.aval.bad{color:var(--bad)}
-/* week */
-.wstrip{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}
-.wcell{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 6px;text-align:center}
-.wcell.wend{opacity:.55}
-.wd{font-size:10px;letter-spacing:1px;color:var(--mut);font-weight:700}
-.wn{font-size:24px;font-weight:800;margin:3px 0}
-.wn.good{color:var(--good)}.wn.warn{color:var(--warn)}.wn.bad{color:var(--bad)}
-.wg{font-size:9.5px;color:#6f6f7a}
-.wdt{font-size:9px;color:#5a5a64;margin-top:2px}
-.legend{font-size:10.5px;color:#6f6f7a;margin-top:10px;display:flex;gap:16px;flex-wrap:wrap}
-.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
-footer{color:#6f6f7a;font-size:10.5px;line-height:1.7;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
-@media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.wstrip{grid-template-columns:repeat(4,1fr)}}
-</style></head><body><div class="wrap">
-<h1>Booked <span>Jobs</span> Dashboard</h1>
-<div class="sub">Comfort By Design · count of booked jobs vs Booked Jobs Goal and same period last year · generated 2026-08-11 · data through 2026-08-10</div>
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 20px 60px;}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;border-left:5px solid var(--accent);padding-left:14px;}
+h1{margin:0;font-size:25px;letter-spacing:-.4px;}
+.sub{color:var(--muted);font-size:13px;margin-top:4px;}
+.asof{font-size:12px;color:var(--muted);text-align:right;}
+.asof b{color:var(--ink)}
+h2.sec{font-size:13px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);margin:30px 0 12px;font-weight:700;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(16,24,40,.04);}
 
-<div class="panel hero">
+/* HERO */
+.hero{display:grid;grid-template-columns:minmax(280px,1fr) minmax(340px,1.5fr);gap:0;overflow:hidden;border-top:3px solid var(--accent);}
+.hero-l{padding:22px 24px;border-right:1px solid var(--line);}
+.hero-r{padding:18px 20px;}
+.hero-dow{font-size:14px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);font-weight:700;}
+.hero-num{font-size:76px;line-height:.95;font-weight:800;letter-spacing:-3px;margin:6px 0 2px;}
+.hero-lbl{font-size:13px;color:var(--muted);font-weight:600;}
+.hero-date{font-size:13px;color:var(--muted);margin-top:8px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.chip{border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:600;background:#FAFBFC;}
+.chip small{display:block;font-weight:500;color:var(--muted);font-size:11px;margin-top:1px;}
+.g{color:var(--green)}.a{color:var(--amber)}.r{color:var(--red)}
+.hero-title{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:6px;}
+.warn{background:#FFF6E5;border:1px solid #F3D89B;color:#8A6100;border-radius:8px;padding:8px 11px;font-size:12.5px;margin-top:12px;}
+
+/* KPI */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.kpi{padding:16px 18px;}
+.kpi .p{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;}
+.kpi .v{font-size:34px;font-weight:800;letter-spacing:-1.2px;margin:6px 0 2px;}
+.kpi .r2{display:flex;gap:14px;font-size:12.5px;font-weight:600;margin-top:8px;flex-wrap:wrap;}
+.kpi .r2 span small{display:block;color:var(--muted);font-weight:500;font-size:11px;}
+.kpi .rng{font-size:11px;color:var(--muted);margin-top:8px;}
+
+/* rolling */
+.grid4r{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.roll{padding:14px 16px;}
+.roll .p{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+.roll .v{font-size:27px;font-weight:800;margin:5px 0 2px;letter-spacing:-.8px;}
+.roll .m{font-size:12px;font-weight:600;}
+.roll .m em{font-style:normal;color:var(--muted);font-weight:500;}
+
+/* attainment bars */
+.att{padding:18px 20px;}
+.arow{display:grid;grid-template-columns:64px 1fr 150px;gap:14px;align-items:center;margin:14px 0;}
+.aname{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.6px;}
+.atrack{position:relative;height:26px;background:#EEF1F4;border-radius:6px;overflow:visible;}
+.afill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),#F79256);}
+.agoal{position:absolute;top:-4px;bottom:-4px;width:3px;background:#111A24;border-radius:2px;}
+.agoal:after{content:"GOAL";position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.6px;color:#111A24;font-weight:700;}
+.aval{font-size:12.5px;font-weight:700;text-align:right;}
+.aval em{font-style:normal;color:var(--muted);font-weight:500;display:block;font-size:11px;}
+
+/* monthly */
+.mon{padding:18px 20px 10px;}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:6px;flex-wrap:wrap;}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px;}
+
+/* week strip */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;padding:16px 18px;}
+.wd{border:1px solid var(--line);border-radius:9px;padding:10px 8px;text-align:center;background:#FAFBFC;}
+.wd.future{opacity:.42;}
+.wd .d{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.6px;}
+.wd .n{font-size:23px;font-weight:800;margin:4px 0 1px;}
+.wd .gl{font-size:10.5px;color:var(--muted);}
+.wd.today{border-color:var(--accent);background:var(--accent-soft);}
+
+footer{margin-top:34px;font-size:11.5px;color:var(--muted);line-height:1.7;border-top:1px solid var(--line);padding-top:14px;}
+svg text{font-family:inherit}
+@media(max-width:900px){.grid4,.grid4r{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.hero-l{border-right:none;border-bottom:1px solid var(--line)}.week{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
   <div>
-    <div class="hday">Monday</div>
-    <div class="hnum good">46</div>
-    <div class="hjobs">booked jobs</div>
-    <div class="hdate">August 10, 2026</div>
-    <div class="chips"><span class="chip good">vs Goal <b>110.1%</b><i>goal 41.8</i></span><span class="chip bad">vs Last Yr <b>-4.2%</b><i>LY 48 · 2025-08-11</i></span></div>
-    
+    <h1>Booked Jobs Dashboard</h1>
+    <div class="sub">Comfort By Design &middot; count of booked jobs vs. Booked Jobs Goal and same period last year</div>
   </div>
-  <div>
-    <div class="ptitle" style="margin-bottom:6px">Last 14 days</div>
-    <svg viewBox="0 0 560 190" width="100%" preserveAspectRatio="xMidYMid meet"><line x1="0" y1="66.5" x2="560" y2="66.5" stroke="#c9a227" stroke-width="1.4" stroke-dasharray="5 4"/><text x="558" y="62.5" text-anchor="end" font-size="9" fill="#c9a227">avg daily goal 41.4</text><rect x="6.4" y="79.2" width="27.2" height="84.8" rx="2" fill="#8a8a96"/><text x="20.0" y="75.2" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">36</text><text x="20.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/28</text><rect x="46.4" y="86.3" width="27.2" height="77.7" rx="2" fill="#8a8a96"/><text x="60.0" y="82.3" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">33</text><text x="60.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/29</text><rect x="86.4" y="91.0" width="27.2" height="73.0" rx="2" fill="#8a8a96"/><text x="100.0" y="87.0" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">31</text><text x="100.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/30</text><rect x="126.4" y="86.3" width="27.2" height="77.7" rx="2" fill="#8a8a96"/><text x="140.0" y="82.3" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">33</text><text x="140.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07/31</text><rect x="166.4" y="159.3" width="27.2" height="4.7" rx="2" fill="#4a4a52"/><text x="180.0" y="155.3" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">2</text><text x="180.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/01</text><rect x="206.4" y="147.5" width="27.2" height="16.5" rx="2" fill="#4a4a52"/><text x="220.0" y="143.5" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">7</text><text x="220.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/02</text><rect x="246.4" y="67.5" width="27.2" height="96.5" rx="2" fill="#8a8a96"/><text x="260.0" y="63.5" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">41</text><text x="260.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/03</text><rect x="286.4" y="18.0" width="27.2" height="146.0" rx="2" fill="#8a8a96"/><text x="300.0" y="14.0" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">62</text><text x="300.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/04</text><rect x="326.4" y="55.7" width="27.2" height="108.3" rx="2" fill="#8a8a96"/><text x="340.0" y="51.7" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">46</text><text x="340.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/05</text><rect x="366.4" y="79.2" width="27.2" height="84.8" rx="2" fill="#8a8a96"/><text x="380.0" y="75.2" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">36</text><text x="380.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/06</text><rect x="406.4" y="51.0" width="27.2" height="113.0" rx="2" fill="#8a8a96"/><text x="420.0" y="47.0" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">48</text><text x="420.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/07</text><rect x="446.4" y="161.6" width="27.2" height="2.4" rx="2" fill="#4a4a52"/><text x="460.0" y="157.6" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">1</text><text x="460.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/08</text><rect x="486.4" y="161.6" width="27.2" height="2.4" rx="2" fill="#4a4a52"/><text x="500.0" y="157.6" text-anchor="middle" font-size="9.5" fill="#9a9aa6" font-weight="500">1</text><text x="500.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/09</text><rect x="526.4" y="55.7" width="27.2" height="108.3" rx="2" fill="var(--accent)"/><text x="540.0" y="51.7" text-anchor="middle" font-size="9.5" fill="var(--accent)" font-weight="700">46</text><text x="540.0" y="180.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08/10</text></svg>
+  <div class="asof">
+    Generated <b>Wed, Aug 12, 2026</b><br>
+    Data through <b>Tue, Aug 11, 2026</b>
+  </div>
+</header>
+
+<!-- ============ YESTERDAY HERO ============ -->
+<section class="card hero">
+  <div class="hero-l">
+    <div class="hero-dow">Tuesday</div>
+    <div class="hero-num a">37</div>
+    <div class="hero-lbl">booked jobs</div>
+    <div class="hero-date">August 11, 2026</div>
+    <div class="chips">
+      <div class="chip">vs Goal <span class="a">88.6%</span><small>goal 41.8</small></div>
+      <div class="chip">vs Last Yr <span class="r">&minus;27.5%</span><small>51 on Tue, Aug 12, 2025</small></div>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="hero-title">Last 14 days &mdash; daily booked jobs</div>
+    <svg viewBox="0 0 660 200" width="100%" height="200" preserveAspectRatio="xMidYMid meet">
+      <!-- avg goal dashed line -->
+      <!-- scale: max 62 -> y from 168 down to 26 (h=142) -->
+      <g id="bars"></g>
+    </svg>
+    <div style="font-size:11px;color:var(--muted);margin-top:2px;">Dashed line = average daily Booked Jobs Goal on business days (41.5). Weekends muted; yesterday in orange.</div>
+  </div>
+</section>
+
+<!-- ============ KPI CARDS ============ -->
+<h2 class="sec">Period to date</h2>
+<div class="grid4">
+  <div class="card kpi">
+    <div class="p">WTD</div>
+    <div class="v">83</div>
+    <div class="r2">
+      <span class="a">99.3%<small>vs goal 83.6</small></span>
+      <span class="r">&minus;16.2%<small>vs LY 99</small></span>
+    </div>
+    <div class="rng">Mon Aug 10 &rarr; Aug 12</div>
+  </div>
+  <div class="card kpi">
+    <div class="p">MTD</div>
+    <div class="v">327</div>
+    <div class="r2">
+      <span class="g">111.8%<small>vs goal 292.5</small></span>
+      <span class="g">+34.0%<small>vs LY 244</small></span>
+    </div>
+    <div class="rng">Aug 1 &rarr; Aug 12</div>
+  </div>
+  <div class="card kpi">
+    <div class="p">QTD</div>
+    <div class="v">1,221</div>
+    <div class="r2">
+      <span class="g">102.6%<small>vs goal 1,190.2</small></span>
+      <span class="g">+8.1%<small>vs LY 1,129</small></span>
+    </div>
+    <div class="rng">Jul 1 &rarr; Aug 12</div>
+  </div>
+  <div class="card kpi">
+    <div class="p">YTD</div>
+    <div class="v">6,417</div>
+    <div class="r2">
+      <span class="g">104.0%<small>vs goal 6,168.5</small></span>
+      <span class="g">+9.1%<small>vs LY 5,883</small></span>
+    </div>
+    <div class="rng">Jan 1 &rarr; Aug 12</div>
   </div>
 </div>
 
-<div class="grid4" style="margin-bottom:18px"><div class="card">
-      <div class="klab">WTD</div>
-      <div class="kval">46</div>
-      <div class="ksub">since 2026-08-10</div>
-      <div class="krow"><span class="tag good">Goal 110.1%</span><span class="tag bad">YoY -4.2%</span></div>
-      <div class="kfoot">goal 42 · LY 48</div>
-    </div><div class="card">
-      <div class="klab">MTD</div>
-      <div class="kval">290</div>
-      <div class="ksub">since 2026-08-01</div>
-      <div class="krow"><span class="tag good">Goal 115.7%</span><span class="tag good">YoY +48.0%</span></div>
-      <div class="kfoot">goal 251 · LY 196</div>
-    </div><div class="card">
-      <div class="klab">QTD</div>
-      <div class="kval">1,184</div>
-      <div class="ksub">since 2026-07-01</div>
-      <div class="krow"><span class="tag good">Goal 103.1%</span><span class="tag good">YoY +9.5%</span></div>
-      <div class="kfoot">goal 1,148 · LY 1,081</div>
-    </div><div class="card">
-      <div class="klab">YTD</div>
-      <div class="kval">6,380</div>
-      <div class="ksub">since 2026-01-01</div>
-      <div class="krow"><span class="tag good">Goal 104.1%</span><span class="tag good">YoY +9.3%</span></div>
-      <div class="kfoot">goal 6,127 · LY 5,835</div>
-    </div></div>
+<!-- ============ ROLLING ============ -->
+<h2 class="sec">Rolling windows (anchored to Aug 11, 2026)</h2>
+<div class="grid4r">
+  <div class="card roll">
+    <div class="p">Last 30</div><div class="v">926</div>
+    <div class="m"><span class="g">102.4%</span> <em>of goal 904.6</em></div>
+    <div class="m"><span class="g">+5.6%</span> <em>vs LY 877</em></div>
+  </div>
+  <div class="card roll">
+    <div class="p">Last 60</div><div class="v">1,724</div>
+    <div class="m"><span class="g">102.6%</span> <em>of goal 1,679.9</em></div>
+    <div class="m"><span class="g">+1.4%</span> <em>vs LY 1,701</em></div>
+  </div>
+  <div class="card roll">
+    <div class="p">Last 90</div><div class="v">2,656</div>
+    <div class="m"><span class="g">104.4%</span> <em>of goal 2,544.0</em></div>
+    <div class="m"><span class="g">+10.2%</span> <em>vs LY 2,411</em></div>
+  </div>
+  <div class="card roll">
+    <div class="p">Last 180</div><div class="v">4,940</div>
+    <div class="m"><span class="g">101.9%</span> <em>of goal 4,848.8</em></div>
+    <div class="m"><span class="g">+5.7%</span> <em>vs LY 4,674</em></div>
+  </div>
+</div>
 
-<div class="panel"><div class="ptitle">Rolling windows (anchored at 2026-08-10)</div>
-<div class="grid4"><div class="rcard">
-      <div class="rlab">Last 30 days</div>
-      <div class="rval">891</div>
-      <div class="krow"><span class="tag good">Goal 103.3%</span><span class="tag good">YoY +7.9%</span></div>
-      <div class="kfoot">2026-07-12 → 2026-08-10 · goal 863 · LY 826</div>
-    </div><div class="rcard">
-      <div class="rlab">Last 60 days</div>
-      <div class="rval">1,709</div>
-      <div class="krow"><span class="tag good">Goal 101.8%</span><span class="tag good">YoY +1.7%</span></div>
-      <div class="kfoot">2026-06-12 → 2026-08-10 · goal 1,679 · LY 1,680</div>
-    </div><div class="rcard">
-      <div class="rlab">Last 90 days</div>
-      <div class="rval">2,645</div>
-      <div class="krow"><span class="tag good">Goal 104.0%</span><span class="tag good">YoY +8.9%</span></div>
-      <div class="kfoot">2026-05-13 → 2026-08-10 · goal 2,544 · LY 2,428</div>
-    </div><div class="rcard">
-      <div class="rlab">Last 180 days</div>
-      <div class="rval">4,926</div>
-      <div class="krow"><span class="tag good">Goal 101.6%</span><span class="tag good">YoY +5.9%</span></div>
-      <div class="kfoot">2026-02-12 → 2026-08-10 · goal 4,849 · LY 4,653</div>
-    </div></div></div>
+<!-- ============ ATTAINMENT ============ -->
+<h2 class="sec">Attainment to date</h2>
+<div class="card att" id="att"></div>
 
-<div class="panel"><div class="ptitle">Attainment to date</div><div class="arow">
-      <div class="alab">WTD</div>
-      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:81.10%"><span>Goal 42</span></div></div>
-      <div class="aval good">110.1%</div>
-    </div><div class="arow">
-      <div class="alab">MTD</div>
-      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:77.18%"><span>Goal 251</span></div></div>
-      <div class="aval good">115.7%</div>
-    </div><div class="arow">
-      <div class="alab">QTD</div>
-      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:86.60%"><span>Goal 1,148</span></div></div>
-      <div class="aval good">103.1%</div>
-    </div><div class="arow">
-      <div class="alab">YTD</div>
-      <div class="atrack"><div class="afill good" style="width:89.29%"></div><div class="gmark" style="left:85.74%"><span>Goal 6,127</span></div></div>
-      <div class="aval good">104.1%</div>
-    </div></div>
+<!-- ============ MONTHLY TREND ============ -->
+<h2 class="sec">Monthly booked jobs</h2>
+<div class="card mon">
+  <div class="legend">
+    <span><i class="sw" style="background:var(--y25)"></i>2025</span>
+    <span><i class="sw" style="background:var(--y26)"></i>2026</span>
+    <span><i class="sw" style="background:repeating-linear-gradient(45deg,#F26B21,#F26B21 2px,#fff 2px,#fff 4px)"></i>current month (partial)</span>
+    <span>&#9476;&#9476; 2026 monthly Booked Jobs Goal</span>
+  </div>
+  <svg viewBox="0 0 1120 320" width="100%" height="320" preserveAspectRatio="xMidYMid meet"><g id="mbars"></g></svg>
+</div>
 
-<div class="panel"><div class="ptitle">Monthly booked jobs</div><svg viewBox="0 0 1080 300" width="100%" preserveAspectRatio="xMidYMid meet"><rect x="8.1" y="100.4" width="37.8" height="165.6" rx="2" fill="#6b6b78"/><text x="27.0" y="96.4" text-anchor="middle" font-size="9" fill="#9a9aa6">918</text><text x="27.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">01</text><text x="8.1" y="295.0" font-size="9.5" fill="#8a8a96" font-weight="600">2025</text><rect x="62.1" y="123.1" width="37.8" height="142.9" rx="2" fill="#6b6b78"/><text x="81.0" y="119.1" text-anchor="middle" font-size="9" fill="#9a9aa6">792</text><text x="81.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">02</text><rect x="116.1" y="139.4" width="37.8" height="126.6" rx="2" fill="#6b6b78"/><text x="135.0" y="135.4" text-anchor="middle" font-size="9" fill="#9a9aa6">702</text><text x="135.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">03</text><rect x="170.1" y="136.1" width="37.8" height="129.9" rx="2" fill="#6b6b78"/><text x="189.0" y="132.1" text-anchor="middle" font-size="9" fill="#9a9aa6">720</text><text x="189.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">04</text><rect x="224.1" y="126.2" width="37.8" height="139.8" rx="2" fill="#6b6b78"/><text x="243.0" y="122.2" text-anchor="middle" font-size="9" fill="#9a9aa6">775</text><text x="243.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">05</text><rect x="278.1" y="113.2" width="37.8" height="152.8" rx="2" fill="#6b6b78"/><text x="297.0" y="109.2" text-anchor="middle" font-size="9" fill="#9a9aa6">847</text><text x="297.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">06</text><rect x="332.1" y="106.4" width="37.8" height="159.6" rx="2" fill="#6b6b78"/><text x="351.0" y="102.4" text-anchor="middle" font-size="9" fill="#9a9aa6">885</text><text x="351.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07</text><rect x="386.1" y="118.1" width="37.8" height="147.9" rx="2" fill="#6b6b78"/><text x="405.0" y="114.1" text-anchor="middle" font-size="9" fill="#9a9aa6">820</text><text x="405.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08</text><rect x="440.1" y="86.3" width="37.8" height="179.7" rx="2" fill="#6b6b78"/><text x="459.0" y="82.3" text-anchor="middle" font-size="9" fill="#9a9aa6">996</text><text x="459.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">09</text><rect x="494.1" y="16.0" width="37.8" height="250.0" rx="2" fill="#6b6b78"/><text x="513.0" y="12.0" text-anchor="middle" font-size="9" fill="#9a9aa6">1386</text><text x="513.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">10</text><rect x="548.1" y="71.4" width="37.8" height="194.6" rx="2" fill="#6b6b78"/><text x="567.0" y="67.4" text-anchor="middle" font-size="9" fill="#9a9aa6">1079</text><text x="567.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">11</text><rect x="602.1" y="69.8" width="37.8" height="196.2" rx="2" fill="#6b6b78"/><text x="621.0" y="65.8" text-anchor="middle" font-size="9" fill="#9a9aa6">1088</text><text x="621.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">12</text><rect x="656.1" y="57.3" width="37.8" height="208.7" rx="2" fill="var(--accent)"/><text x="675.0" y="53.3" text-anchor="middle" font-size="9" fill="#9a9aa6">1157</text><text x="675.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">01</text><text x="656.1" y="295.0" font-size="9.5" fill="#8a8a96" font-weight="600">2026</text><line x1="655.1" y1="95.4" x2="694.9" y2="95.4" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="710.1" y="144.2" width="37.8" height="121.8" rx="2" fill="var(--accent)"/><text x="729.0" y="140.2" text-anchor="middle" font-size="9" fill="#9a9aa6">675</text><text x="729.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">02</text><line x1="709.1" y1="116.0" x2="748.9" y2="116.0" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="764.1" y="127.3" width="37.8" height="138.7" rx="2" fill="var(--accent)"/><text x="783.0" y="123.3" text-anchor="middle" font-size="9" fill="#9a9aa6">769</text><text x="783.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">03</text><line x1="763.1" y1="133.0" x2="802.9" y2="133.0" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="818.1" y="107.3" width="37.8" height="158.7" rx="2" fill="var(--accent)"/><text x="837.0" y="103.3" text-anchor="middle" font-size="9" fill="#9a9aa6">880</text><text x="837.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">04</text><line x1="817.1" y1="133.0" x2="856.9" y2="133.0" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="872.1" y="118.1" width="37.8" height="147.9" rx="2" fill="var(--accent)"/><text x="891.0" y="114.1" text-anchor="middle" font-size="9" fill="#9a9aa6">820</text><text x="891.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">05</text><line x1="871.1" y1="116.4" x2="910.9" y2="116.4" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="926.1" y="104.6" width="37.8" height="161.4" rx="2" fill="var(--accent)"/><text x="945.0" y="100.6" text-anchor="middle" font-size="9" fill="#9a9aa6">895</text><text x="945.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">06</text><line x1="925.1" y1="104.1" x2="964.9" y2="104.1" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="980.1" y="104.7" width="37.8" height="161.3" rx="2" fill="var(--accent)"/><text x="999.0" y="100.7" text-anchor="middle" font-size="9" fill="#9a9aa6">894</text><text x="999.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">07</text><line x1="979.1" y1="104.1" x2="1018.9" y2="104.1" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="1034.1" y="213.7" width="37.8" height="52.3" rx="2" fill="var(--accent)" fill-opacity="0.55" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="3 2"/><text x="1053.0" y="209.7" text-anchor="middle" font-size="9" fill="#9a9aa6">290</text><text x="1053.0" y="282.0" text-anchor="middle" font-size="8.5" fill="#6f6f7a">08</text><line x1="1033.1" y1="107.7" x2="1072.9" y2="107.7" stroke="#c9a227" stroke-width="1.6" stroke-dasharray="4 3"/></svg>
-<div class="legend"><span><span class="sw" style="background:#6b6b78"></span>2025</span>
-<span><span class="sw" style="background:var(--accent)"></span>2026</span>
-<span><span class="sw" style="background:transparent;border:1px dashed var(--accent)"></span>current month (partial)</span>
-<span><span class="sw" style="background:#c9a227"></span>2026 Booked Jobs Goal</span></div></div>
-
-<div class="panel"><div class="ptitle">This week (Monday start)</div><div class="wstrip"><div class="wcell">
-      <div class="wd">Mon</div>
-      <div class="wn good">46</div>
-      <div class="wg">goal 42</div>
-      <div class="wdt">08-10</div>
-    </div><div class="wcell">
-      <div class="wd">Tue</div>
-      <div class="wn bad">0</div>
-      <div class="wg">goal 42</div>
-      <div class="wdt">08-11</div>
-    </div></div></div>
+<!-- ============ WEEK STRIP ============ -->
+<h2 class="sec">This week (Monday start)</h2>
+<div class="card week" id="week"></div>
 
 <footer>
-Source: <b>Booking PBI 4DX.xlsx</b> (Sheet1) — metric is the count of rows grouped by <b>Created Date</b>. Goal: <b>CBD 2026 Revenue Budget.xlsx</b> → Daily Goals → <b>Booked Jobs Goal</b>.<br/>
-<b>Yesterday</b> = the prior calendar day (2026-08-10); last-year comparison uses a 364-day shift (2025-08-11) so the weekday matches. Weeks start Monday.<br/>
-<b>Goal coverage:</b> the Booked Jobs Goal column is populated on business days only and currently runs Jan 2 – Aug 31, 2026. Weekends, holidays and unbudgeted months have no goal and are omitted from goal sums rather than counted as zero. Goal and last-year figures anchor to the actuals' last Created Date (2026-08-10).<br/>
-Attainment: ≥100% green · 95–99.9% amber · &lt;95% red. YoY: ≥0% green.
+  <b>Sources.</b> Booked jobs = count of rows in <i>Booking PBI 4DX.xlsx</i> (Sheet1) grouped by <b>Created Date</b> — every row with a Created Date counts as one booked job (17,425 dated rows; 262 rows had no Created Date and are excluded). Goal = <b>Booked Jobs Goal</b> column on the <i>Daily Goals</i> tab of <i>CBD 2026 Revenue Budget.xlsx</i>. Both files on SharePoint (comfortbydesign.com).<br>
+  <b>Yesterday</b> = the prior calendar day (Aug 11, 2026). Last-year comparison uses a <b>364-day shift</b> so the weekday matches (Tue &rarr; Tue).<br>
+  <b>Goal coverage.</b> The Booked Jobs Goal column is populated on business days only and currently runs <b>Jan 2 – Aug 31, 2026</b>. Weekends, holidays and unbudgeted months carry no goal and are omitted from goal sums and markers rather than treated as zero. Period goals are summed through the last Created Date in the data (Aug 11, 2026), not through today. Weeks start Monday. Attainment: ≥100% green, 95–99.9% amber, &lt;95% red. YoY: ≥0 green, &lt;0 red.
 </footer>
-</div></body></html>
+</div>
+
+<script>
+(function(){
+var A='#F26B21', MUTED='#C3CBD4', BAR='#8B98A6';
+
+/* ---------- SPARKLINE ---------- */
+var spark=[
+ {d:'7/29',c:33,we:false},{d:'7/30',c:31,we:false},{d:'7/31',c:33,we:false},
+ {d:'8/1',c:2,we:true},{d:'8/2',c:7,we:true},{d:'8/3',c:41,we:false},
+ {d:'8/4',c:62,we:false},{d:'8/5',c:46,we:false},{d:'8/6',c:36,we:false},
+ {d:'8/7',c:48,we:false},{d:'8/8',c:1,we:true},{d:'8/9',c:1,we:true},
+ {d:'8/10',c:46,we:false},{d:'8/11',c:37,we:false,y:true}
+];
+var AVG=41.5, MAXS=62, X0=26, W=620, TOP=30, BOT=166, H=BOT-TOP;
+var bw=(W-X0)/spark.length, pad=bw*0.20;
+var s='';
+spark.forEach(function(p,i){
+  var h=Math.max(2,p.c/MAXS*H), x=X0+i*bw+pad, y=BOT-h, w=bw-pad*2;
+  var fill=p.y?A:(p.we?MUTED:BAR);
+  s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+fill+'"/>';
+  s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(y-5).toFixed(1)+'" font-size="10.5" text-anchor="middle" font-weight="'+(p.y?'800':'600')+'" fill="'+(p.y?A:'#6B7683')+'">'+p.c+'</text>';
+  s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(BOT+15)+'" font-size="9.5" text-anchor="middle" fill="'+(p.y?'#141A22':'#8C97A2')+'" font-weight="'+(p.y?'700':'400')+'">'+p.d+'</text>';
+});
+var gy=BOT-AVG/MAXS*H;
+s+='<line x1="'+X0+'" x2="'+(X0+bw*spark.length)+'" y1="'+gy.toFixed(1)+'" y2="'+gy.toFixed(1)+'" stroke="#141A22" stroke-width="1.4" stroke-dasharray="6 4" opacity=".6"/>';
+s+='<text x="'+(X0+bw*spark.length+4)+'" y="'+(gy+3.5).toFixed(1)+'" font-size="9.5" fill="#6B7683">goal 41.5</text>';
+document.getElementById('bars').innerHTML=s;
+
+/* ---------- ATTAINMENT ---------- */
+var att=[
+ {n:'WTD',a:83,g:83.56},{n:'MTD',a:327,g:292.47},
+ {n:'QTD',a:1221,g:1190.20},{n:'YTD',a:6417,g:6168.52}
+];
+var ah='';
+att.forEach(function(p){
+  var pct=p.a/p.g*100;
+  var cls=pct>=100?'g':(pct>=95?'a':'r');
+  var scale=Math.max(p.a,p.g)*1.12;
+  var fw=Math.min(100,p.a/scale*100), gp=Math.min(99.4,p.g/scale*100);
+  ah+='<div class="arow"><div class="aname">'+p.n+'</div>'+
+      '<div class="atrack"><div class="afill" style="width:'+fw.toFixed(1)+'%"></div>'+
+      '<div class="agoal" style="left:'+gp.toFixed(1)+'%"></div></div>'+
+      '<div class="aval '+cls+'">'+pct.toFixed(1)+'%<em>'+p.a.toLocaleString()+' of '+p.g.toLocaleString(undefined,{maximumFractionDigits:1})+'</em></div></div>';
+});
+document.getElementById('att').innerHTML=ah;
+
+/* ---------- MONTHLY ---------- */
+var mon=[
+ ['2025-01',918],['2025-02',792],['2025-03',702],['2025-04',720],['2025-05',775],['2025-06',847],
+ ['2025-07',885],['2025-08',820],['2025-09',996],['2025-10',1386],['2025-11',1079],['2025-12',1088],
+ ['2026-01',1157],['2026-02',675],['2026-03',769],['2026-04',880],['2026-05',820],['2026-06',895],
+ ['2026-07',894],['2026-08',327]
+];
+var mg={'2026-01':945.5,'2026-02':831.6,'2026-03':737.1,'2026-04':737.1,'2026-05':829.3,'2026-06':897.7,'2026-07':897.7,'2026-08':877.4};
+var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MX=1420, MX0=44, MW=1060, MTOP=24, MBOT=264, MH=MBOT-MTOP;
+var mbw=MW/mon.length, mpad=mbw*0.16;
+var mh='<defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#FCD9C2"/><line x1="0" y1="0" x2="0" y2="6" stroke="#F26B21" stroke-width="3"/></pattern></defs>';
+[0,400,800,1200].forEach(function(v){
+  var y=MBOT-v/MX*MH;
+  mh+='<line x1="'+MX0+'" x2="'+(MX0+MW)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="#E4E8ED"/>';
+  mh+='<text x="'+(MX0-8)+'" y="'+(y+3.5).toFixed(1)+'" font-size="10" text-anchor="end" fill="#8C97A2">'+v+'</text>';
+});
+mon.forEach(function(p,i){
+  var k=p[0], v=p[1], yr=k.slice(0,4), mi=parseInt(k.slice(5),10)-1;
+  var cur=(k==='2026-08');
+  var h=v/MX*MH, x=MX0+i*mbw+mpad, y=MBOT-h, w=mbw-mpad*2;
+  var fill=cur?'url(#hatch)':(yr==='2026'?A:'#9AA6B2');
+  mh+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+fill+'"'+(cur?' stroke="#F26B21" stroke-width="1.2"':'')+'/>';
+  mh+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(y-6).toFixed(1)+'" font-size="10.5" text-anchor="middle" font-weight="600" fill="#4A5560">'+v+'</text>';
+  mh+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(MBOT+15)+'" font-size="10" text-anchor="middle" fill="#6B7683">'+MN[mi]+'</text>';
+  if(i===0||k.slice(5)==='01')mh+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(MBOT+30)+'" font-size="10" text-anchor="middle" fill="#141A22" font-weight="700">'+yr+'</text>';
+  if(mg[k]){
+    var gy2=MBOT-mg[k]/MX*MH;
+    mh+='<line x1="'+(x-mpad*0.4).toFixed(1)+'" x2="'+(x+w+mpad*0.4).toFixed(1)+'" y1="'+gy2.toFixed(1)+'" y2="'+gy2.toFixed(1)+'" stroke="#141A22" stroke-width="1.8" stroke-dasharray="5 3"/>';
+  }
+});
+document.getElementById('mbars').innerHTML=mh;
+
+/* ---------- WEEK STRIP ---------- */
+var wk=[
+ {d:'Mon',dt:'Aug 10',n:46,g:41.8},{d:'Tue',dt:'Aug 11',n:37,g:41.8},
+ {d:'Wed',dt:'Aug 12',n:0,g:41.8,today:true},
+ {d:'Thu',dt:'Aug 13',g:41.8,f:true},{d:'Fri',dt:'Aug 14',g:41.8,f:true},
+ {d:'Sat',dt:'Aug 15',f:true},{d:'Sun',dt:'Aug 16',f:true}
+];
+var wh='';
+wk.forEach(function(p){
+  var cls='wd'+(p.f?' future':'')+(p.today?' today':'');
+  var col='';
+  if(!p.f&&p.g){var pc=p.n/p.g*100;col=pc>=100?'var(--green)':(pc>=95?'var(--amber)':'var(--red)');}
+  wh+='<div class="'+cls+'"><div class="d">'+p.d+'</div><div class="n" style="color:'+(col||'var(--muted)')+'">'+(p.f?'—':p.n)+'</div>'+
+      '<div class="gl">'+p.dt+(p.g?' · goal '+p.g:' · no goal')+'</div></div>';
+});
+document.getElementById('week').innerHTML=wh;
+})();
+</script>
+</body>
+</html>
