@@ -6,180 +6,233 @@
 <title>CBD Sales Dashboard</title>
 <style>
 :root{
-  --bg:#0f1419; --panel:#171d26; --panel2:#1d2530; --line:#2a3441;
-  --txt:#e8edf4; --muted:#8b98a9; --accent:#4da3ff;
-  --green:#3ddc84; --amber:#ffc861; --red:#ff6b6b;
+  --bg:#0e1116; --panel:#161b23; --panel2:#1c222c; --line:#2a3140;
+  --txt:#e6edf3; --muted:#8b98a9; --accent:#4c8dff;
+  --green:#2ea043; --amber:#d29922; --red:#da3633;
+  --greenb:rgba(46,160,67,.14); --amberb:rgba(210,153,34,.14); --redb:rgba(218,54,51,.14);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:28px 22px 60px}
-h1{font-size:26px;margin:0 0 4px;letter-spacing:-.02em}
-.sub{color:var(--muted);font-size:13px;margin-bottom:26px}
-h2{font-size:15px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:34px 0 14px;font-weight:600}
-.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 15px}
-.card .label{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
-.card .range{font-size:10.5px;color:#66738a;margin-top:2px}
-.card .val{font-size:25px;font-weight:700;margin:11px 0 12px;letter-spacing:-.02em}
-.metric{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding:4px 0;border-top:1px solid var(--line)}
-.metric span:first-child{color:var(--muted)}
-.metric b{font-weight:700;font-variant-numeric:tabular-nums}
-.g{color:var(--green)}.a{color:var(--amber)}.r{color:var(--red)}.n{color:var(--muted)}
-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-th{text-align:right;padding:10px 13px;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:var(--panel2);font-weight:600}
+body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:22px 26px 60px}
+h1{font-size:22px;margin:0 0 4px;letter-spacing:.2px}
+h2{font-size:14px;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted);margin:30px 0 12px;font-weight:600}
+.sub{color:var(--muted);font-size:12.5px;margin-bottom:6px}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 15px}
+.card .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
+.card .rng{font-size:10.5px;color:#61708a;margin-top:2px}
+.card .val{font-size:25px;font-weight:700;margin:9px 0 10px;letter-spacing:-.5px}
+.metrics{display:flex;flex-direction:column;gap:5px}
+.m{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.m span:first-child{color:var(--muted)}
+.pill{font-weight:700;padding:1.5px 7px;border-radius:5px;font-size:11.5px}
+.g{color:var(--green);background:var(--greenb)}
+.a{color:var(--amber);background:var(--amberb)}
+.r{color:var(--red);background:var(--redb)}
+.n{color:var(--muted);background:rgba(139,152,169,.12)}
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:9px 12px;text-align:right;font-size:12.5px;border-bottom:1px solid var(--line)}
+th{background:var(--panel2);color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 th:first-child,td:first-child{text-align:left}
-td{padding:10px 13px;text-align:right;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
-td:first-child{font-weight:600}
-.chart{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
-.bars{display:flex;align-items:flex-end;gap:5px;height:230px;padding-top:10px}
-.bcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative}
-.bar{width:100%;background:linear-gradient(180deg,#4da3ff,#2b6fb8);border-radius:4px 4px 0 0;position:relative}
-.bar.cur{background:repeating-linear-gradient(45deg,#4da3ff,#4da3ff 5px,#2b6fb8 5px,#2b6fb8 10px)}
-.gtick{position:absolute;left:0;right:0;border-top:2px dashed var(--amber);z-index:2}
-.blab{font-size:9px;color:var(--muted);margin-top:6px;white-space:nowrap;transform:rotate(-60deg);transform-origin:center;height:34px}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}
-.day{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 9px;text-align:center}
-.day .d{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.day .v{font-size:15px;font-weight:700;margin-top:6px}
-.day.future{opacity:.35}
-.grid2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.legend{font-size:11.5px;color:var(--muted);margin-top:9px}
-footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;line-height:1.7}
-@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+tr:last-child td{border-bottom:none}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+footer{margin-top:34px;color:#61708a;font-size:11.5px;border-top:1px solid var(--line);padding-top:14px;line-height:1.7}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.wk .d{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
+.wk .d .dn{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px}
+.wk .d .dv{font-size:15px;font-weight:700;margin-top:5px}
+.wk .d .dg{font-size:10px;color:#61708a;margin-top:2px}
+.wk .d.fut{opacity:.38}
 </style>
 </head>
 <body>
-<h1>Comfort By Design — Sales Dashboard</h1>
-<div class="sub" id="sub"></div>
+<h1>Comfort By Design &mdash; Sales Dashboard</h1>
+<div class="sub" id="asof"></div>
 
 <h2>Period to date</h2>
 <div class="cards" id="kpiCards"></div>
 
-<h2>Rolling windows <span style="text-transform:none;letter-spacing:0">(anchored at data-as-of)</span></h2>
+<h2>Rolling windows</h2>
 <div class="cards" id="rollCards"></div>
 
 <h2>Attainment to date</h2>
 <table id="attTable"></table>
 
-<h2>Monthly trend — sold estimates</h2>
-<div class="chart">
-  <div class="bars" id="bars"></div>
-  <div class="legend">Dashed amber tick = 2026 monthly Sales Goal. Hatched bar = current (partial) month.</div>
-</div>
+<h2>Monthly trend</h2>
+<div class="chart"><canvas id="monthly" height="150"></canvas></div>
 
 <h2>This week (Monday start)</h2>
-<div class="week" id="week"></div>
+<div class="wk" id="week"></div>
 
-<h2>Additional data — YTD 2026 breakdowns</h2>
-<div class="grid2">
-  <table id="tBU"></table>
-  <table id="tRep"></table>
-  <table id="tLead"></table>
+<h2>Additional data &mdash; YTD 2026 breakdowns</h2>
+<div class="grid3">
+  <div><table id="tBU"></table></div>
+  <div><table id="tRep"></table></div>
+  <div><table id="tLead"></table></div>
 </div>
 
 <footer id="foot"></footer>
 
 <script>
-const D = {
-  today: "2026-08-12",
-  dataAsOf: "2026-08-11",
-  kpi:{yesterday:26090.70, wtd:40559.70, mtd:593273.98, qtd:1545810.36, ytd:5784054.02},
-  goal:{yesterday:40000, wtd:80000, mtd:280000, qtd:1181259.35, ytd:5982161.42},
-  budget:{yesterday:37530.19, wtd:75060.38, mtd:262711.33, qtd:1141713.38, ytd:5512485.82},
-  lastYear:{yesterday:16516, wtd:21984, mtd:198653, qtd:916710.05, ytd:4604605.27},
-  ranges:{yesterday:["2026-08-11","2026-08-11"],wtd:["2026-08-10","2026-08-12"],mtd:["2026-08-01","2026-08-12"],qtd:["2026-07-01","2026-08-12"],ytd:["2026-01-01","2026-08-12"]},
-  trailing:{
-    d30:{actual:1218195.12,goal:894495.01,budget:862030.91,lastYear:678307.15,range:["2026-07-13","2026-08-11"]},
-    d60:{actual:2038769.27,goal:1646995.40,budget:1583272.16,lastYear:1582822.87,range:["2026-06-13","2026-08-11"]},
-    d90:{actual:3138450.21,goal:2504258.79,budget:2387682.07,lastYear:2153239.32,range:["2026-05-14","2026-08-11"]},
-    d180:{actual:4634918.45,goal:4878811.42,budget:4510329.92,lastYear:3862837.11,range:["2026-02-13","2026-08-11"]},
-    d365:{actual:10046632.88,goal:null,budget:null,lastYear:7146537.96,range:["2025-08-12","2026-08-11"]}
-  },
-  monthly:[["2025-01",487213,null],["2025-02",475289,null],["2025-03",495622,null],["2025-04",673500,null],["2025-05",660351,null],["2025-06",855181,null],["2025-07",729569,null],["2025-08",568014,null],["2025-09",1047646,null],["2025-10",1059139,null],["2025-11",888977,null],["2025-12",910168,null],["2026-01",858925,760000],["2026-02",632359,763000],["2026-03",446246,741053],["2026-04",493484,830000],["2026-05",873503,853000],["2026-06",933727,853849],["2026-07",952536,901259],["2026-08",593274,840000]],
-  weekDaily:[{date:"2026-08-10",value:14469},{date:"2026-08-11",value:26090.70},{date:"2026-08-12",value:0}],
-  byBU:[["HVAC-Sales-CBD",3188217.07],["FIRE-Sales-CBD",1159084.48],["HVAC-Sales-Com-CBD",732581.26],["FIRE-Sales-Com-CBD",704171.21]],
-  byRep:[["Aaron Fischer",3701869.22],["Noah Meshak",1979665.43],["Michael K",65756.22],["Lee P",31498.88],["Collin Lieffort",5185.27],["Kurtis K",79]],
-  byLead:[["(direct / no lead job)",3580558.55],["HVAC Repair Aged",949783.54],["HVAC Repair",463230.71],["HVAC Membership Visit Aged",281743.57],["FIRE Repair",137946.50],["FIRE Inspection",96815],["HVAC Membership Visit",94851.16],["HVAC System Check Aged",93521.18],["HVAC System Check",71306.64],["PLMB Repair",11627.17],["FIRE Membership Visit",2670]]
+const DATA = {
+  dataAsOf: "2026-08-12",
+  today: "2026-08-13",
+  periods: [
+    {k:"yesterday", label:"Yesterday", range:["2026-08-12","2026-08-12"], actual:27725.50,  goal:40000,            budget:37530.19047619047,  lastYear:54771.35},
+    {k:"wtd",       label:"WTD",       range:["2026-08-10","2026-08-13"], actual:68285.20,  goal:120000,           budget:112590.57142857142, lastYear:76755.35},
+    {k:"mtd",       label:"MTD",       range:["2026-08-01","2026-08-13"], actual:620999.48, goal:320000,           budget:300241.5238095238,  lastYear:253424.35},
+    {k:"qtd",       label:"QTD",       range:["2026-07-01","2026-08-13"], actual:1573535.86,goal:1221259.3460869566,budget:1179243.5655486544,lastYear:971481.40},
+    {k:"ytd",       label:"YTD",       range:["2026-01-01","2026-08-13"], actual:5811779.52,goal:6022161.417665898, budget:5550016.005548647, lastYear:4659376.62}
+  ],
+  rolling: [
+    {label:"Last 30 days",  range:["2026-07-14","2026-08-12"], actual:1195052.82, goal:893528.6747826088,  budget:859606.4594616981,  lastYear:710649.96},
+    {label:"Last 60 days",  range:["2026-06-14","2026-08-12"], actual:2066494.77, goal:1686995.404268774,  budget:1620802.3510031996, lastYear:1637594.22},
+    {label:"Last 90 days",  range:["2026-05-15","2026-08-12"], actual:3125597.12, goal:2501608.786086954,  budget:2385535.5055486523, lastYear:2191672.67},
+    {label:"Last 180 days", range:["2026-02-14","2026-08-12"], actual:4638477.65, goal:4880661.417665904,  budget:4511082.005548655,  lastYear:3897964.27},
+    {label:"Last 365 days", range:["2025-08-13","2026-08-12"], actual:10057842.38,goal:null,               budget:null,               lastYear:7147978.94}
+  ],
+  monthly: {"2024-01":505499.09,"2024-02":279319.95,"2024-03":326822.98,"2024-04":283537.71,"2024-05":572078.31,"2024-06":530314.93,"2024-07":590277.14,"2024-08":429146.31,"2024-09":756209.92,"2024-10":561904.93,"2024-11":452581.50,"2024-12":497865.81,"2025-01":487212.78,"2025-02":475288.64,"2025-03":495621.85,"2025-04":673499.71,"2025-05":660351.22,"2025-06":855181.12,"2025-07":729568.67,"2025-08":568014.04,"2025-09":1047646.03,"2025-10":1059139.44,"2025-11":888977.05,"2025-12":910167.58,"2026-01":858925.30,"2026-02":632359.01,"2026-03":446245.73,"2026-04":493483.67,"2026-05":873502.81,"2026-06":933727.14,"2026-07":952536.38,"2026-08":620999.48},
+  monthlyGoal: {"2026-01":760000.00,"2026-02":763000,"2026-03":741052.63,"2026-04":830000.00,"2026-05":853000,"2026-06":853849.44,"2026-07":901259.35,"2026-08":840000},
+  weekDaily: [
+    {date:"2026-08-10", day:"Mon", value:14469.00,  goal:40000},
+    {date:"2026-08-11", day:"Tue", value:26090.70,  goal:40000},
+    {date:"2026-08-12", day:"Wed", value:27725.50,  goal:40000},
+    {date:"2026-08-13", day:"Thu", value:0,         goal:40000, future:true},
+    {date:"2026-08-14", day:"Fri", value:0,         goal:40000, future:true},
+    {date:"2026-08-15", day:"Sat", value:0,         goal:0,     future:true},
+    {date:"2026-08-16", day:"Sun", value:0,         goal:0,     future:true}
+  ],
+  byBU:   [["HVAC-Sales-CBD",3189217],["FIRE-Sales-CBD",1168383],["HVAC-Sales-Com-CBD",735302],["FIRE-Sales-Com-CBD",718877]],
+  byRep:  [["Aaron Fischer",3720296],["Noah Fischer",1988964],["Michael K",65756],["Lee P",31499],["Collin Lieffort",5185],["Kurtis K",79]],
+  byLead: [["Direct / self-generated",3605563],["HVAC-Service-CBD",1589087],["HVAC-Scheduled Service-CBD",349823],["FIRE-Service-CBD",264637],["FIRE-Scheduled Service-CBD",2670]]
 };
 
-const usd=v=>"$"+Math.round(v).toLocaleString();
-const usdK=v=> v>=1e6 ? "$"+(v/1e6).toFixed(2)+"M" : "$"+Math.round(v/1000)+"k";
-const cls=p=> p>=100?"g":(p>=95?"a":"r");
-function att(a,t){ if(t==null||t===0) return {t:"—",c:"n"}; const p=a/t*100; return {t:p.toFixed(1)+"%",c:cls(p)}; }
-function yoy(a,l){ if(l==null||l===0) return {t:"—",c:"n"}; const p=(a-l)/l*100; return {t:(p>=0?"+":"")+p.toFixed(1)+"%",c:p>=0?"g":"r"}; }
-const fmtR=r=>{const f=s=>{const p=s.split("-");return p[1]+"/"+p[2];}; return r[0]===r[1]?f(r[0]):f(r[0])+" – "+f(r[1]);};
+const fmt = n => "$" + Math.round(n).toLocaleString("en-US");
+const fmtK = n => n >= 1e6 ? "$" + (n/1e6).toFixed(2) + "M" : "$" + Math.round(n/1000) + "k";
+const dfmt = s => { const p = s.split("-"); return p[1].replace(/^0/,"") + "/" + p[2].replace(/^0/,"") + "/" + p[0].slice(2); };
 
-document.getElementById("sub").textContent =
-  "Sold estimates vs Goal, Budget and same period last year · Data as of "+D.dataAsOf+" · Generated "+D.today;
+function attClass(p){ if(p===null) return "n"; if(p>=100) return "g"; if(p>=95) return "a"; return "r"; }
+function pct(a,t){ if(t===null||t===undefined||t===0) return null; return a/t*100; }
+function yoy(a,l){ if(l===null||l===undefined||l===0) return null; return (a-l)/l*100; }
+function pillPct(v,cls){ return v===null ? '<span class="pill n">&mdash;</span>' : '<span class="pill '+cls+'">'+v.toFixed(1)+'%</span>'; }
+function pillYoY(v){ if(v===null) return '<span class="pill n">&mdash;</span>';
+  return '<span class="pill '+(v>=0?"g":"r")+'">'+(v>=0?"+":"")+v.toFixed(1)+'%</span>'; }
 
-// KPI cards
-const periods=[["yesterday","Yesterday"],["wtd","Week to date"],["mtd","Month to date"],["qtd","Quarter to date"],["ytd","Year to date"]];
-document.getElementById("kpiCards").innerHTML = periods.map(([k,lab])=>{
-  const g=att(D.kpi[k],D.goal[k]), b=att(D.kpi[k],D.budget[k]), y=yoy(D.kpi[k],D.lastYear[k]);
-  return `<div class="card"><div class="label">${lab}</div><div class="range">${fmtR(D.ranges[k])}</div>
-    <div class="val">${usd(D.kpi[k])}</div>
-    <div class="metric"><span>vs Goal</span><b class="${g.c}">${g.t}</b></div>
-    <div class="metric"><span>vs Budget</span><b class="${b.c}">${b.t}</b></div>
-    <div class="metric"><span>vs Last Yr</span><b class="${y.c}">${y.t}</b></div></div>`;
-}).join("");
+document.getElementById("asof").textContent =
+  "Sold estimates vs Goal, Budget and same period last year  ·  Data as of " + dfmt(DATA.dataAsOf) + "  ·  Generated " + dfmt(DATA.today);
 
-// Rolling cards
-const rolls=[["d30","Last 30 days"],["d60","Last 60 days"],["d90","Last 90 days"],["d180","Last 180 days"],["d365","Last 365 days"]];
-document.getElementById("rollCards").innerHTML = rolls.map(([k,lab])=>{
-  const t=D.trailing[k];
-  const g=att(t.actual,t.goal), b=att(t.actual,t.budget), y=yoy(t.actual,t.lastYear);
-  return `<div class="card"><div class="label">${lab}</div><div class="range">${fmtR(t.range)}</div>
-    <div class="val">${usd(t.actual)}</div>
-    <div class="metric"><span>vs Goal</span><b class="${g.c}">${g.t}</b></div>
-    <div class="metric"><span>vs Budget</span><b class="${b.c}">${b.t}</b></div>
-    <div class="metric"><span>vs Last Yr</span><b class="${y.c}">${y.t}</b></div></div>`;
-}).join("");
+function cardHTML(o){
+  const g = pct(o.actual, o.goal), b = pct(o.actual, o.budget), y = yoy(o.actual, o.lastYear);
+  return '<div class="card">'
+    + '<div class="lbl">' + o.label + '</div>'
+    + '<div class="rng">' + dfmt(o.range[0]) + (o.range[0]===o.range[1] ? '' : ' – ' + dfmt(o.range[1])) + '</div>'
+    + '<div class="val">' + fmt(o.actual) + '</div>'
+    + '<div class="metrics">'
+    +   '<div class="m"><span>vs Goal</span>' + pillPct(g, attClass(g)) + '</div>'
+    +   '<div class="m"><span>vs Budget</span>' + pillPct(b, attClass(b)) + '</div>'
+    +   '<div class="m"><span>vs Last Yr</span>' + pillYoY(y) + '</div>'
+    + '</div></div>';
+}
+document.getElementById("kpiCards").innerHTML  = DATA.periods.map(cardHTML).join("");
+document.getElementById("rollCards").innerHTML = DATA.rolling.map(cardHTML).join("");
 
 // Attainment table
-let rows = periods.map(([k,lab])=>({lab,a:D.kpi[k],g:D.goal[k],b:D.budget[k],l:D.lastYear[k]}))
-  .concat(rolls.map(([k,lab])=>{const t=D.trailing[k];return {lab,a:t.actual,g:t.goal,b:t.budget,l:t.lastYear};}));
-document.getElementById("attTable").innerHTML =
-  "<tr><th>Period</th><th>Actual</th><th>Goal</th><th>vs Goal</th><th>Budget</th><th>vs Budget</th><th>Last Year</th><th>YoY</th></tr>"+
-  rows.map(r=>{const g=att(r.a,r.g),b=att(r.a,r.b),y=yoy(r.a,r.l);
-    return `<tr><td>${r.lab}</td><td>${usd(r.a)}</td><td>${r.g==null?"—":usd(r.g)}</td><td class="${g.c}">${g.t}</td>
-    <td>${r.b==null?"—":usd(r.b)}</td><td class="${b.c}">${b.t}</td><td>${usd(r.l)}</td><td class="${y.c}">${y.t}</td></tr>`;}).join("");
-
-// Monthly bars
-const maxV = Math.max(...D.monthly.map(m=>Math.max(m[1], m[2]||0)))*1.08;
-document.getElementById("bars").innerHTML = D.monthly.map(([m,v,g])=>{
-  const h=(v/maxV*100).toFixed(1), cur = m===D.today.slice(0,7);
-  const tick = g!=null ? `<div class="gtick" style="bottom:${(g/maxV*100).toFixed(1)}%"></div>` : "";
-  return `<div class="bcol" title="${m}: ${usd(v)}${g?' | goal '+usd(g):''}">${tick}
-    <div class="bar${cur?' cur':''}" style="height:${h}%"></div>
-    <div class="blab">${m}</div></div>`;
-}).join("");
+(function(){
+  const rows = DATA.periods.concat(DATA.rolling);
+  let h = '<tr><th>Period</th><th>Actual</th><th>Goal</th><th>% Goal</th><th>Budget</th><th>% Budget</th><th>Last Year</th><th>YoY</th></tr>';
+  rows.forEach(o=>{
+    const g = pct(o.actual,o.goal), b = pct(o.actual,o.budget), y = yoy(o.actual,o.lastYear);
+    h += '<tr><td>'+o.label+'</td><td>'+fmt(o.actual)+'</td>'
+      + '<td>'+(o.goal===null?'&mdash;':fmt(o.goal))+'</td><td>'+pillPct(g,attClass(g))+'</td>'
+      + '<td>'+(o.budget===null?'&mdash;':fmt(o.budget))+'</td><td>'+pillPct(b,attClass(b))+'</td>'
+      + '<td>'+fmt(o.lastYear)+'</td><td>'+pillYoY(y)+'</td></tr>';
+  });
+  document.getElementById("attTable").innerHTML = h;
+})();
 
 // Week strip
-const names=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-const start=D.weekDaily[0].date, map={}; D.weekDaily.forEach(d=>map[d.date]=d.value);
-const sp=start.split("-").map(Number); const s0=new Date(sp[0],sp[1]-1,sp[2]);
-document.getElementById("week").innerHTML = names.map((n,i)=>{
-  const d=new Date(s0.getFullYear(),s0.getMonth(),s0.getDate()+i);
-  const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-  const has=k in map;
-  return `<div class="day${has?"":" future"}"><div class="d">${n} ${d.getMonth()+1}/${d.getDate()}</div>
-    <div class="v">${has?usdK(map[k]):"—"}</div></div>`;
-}).join("");
+document.getElementById("week").innerHTML = DATA.weekDaily.map(d=>
+  '<div class="d'+(d.future?' fut':'')+'"><div class="dn">'+d.day+' '+dfmt(d.date).split("/").slice(0,2).join("/")+'</div>'
+  + '<div class="dv">'+fmt(d.value)+'</div>'
+  + '<div class="dg">'+(d.goal?'goal '+fmt(d.goal):'&mdash;')+'</div></div>').join("");
 
-function bd(id,title,data){
-  const tot=data.reduce((a,b)=>a+b[1],0);
-  document.getElementById(id).innerHTML =
-    `<tr><th>${title}</th><th>YTD 2026</th><th>%</th></tr>`+
-    data.map(([n,v])=>`<tr><td>${n}</td><td>${usd(v)}</td><td>${(v/tot*100).toFixed(1)}%</td></tr>`).join("")+
-    `<tr><td><b>Total</b></td><td><b>${usd(tot)}</b></td><td>100.0%</td></tr>`;
+// Breakdown tables
+function bt(el,title,rows){
+  const tot = rows.reduce((s,r)=>s+r[1],0);
+  let h='<tr><th>'+title+'</th><th>YTD 2026</th><th>%</th></tr>';
+  rows.forEach(r=>{ h+='<tr><td>'+r[0]+'</td><td>'+fmt(r[1])+'</td><td>'+(r[1]/tot*100).toFixed(1)+'%</td></tr>'; });
+  h+='<tr><td><b>Total</b></td><td><b>'+fmt(tot)+'</b></td><td><b>100.0%</b></td></tr>';
+  document.getElementById(el).innerHTML=h;
 }
-bd("tBU","Business unit",D.byBU);
-bd("tRep","Sales rep",D.byRep);
-bd("tLead","Lead source",D.byLead);
+bt("tBU","Business unit",DATA.byBU);
+bt("tRep","Sales rep",DATA.byRep);
+bt("tLead","Lead source",DATA.byLead);
+
+// Monthly bar chart (canvas, no deps)
+(function(){
+  const c = document.getElementById("monthly");
+  const keys = Object.keys(DATA.monthly).sort();
+  const dpr = window.devicePixelRatio || 1;
+  function draw(){
+    const W = c.parentNode.clientWidth - 32, H = 300;
+    c.width = W*dpr; c.height = H*dpr; c.style.width = W+"px"; c.style.height = H+"px";
+    const x = c.getContext("2d"); x.setTransform(dpr,0,0,dpr,0,0); x.clearRect(0,0,W,H);
+    const padL=62, padR=10, padT=14, padB=42;
+    const cw = W-padL-padR, ch = H-padT-padB;
+    const vals = keys.map(k=>DATA.monthly[k]);
+    const goals = keys.map(k=>DATA.monthlyGoal[k]||null);
+    const max = Math.max.apply(null, vals.concat(goals.filter(v=>v!==null))) * 1.1;
+    // gridlines
+    x.strokeStyle="#2a3140"; x.fillStyle="#8b98a9"; x.font="10px sans-serif"; x.lineWidth=1;
+    for(let i=0;i<=4;i++){
+      const y = padT + ch - (ch*i/4);
+      x.beginPath(); x.moveTo(padL,y); x.lineTo(W-padR,y); x.stroke();
+      x.textAlign="right"; x.fillText(fmtK(max*i/4), padL-8, y+3);
+    }
+    const bw = cw/keys.length;
+    keys.forEach((k,i)=>{
+      const v = DATA.monthly[k];
+      const bh = ch*v/max;
+      const bx = padL + i*bw + bw*0.16, by = padT+ch-bh, bwid = bw*0.68;
+      const cur = (k === DATA.today.slice(0,7));
+      const y26 = k.slice(0,4)==="2026";
+      x.fillStyle = y26 ? "#4c8dff" : "#33405a";
+      x.fillRect(bx,by,bwid,bh);
+      if(cur){ // hatch current month
+        x.save(); x.beginPath(); x.rect(bx,by,bwid,bh); x.clip();
+        x.strokeStyle="rgba(255,255,255,.45)"; x.lineWidth=1.5;
+        for(let o=-bh; o<bwid+bh; o+=7){ x.beginPath(); x.moveTo(bx+o,by+bh); x.lineTo(bx+o+bh,by); x.stroke(); }
+        x.restore();
+      }
+      const g = DATA.monthlyGoal[k];
+      if(g){ // dashed goal tick
+        const gy = padT+ch-ch*g/max;
+        x.save(); x.setLineDash([4,3]); x.strokeStyle="#d29922"; x.lineWidth=1.6;
+        x.beginPath(); x.moveTo(bx-bw*0.06, gy); x.lineTo(bx+bwid+bw*0.06, gy); x.stroke(); x.restore();
+      }
+      if(i%2===0 || y26){
+        x.fillStyle="#61708a"; x.font="9px sans-serif"; x.textAlign="center"; x.save();
+        x.translate(bx+bwid/2, H-padB+13); x.rotate(-Math.PI/4);
+        x.fillText(k, 0, 0); x.restore();
+      }
+    });
+    // legend
+    x.textAlign="left"; x.font="10.5px sans-serif";
+    x.fillStyle="#4c8dff"; x.fillRect(padL,H-14,10,10); x.fillStyle="#8b98a9"; x.fillText("2026 sold",padL+15,H-5);
+    x.fillStyle="#33405a"; x.fillRect(padL+80,H-14,10,10); x.fillStyle="#8b98a9"; x.fillText("prior years",padL+95,H-5);
+    x.strokeStyle="#d29922"; x.save(); x.setLineDash([4,3]); x.lineWidth=1.6;
+    x.beginPath(); x.moveTo(padL+180,H-9); x.lineTo(padL+195,H-9); x.stroke(); x.restore();
+    x.fillStyle="#8b98a9"; x.fillText("2026 Sales Goal",padL+200,H-5);
+  }
+  draw(); window.addEventListener("resize",draw);
+})();
 
 document.getElementById("foot").innerHTML =
-  "<b>Sales</b> = sum of Estimates Subtotal dated by Sold On for the four sales business units: HVAC-Sales-CBD, FIRE-Sales-CBD, HVAC-Sales-Com-CBD, FIRE-Sales-Com-CBD.<br>"+
-  "Goal = <i>Sales Goal</i>; Budget = <i>Install(HVAC/FP) Goal</i> from CBD 2026 Revenue Budget → Daily Goals. Goal/Budget/Last-Year are anchored to the actuals' last populated Sold On date ("+D.dataAsOf+").<br>"+
-  "Weeks start Monday. Attainment: <span class='g'>green ≥100%</span>, <span class='a'>amber 95–99.9%</span>, <span class='r'>red &lt;95%</span>. YoY: <span class='g'>green ≥0</span>, <span class='r'>red &lt;0</span>. \"—\" = no target available (2025 Daily Goals are blank, so Last 365 shows YoY only).";
+  "<b>Sales</b> = sum of \"Estimates Subtotal\" dated by \"Sold On\" for the four sales business units: HVAC-Sales-CBD, FIRE-Sales-CBD, HVAC-Sales-Com-CBD, FIRE-Sales-Com-CBD.<br>"
+  + "Goal = \"Sales Goal\" and Budget = \"Install(HVAC/FP) Goal\" from the CBD 2026 Revenue Budget → Daily Goals tab. Targets and last-year comparisons are anchored to the last populated Sold On date (" + dfmt(DATA.dataAsOf) + ").<br>"
+  + "Weeks start Monday. Last 365 days shows no Goal/Budget because 2025 daily goals are not populated. Attainment colours: green ≥100%, amber 95–99.9%, red &lt;95%. YoY: green ≥0%, red &lt;0%.<br>"
+  + "Sources: Sales4dx.xlsx (Sheet1) and CBD 2026 Revenue Budget.xlsx (Daily Goals), SharePoint / OneDrive.";
 </script>
 </body>
 </html>
