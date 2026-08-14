@@ -17,7 +17,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-07-17"
+   "current_scheduled_date": "2026-07-17",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "159896204",
@@ -31,10 +32,12 @@
    "captured_on": "2026-08-13",
    "completed_date": null,
    "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "on_time": false,
+   "status": "missed",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-13"
+   "current_scheduled_date": "2026-08-13",
+   "last_seen": "2026-08-13",
+   "missed_reason": "fell off schedule without completing"
   },
   {
    "job": "158030465",
@@ -46,12 +49,13 @@
    "tech": "Dale C",
    "scheduled_date": "2026-08-13",
    "captured_on": "2026-08-13",
-   "completed_date": "2026-08-12",
-   "days_to_complete": -1,
+   "completed_date": "2026-08-13",
+   "days_to_complete": 0,
    "on_time": true,
    "status": "completed",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-13"
+   "current_scheduled_date": "2026-08-13",
+   "last_seen": "2026-08-13"
   },
   {
    "job": "155059308",
@@ -65,10 +69,12 @@
    "captured_on": "2026-08-13",
    "completed_date": null,
    "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "on_time": false,
+   "status": "missed",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-13"
+   "current_scheduled_date": "2026-08-13",
+   "last_seen": "2026-08-13",
+   "missed_reason": "fell off schedule without completing"
   },
   {
    "job": "155532769",
@@ -80,12 +86,13 @@
    "tech": "Jason L",
    "scheduled_date": "2026-08-13",
    "captured_on": "2026-08-13",
-   "completed_date": "2026-08-12",
-   "days_to_complete": -1,
+   "completed_date": "2026-08-13",
+   "days_to_complete": 0,
    "on_time": true,
    "status": "completed",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-13"
+   "current_scheduled_date": "2026-08-13",
+   "last_seen": "2026-08-13"
   },
   {
    "job": "159986563",
@@ -97,12 +104,13 @@
    "tech": "Chris B",
    "scheduled_date": "2026-08-13",
    "captured_on": "2026-08-13",
-   "completed_date": "2026-08-12",
-   "days_to_complete": -1,
+   "completed_date": "2026-08-13",
+   "days_to_complete": 0,
    "on_time": true,
    "status": "completed",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-13"
+   "current_scheduled_date": "2026-08-13",
+   "last_seen": "2026-08-13"
   },
   {
    "job": "159563162",
@@ -119,7 +127,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-14"
+   "current_scheduled_date": "2026-08-14",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "159806862",
@@ -136,7 +145,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-14"
+   "current_scheduled_date": "2026-08-14",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "159831994",
@@ -153,7 +163,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-14"
+   "current_scheduled_date": "2026-08-14",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "160020512",
@@ -170,7 +181,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-17"
+   "current_scheduled_date": "2026-08-17",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "157121180",
@@ -187,7 +199,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-17"
+   "current_scheduled_date": "2026-08-17",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "157200415",
@@ -204,7 +217,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-17"
+   "current_scheduled_date": "2026-08-17",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "159979781",
@@ -221,7 +235,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-17"
+   "current_scheduled_date": "2026-08-17",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "159990928",
@@ -238,7 +253,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-17"
+   "current_scheduled_date": "2026-08-17",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "160020424",
@@ -255,7 +271,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-17"
+   "current_scheduled_date": "2026-08-17",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "160022925",
@@ -272,7 +289,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-18"
+   "current_scheduled_date": "2026-08-18",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "158503563",
@@ -289,7 +307,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-18"
+   "current_scheduled_date": "2026-08-18",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "160177052",
@@ -306,7 +325,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-19"
+   "current_scheduled_date": "2026-08-19",
+   "last_seen": "2026-08-14"
   },
   {
    "job": "158341406",
@@ -323,7 +343,8 @@
    "on_time": null,
    "status": "open",
    "reschedules": 0,
-   "current_scheduled_date": "2026-08-24"
+   "current_scheduled_date": "2026-08-24",
+   "last_seen": "2026-08-14"
   }
  ]
 }
