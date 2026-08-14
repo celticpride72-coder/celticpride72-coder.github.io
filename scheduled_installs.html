@@ -87,7 +87,13 @@
   .cvals{font-size:12.5px;margin-top:6px;font-variant-numeric:tabular-nums}
   .cdots{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
   .cdot{width:10px;height:10px;border-radius:3px;display:inline-block;flex:0 0 auto}
+  .cdot.miss{opacity:.28}
   .cmore{font-size:10px;color:var(--muted);font-weight:700}
+  .cdone{font-size:11px;margin-top:6px;font-weight:700;line-height:1.3}
+  .cdone .miss{color:var(--muted);font-weight:600}
+  .pct-g{color:#2bd4a7}.pct-a{color:#f5c451}.pct-b{color:#f8736a}
+  .cal-cell.pastc{background:#10151d}
+  .cal-cell.pastc.we{background:#0f131a}
 
   @media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.jobs{grid-template-columns:1fr}
     .cal-head{display:none}.cal-week{grid-template-columns:repeat(2,1fr)}.cal-cell:not(.has){display:none}}
@@ -220,29 +226,76 @@ const keyOf = dt => dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")
 const parseK = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
 function mondayOf(dt){ const x=new Date(dt); const off=(x.getDay()+6)%7; x.setDate(x.getDate()-off); x.setHours(0,0,0,0); return x; }
 const TODAY = keyOf(new Date());
+const PAST_WINDOW_DAYS = 42;
+let LEDGER = null;   // adherence ledger jobs, loaded async for the completion overlay
+
 document.getElementById("calLegend").innerHTML =
   ["HVAC","Fireplace","Electrical"].filter(t=>DATA.some(j=>j._trade===t))
-   .map(t=>`<span class="lg"><span class="cdot" style="background:${TVAR[t]}"></span>${t}</span>`).join("");
+   .map(t=>`<span class="lg"><span class="cdot" style="background:${TVAR[t]}"></span>${t}</span>`).join("")
+  + `<span class="lg" style="margin-left:6px"><span class="cdot" style="background:var(--dim)"></span>done that day</span>`
+  + `<span class="lg"><span class="cdot" style="background:var(--dim);opacity:.28"></span>not done that day</span>`;
+
+// Pull the adherence ledger (same folder) to overlay each past day with % completed on the scheduled day.
+if(typeof fetch==="function"){
+  fetch("installs_adherence_ledger.json",{cache:"no-store"})
+    .then(r=>r.ok?r.json():null)
+    .then(j=>{ LEDGER=(j&&Array.isArray(j.jobs))?j.jobs:null; renderCalendar(current()); })
+    .catch(()=>{});
+}
+
+function ledgerPasses(j){
+  if(fTrade.value && j.trade!==fTrade.value) return false;
+  if(fBU.value && j.bu!==fBU.value) return false;
+  if(fTech.value && (j.tech||"")!==fTech.value) return false;
+  const q=fSearch.value.trim().toLowerCase();
+  if(q){ const hay=[j.customer,j.job,j.tech,j.bu].join(" ").toLowerCase(); if(!hay.includes(q)) return false; }
+  return true;
+}
+
 function renderCalendar(rows){
   const el=document.getElementById("calendar");
-  const byDate={};
-  rows.forEach(j=>{ const d=j["Scheduled Date"]; if(d){ (byDate[d]=byDate[d]||[]).push(j); } });
-  const dates=Object.keys(byDate).sort();
-  if(!dates.length){ el.innerHTML='<div class="panel" style="text-align:center;color:var(--dim)">No scheduled dates match these filters.</div>'; return; }
-  const weeks=[...new Set(dates.map(d=>keyOf(mondayOf(parseK(d)))))].sort();
+  // upcoming / today cohorts from the current scheduled export
+  const schedByDay={};
+  rows.forEach(j=>{ const d=j["Scheduled Date"]; if(d){ (schedByDay[d]=schedByDay[d]||[]).push(j); } });
+  // past cohorts from the ledger (locked scheduled date + completion status), within the trailing window
+  const ledByDay={};
+  const pastStart=keyOf(new Date(Date.now()-PAST_WINDOW_DAYS*86400000));
+  if(LEDGER){ LEDGER.filter(ledgerPasses).forEach(j=>{ const d=j.scheduled_date; if(d && d<TODAY && d>=pastStart){ (ledByDay[d]=ledByDay[d]||[]).push(j); } }); }
+
+  const allDays=new Set([...Object.keys(schedByDay), ...Object.keys(ledByDay)]);
+  if(!allDays.size){ el.innerHTML='<div class="panel" style="text-align:center;color:var(--dim)">No scheduled dates match these filters.</div>'; return; }
+  const weeks=[...new Set([...allDays].map(d=>keyOf(mondayOf(parseK(d)))))].sort();
+
   el.innerHTML = '<div class="cal-head">'+WD.map(w=>`<div>${w}</div>`).join("")+'</div>' +
     weeks.map(wk=>{
-      const mon=parseK(wk);
-      let cells="";
+      const mon=parseK(wk); let cells="";
       for(let i=0;i<7;i++){
-        const day=new Date(mon); day.setDate(mon.getDate()+i);
-        const k=keyOf(day); const list=(byDate[k]||[]).slice().sort((a,b)=>b._val-a._val);
-        const sum=list.reduce((a,j)=>a+j._val,0);
-        const dots=list.slice(0,8).map(j=>`<span class="cdot" style="background:${TVAR[j._trade]||'var(--dim)'}" title="${(j['Customer Name']||'').replace(/"/g,'')} · ${j._trade}${j._val?' · '+money(j._val):''}"></span>`).join("");
-        cells+=`<div class="cal-cell${i>=5?' we':''}${list.length?' has':''}${k===TODAY?' today':''}">
-          <div class="cd">${WD[i]} ${day.getDate()}</div>
-          ${list.length?`<div class="cvals"><b>${list.length}</b> job${list.length>1?"s":""} · ${money(sum)}</div><div class="cdots">${dots}${list.length>8?`<span class="cmore">+${list.length-8}</span>`:""}</div>`:""}
-        </div>`;
+        const day=new Date(mon); day.setDate(mon.getDate()+i); const k=keyOf(day);
+        const past = k<TODAY;
+        let inner="";
+        if(past && ledByDay[k]){
+          const list=ledByDay[k].slice().sort((a,b)=>(b.value||0)-(a.value||0));
+          const sched=list.length;
+          const doneOn=list.filter(j=>j.completed_date===k).length;
+          const rev=list.reduce((a,j)=>a+(j.value||0),0);
+          const uncomp=list.filter(j=>j.completed_date!==k).reduce((a,j)=>a+(j.value||0),0);
+          const pctv=sched?Math.round(doneOn/sched*100):0;
+          const pc=pctv>=80?'pct-g':pctv>=50?'pct-a':'pct-b';
+          const dots=list.slice(0,8).map(j=>`<span class="cdot${j.completed_date===k?'':' miss'}" style="background:${TVAR[j.trade]||'var(--dim)'}" title="${(j.customer||'').replace(/"/g,'')} · ${j.trade}${j.value?' · '+money(j.value):''}${j.completed_date?(j.completed_date===k?' · done '+shortDate(k):' · done '+shortDate(j.completed_date)):' · not yet completed'}"></span>`).join("");
+          inner=`<div class="cvals"><b>${sched}</b> job${sched>1?"s":""} · ${money(rev)}</div>`+
+                `<div class="cdots">${dots}${list.length>8?`<span class="cmore">+${list.length-8}</span>`:""}</div>`+
+                `<div class="cdone"><span class="${pc}">${pctv}% done</span> · <span class="miss">${money(uncomp)} not done</span></div>`;
+        } else {
+          const list=(schedByDay[k]||[]).slice().sort((a,b)=>b._val-a._val);
+          if(list.length){
+            const sum=list.reduce((a,j)=>a+j._val,0);
+            const dots=list.slice(0,8).map(j=>`<span class="cdot" style="background:${TVAR[j._trade]||'var(--dim)'}" title="${(j['Customer Name']||'').replace(/"/g,'')} · ${j._trade}${j._val?' · '+money(j._val):''}"></span>`).join("");
+            inner=`<div class="cvals"><b>${list.length}</b> job${list.length>1?"s":""} · ${money(sum)}</div><div class="cdots">${dots}${list.length>8?`<span class="cmore">+${list.length-8}</span>`:""}</div>`;
+          }
+        }
+        const has=inner?' has':'';
+        cells+=`<div class="cal-cell${i>=5?' we':''}${has}${k===TODAY?' today':''}${past&&has?' pastc':''}">
+          <div class="cd">${WD[i]} ${day.getDate()}</div>${inner}</div>`;
       }
       return `<div class="week-lbl">Week of ${mon.toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"})}</div><div class="cal-week">${cells}</div>`;
     }).join("");
