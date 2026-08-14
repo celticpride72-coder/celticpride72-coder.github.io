@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scheduled Installs — Comfort by Design</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1b212b; --edge:#232a34; --ink:#e7edf5; --dim:#93a1b3; --muted:#7c8a9c;
+    --accent:#4c8dff; --accent2:#2bd4a7;
+    --hvac:#4c8dff; --fire:#ff7a59; --elec:#f5c451;
+    --good:#2bd4a7; --warn:#f5c451;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  a{color:inherit}
+  .wrap{max-width:1480px;margin:0 auto;padding:22px 22px 70px}
+  header.top{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  h1{margin:0;font-size:26px;letter-spacing:.2px}
+  .sub{color:var(--dim);font-size:14px;margin-top:4px}
+  .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+
+  /* KPI cards */
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:20px 0 10px}
+  .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:16px 18px}
+  .kpi .k{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .kpi .val{font-size:30px;font-weight:750;margin-top:6px;line-height:1.1}
+  .kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+  .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:18px}
+  .panel h3{margin:0 0 12px;font-size:14px;letter-spacing:.3px;color:var(--dim);text-transform:uppercase}
+  .bar-row{display:grid;grid-template-columns:132px 1fr 92px;align-items:center;gap:10px;margin:9px 0;font-size:14px}
+  .bar-row .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;overflow:hidden}
+  .fill{height:100%;border-radius:8px}
+  .bar-row .amt{text-align:right;color:var(--dim);font-variant-numeric:tabular-nums}
+
+  /* controls */
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0 12px}
+  .controls select,.controls input{background:var(--panel);border:1px solid var(--edge);color:var(--ink);border-radius:9px;padding:9px 12px;font-size:14px}
+  .controls input{min-width:210px}
+  .controls .clr{cursor:pointer;background:var(--panel2);border:1px solid var(--edge);color:var(--dim);border-radius:9px;padding:9px 13px;font-size:13px}
+  .controls .count{margin-left:auto;color:var(--dim);font-size:13px}
+
+  /* schedule */
+  .day{margin:16px 0}
+  .day-h{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;border-bottom:1px solid var(--edge);padding-bottom:7px}
+  .day-h .d{font-size:17px;font-weight:750}
+  .day-h .meta{color:var(--dim);font-size:13px}
+  .jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .job{background:var(--panel);border:1px solid var(--edge);border-left-width:4px;border-radius:11px;padding:14px 16px}
+  .job .jt{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .job .cust{font-weight:700;font-size:16px}
+  .job .amt{font-weight:750;font-size:16px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .job .line{color:var(--dim);font-size:13px;margin-top:4px}
+  .job .tags{margin-top:9px;display:flex;flex-wrap:wrap;gap:5px}
+  .tag{background:var(--panel2);border:1px solid var(--edge);border-radius:999px;padding:2px 9px;font-size:11.5px;color:var(--dim)}
+  .badge{display:inline-block;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:750;letter-spacing:.3px;color:#0c0f14}
+  .b-hvac{background:var(--hvac)} .b-fire{background:var(--fire)} .b-elec{background:var(--elec)}
+  .pill-com{background:var(--panel2);border:1px solid var(--edge);color:var(--dim);border-radius:6px;padding:2px 7px;font-size:10.5px;font-weight:700;margin-left:6px}
+  .noval{color:var(--warn)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--edge);white-space:nowrap}
+  th{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;position:sticky;top:0;background:var(--bg)}
+  th:hover{color:var(--ink)}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+  tr:hover td{background:var(--panel)}
+  .twrap{overflow-x:auto;border:1px solid var(--edge);border-radius:12px}
+  .foot-note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.6}
+  @media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.jobs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1><span class="dot"></span>Scheduled Installs</h1>
+      <div class="sub" id="sub"></div>
+    </div>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid2">
+    <div class="panel"><h3>By Trade</h3><div id="byTrade"></div></div>
+    <div class="panel"><h3>By Business Unit</h3><div id="byBU"></div></div>
+    <div class="panel"><h3>By Lead Tech</h3><div id="byTech"></div></div>
+  </div>
+
+  <div class="controls">
+    <select id="fTrade"><option value="">All trades</option></select>
+    <select id="fBU"><option value="">All business units</option></select>
+    <select id="fTech"><option value="">All techs</option></select>
+    <input id="fSearch" placeholder="Search customer, job #, tag…">
+    <span class="clr" id="clr">Clear</span>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div id="schedule"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:30px 0 8px">All scheduled installs</h3>
+  <div class="twrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+
+  <div class="foot-note" id="note"></div>
+</div>
+
+<script>
+const DATA = /*DATA_START*/[{"Job #":"148933911","Job Type":"HVAC Install Replacement","Business Unit":"HVAC-Install-CBD","Status":"Scheduled","Created Date":"2025-12-03","Sold On":"2025-12-03","Customer ID":"148862467","Customer Name":"SHELDAHL, RITA","Tags":"Air Conditioner, Gas Furnace, Need to Schedule, Parts In","Jobs Subtotal":13733,"Jobs Total":13733,"Jobs Payments":13733,"Income":13733,"Scheduled Date":"2026-07-17","Hold Date":null,"Upcoming Appt Start Date":"2026-07-17","Assigned Technicians":"Chris B, Todd S, Will B","Primary Technician":"Chris B"},{"Job #":"159896204","Job Type":"FIRE Install","Business Unit":"FIRE-Install-CBD","Status":"Scheduled","Created Date":"2026-08-06","Sold On":"2026-08-06","Customer ID":"16197485","Customer Name":"CATES FINE HOMES, LLC","Tags":"Fireplace \ud83d\udd25, Parts Ordered, Sign Off Completed","Jobs Subtotal":6479.3,"Jobs Total":6479.3,"Jobs Payments":0,"Income":6479.3,"Scheduled Date":"2026-08-13","Hold Date":null,"Upcoming Appt Start Date":"2026-08-13","Assigned Technicians":"Garrett G, Joe H, Campbell T","Primary Technician":"Campbell T"},{"Job #":"158030465","Job Type":"FIRE Install","Business Unit":"FIRE-Install-CBD","Status":"Scheduled","Created Date":"2026-07-08","Sold On":"2026-07-08","Customer ID":"16202450","Customer Name":"FRIESE, MICAH AND JENNY","Tags":"#, Fireplace \ud83d\udd25, Need to Schedule, Parts In, Sign Off Completed, SURROUND: VENDOR","Jobs Subtotal":4634.98,"Jobs Total":4634.98,"Jobs Payments":2317.49,"Income":4634.98,"Scheduled Date":"2026-08-13","Hold Date":null,"Upcoming Appt Start Date":"2026-08-13","Assigned Technicians":"Howard B, Dale C","Primary Technician":"Dale C"},{"Job #":"155059308","Job Type":"FIRE Install","Business Unit":"FIRE-Install-Com-CBD","Status":"Scheduled","Created Date":"2026-05-19","Sold On":"2026-05-19","Customer ID":"16212297","Customer Name":"LONE TREE CONSTRUCTION","Tags":"Fireplace \ud83d\udd25, Parts In, Sign Off Completed","Jobs Subtotal":6600.6,"Jobs Total":6600.6,"Jobs Payments":0,"Income":6600.6,"Scheduled Date":"2026-08-13","Hold Date":null,"Upcoming Appt Start Date":"2026-08-13","Assigned Technicians":"Garrett G, Joe H","Primary Technician":"Garrett G"},{"Job #":"155532769","Job Type":"HVAC Install Replacement","Business Unit":"HVAC-Install-CBD","Status":"Scheduled","Created Date":"2026-05-29","Sold On":"2026-05-29","Customer ID":"137586770","Customer Name":"HAYNES, BRIAN & DAWN","Tags":"Air Conditioner, High Velocity, Need to Schedule, Parts In, Sales Sold","Jobs Subtotal":15275,"Jobs Total":15275,"Jobs Payments":9513,"Income":15275,"Scheduled Date":"2026-08-13","Hold Date":null,"Upcoming Appt Start Date":"2026-08-13","Assigned Technicians":"Jason L, Nash K, Jim J","Primary Technician":"Jason L"},{"Job #":"159986563","Job Type":"HVAC Install Replacement","Business Unit":"HVAC-Install-CBD","Status":"Scheduled","Created Date":"2026-08-10","Sold On":"2026-08-10","Customer ID":"149726692","Customer Name":"FISCHER MINING LLC","Tags":"Mini Split, Need to Schedule, Parts In, Sign Off Needed","Jobs Subtotal":5800,"Jobs Total":5800,"Jobs Payments":0,"Income":5800,"Scheduled Date":"2026-08-13","Hold Date":null,"Upcoming Appt Start Date":"2026-08-13","Assigned Technicians":"Chris B, Luke H","Primary Technician":"Chris B"},{"Job #":"159563162","Job Type":"FIRE Com Install","Business Unit":"FIRE-Install-Com-CBD","Status":"Scheduled","Created Date":"2026-07-30","Sold On":"2026-07-30","Customer ID":"16191866","Customer Name":"1st CHOICE BUILDERS LLC","Tags":"Fireplace \ud83d\udd25, Need to Schedule, Parts In, Sign Off Completed","Jobs Subtotal":11624.75,"Jobs Total":11624.75,"Jobs Payments":0,"Income":11624.75,"Scheduled Date":"2026-08-14","Hold Date":null,"Upcoming Appt Start Date":"2026-08-14","Assigned Technicians":"Garrett G, Joe H","Primary Technician":"Garrett G"},{"Job #":"159806862","Job Type":"HVAC Install Replacement","Business Unit":"HVAC-Install-CBD","Status":"Scheduled","Created Date":"2026-08-04","Sold On":"2026-08-04","Customer ID":"16208122","Customer Name":"JOHNSON, JACK AND DIANE","Tags":"Essentials Member, Geo W/W, Parts Ordered, Sign Off Needed","Jobs Subtotal":17314.7,"Jobs Total":17314.7,"Jobs Payments":8650,"Income":17314.7,"Scheduled Date":"2026-08-14","Hold Date":null,"Upcoming Appt Start Date":"2026-08-14","Assigned Technicians":"Luke H, Chris B","Primary Technician":"Chris B"},{"Job #":"159831994","Job Type":"HVAC Install Replacement","Business Unit":"HVAC-Install-CBD","Status":"Scheduled","Created Date":"2026-08-05","Sold On":"2026-08-05","Customer ID":"159316358","Customer Name":"FEATHERSTONE, DON","Tags":"Geo \ud83c\udf0e, Parts Ordered, Rebate, Sign Off Needed","Jobs Subtotal":16482,"Jobs Total":16482,"Jobs Payments":7991,"Income":16482,"Scheduled Date":"2026-08-14","Hold Date":null,"Upcoming Appt Start Date":"2026-08-14","Assigned Technicians":"Jason L, Nash K","Primary Technician":"Jason L"},{"Job #":"160020512","Job Type":"ELEC Install","Business Unit":"ELEC-Install-CBD","Status":"Scheduled","Created Date":"2026-08-11","Sold On":null,"Customer ID":"16210157","Customer Name":"OLSON, SCOTT AND KOURIK, BETH","Tags":"Gas Furnace, Geo \ud83c\udf0e, Potential Member","Jobs Subtotal":0,"Jobs Total":0,"Jobs Payments":0,"Income":0,"Scheduled Date":"2026-08-17","Hold Date":null,"Upcoming Appt Start Date":"2026-08-17","Assigned Technicians":"Buck S","Primary Technician":"Buck S"},{"Job #":"157121180","Job Type":"FIRE Com Install","Business Unit":"FIRE-Install-Com-CBD","Status":"Scheduled","Created Date":"2026-06-24","Sold On":"2026-06-24","Customer ID":"16225493","Customer Name":"THE DETAIL COMPANY","Tags":"Fireplace \ud83d\udd25, Need to Schedule, Parts In, Sign Off Completed","Jobs Subtotal":6056.2,"Jobs Total":6056.2,"Jobs Payments":6056.2,"Income":6056.2,"Scheduled Date":"2026-08-17","Hold Date":null,"Upcoming Appt Start Date":"2026-08-17","Assigned Technicians":"Garrett G, Joe H","Primary Technician":"Garrett G"},{"Job #":"157200415","Job Type":"FIRE Install","Business Unit":"FIRE-Install-CBD","Status":"Scheduled","Created Date":"2026-06-25","Sold On":"2026-06-25","Customer ID":"114935407","Customer Name":"SPRAFKA, CHARLIE AND KATHY","Tags":"Fireplace \ud83d\udd25, Need to Schedule, Parts In, Sign Off Completed, Subcontractor","Jobs Subtotal":9080,"Jobs Total":9080,"Jobs Payments":4675,"Income":9080,"Scheduled Date":"2026-08-17","Hold Date":null,"Upcoming Appt Start Date":"2026-08-17","Assigned Technicians":"Dale C, Howard B","Primary Technician":"Dale C"},{"Job #":"159979781","Job Type":"ELEC Install","Business Unit":"ELEC-Install-CBD","Status":"Scheduled","Created Date":"2026-08-10","Sold On":"2026-08-07","Customer ID":"159651989","Customer Name":"MAYNARD, CASEY","Tags":"Electrical, Install Parts Needed, Need to Schedule, Potential Member, Sales Sold","Jobs Subtotal":6906,"Jobs Total":6906,"Jobs Payments":3500,"Income":6906,"Scheduled Date":"2026-08-17","Hold Date":null,"Upcoming Appt Start Date":"2026-08-17","Assigned Technicians":"Jim J, Micah G","Primary Technician":"Jim J"},{"Job #":"159990928","Job Type":"HVAC Install Replacement","Business Unit":"HVAC-Install-CBD","Status":"Scheduled","Created Date":"2026-08-10","Sold On":null,"Customer ID":"159988508","Customer Name":"VETTA, CHRISTOPHER","Tags":"Geo W/W, Potential Member","Jobs Subtotal":0,"Jobs Total":0,"Jobs Payments":0,"Income":0,"Scheduled Date":"2026-08-17","Hold Date":null,"Upcoming Appt Start Date":"2026-08-17","Assigned Technicians":"Noah M","Primary Technician":"Noah M"},{"Job #":"160020424","Job Type":"HVAC Com Install Replacement","Business Unit":"HVAC-Install-Com-CBD","Status":"Scheduled","Created Date":"2026-08-11","Sold On":"2026-08-11","Customer ID":"160038161","Customer Name":"VON LANG CONSTRUCTION","Tags":"DUCTWORK, Install Parts Needed, Sign Off Needed","Jobs Subtotal":3940,"Jobs Total":3940,"Jobs Payments":0,"Income":3940,"Scheduled Date":"2026-08-17","Hold Date":null,"Upcoming Appt Start Date":"2026-08-17","Assigned Technicians":"Jason L, Nash K, Campbell T","Primary Technician":"Campbell T"},{"Job #":"160022925","Job Type":"FIRE Install","Business Unit":"FIRE-Install-CBD","Status":"Scheduled","Created Date":"2026-08-11","Sold On":null,"Customer ID":"156842065","Customer Name":"WAGNER, PATRICK","Tags":"Fireplace \ud83d\udd25, Potential Member","Jobs Subtotal":0,"Jobs Total":0,"Jobs Payments":0,"Income":0,"Scheduled Date":"2026-08-18","Hold Date":null,"Upcoming Appt Start Date":"2026-08-18","Assigned Technicians":"Garrett G, Joe H","Primary Technician":"Garrett G"}]/*DATA_END*/;
+const REFRESHED = /*STAMP_START*/"from manual upload (Aug 13, 2026)"/*STAMP_END*/;
+
+const money = v => (v||v===0) ? "$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}) : "—";
+const money2 = v => "$"+Number(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+
+function trade(bu){
+  if(/^HVAC/i.test(bu)) return "HVAC";
+  if(/^FIRE/i.test(bu)) return "Fireplace";
+  if(/^ELEC/i.test(bu)) return "Electrical";
+  return "Other";
+}
+const TCLASS = {HVAC:"b-hvac",Fireplace:"b-fire",Electrical:"b-elec"};
+const TVAR = {HVAC:"var(--hvac)",Fireplace:"var(--fire)",Electrical:"var(--elec)"};
+const isCom = bu => /-Com-/i.test(bu);
+
+// enrich
+DATA.forEach(j=>{ j._trade=trade(j["Business Unit"]); j._val=Number(j["Jobs Total"]||0); j._com=isCom(j["Business Unit"]); });
+
+function fmtDate(s){
+  if(!s) return "—";
+  const [y,m,d]=s.split("-").map(Number);
+  const dt=new Date(y,m-1,d);
+  return dt.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+}
+function shortDate(s){ if(!s) return "—"; const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+
+// ---------- KPIs ----------
+const total = DATA.reduce((a,j)=>a+j._val,0);
+const priced = DATA.filter(j=>j._val>0);
+const dates = [...new Set(DATA.map(j=>j["Scheduled Date"]).filter(Boolean))].sort();
+const techs = [...new Set(DATA.map(j=>j["Primary Technician"]).filter(Boolean))];
+const bus = [...new Set(DATA.map(j=>j["Business Unit"]))].sort();
+
+document.getElementById("sub").innerHTML =
+  DATA.length+" scheduled install jobs &nbsp;·&nbsp; "+shortDate(dates[0])+" – "+shortDate(dates[dates.length-1])+" 2026 &nbsp;·&nbsp; source: Kody Scheduled Install &nbsp;·&nbsp; refreshed "+REFRESHED;
+
+const kpis=[
+  {k:"Scheduled jobs",val:DATA.length,foot:priced.length+" priced · "+(DATA.length-priced.length)+" awaiting price"},
+  {k:"Total value",val:money(total),foot:"across all scheduled installs"},
+  {k:"Avg job (priced)",val:money(priced.reduce((a,j)=>a+j._val,0)/priced.length),foot:priced.length+" priced jobs"},
+  {k:"Install days",val:dates.length,foot:shortDate(dates[0])+" – "+shortDate(dates[dates.length-1])},
+  {k:"Techs assigned",val:techs.length,foot:bus.length+" business units"}
+];
+document.getElementById("kpis").innerHTML = kpis.map(k=>
+  `<div class="kpi"><div class="k">${k.k}</div><div class="val">${k.val}</div><div class="foot">${k.foot}</div></div>`).join("");
+
+// ---------- breakdown bars ----------
+function groupSum(key){
+  const m={};
+  DATA.forEach(j=>{ const g=(typeof key==="function")?key(j):j[key]; if(!m[g]) m[g]={n:0,v:0}; m[g].n++; m[g].v+=j._val; });
+  return Object.entries(m).sort((a,b)=>b[1].v-a[1].v);
+}
+function renderBars(elId, entries, colorFn){
+  const max=Math.max(...entries.map(e=>e[1].v),1);
+  document.getElementById(elId).innerHTML = entries.map(([nm,o])=>{
+    const w=Math.max(3,(o.v/max)*100);
+    return `<div class="bar-row"><div class="nm" title="${nm}">${nm}</div>
+      <div class="track"><div class="fill" style="width:${w}%;background:${colorFn(nm)}"></div></div>
+      <div class="amt">${money(o.v)}<span style="color:var(--muted)"> · ${o.n}</span></div></div>`;
+  }).join("");
+}
+renderBars("byTrade", groupSum(j=>j._trade), nm=>TVAR[nm]||"var(--accent)");
+renderBars("byBU", groupSum("Business Unit"), nm=>TVAR[trade(nm)]||"var(--accent)");
+renderBars("byTech", groupSum("Primary Technician"), ()=>"var(--accent2)");
+
+// ---------- filters ----------
+const fTrade=document.getElementById("fTrade"), fBU=document.getElementById("fBU"), fTech=document.getElementById("fTech"), fSearch=document.getElementById("fSearch");
+["HVAC","Fireplace","Electrical"].filter(t=>DATA.some(j=>j._trade===t)).forEach(t=>fTrade.add(new Option(t,t)));
+bus.forEach(b=>fBU.add(new Option(b,b)));
+techs.sort().forEach(t=>fTech.add(new Option(t,t)));
+
+function passes(j){
+  if(fTrade.value && j._trade!==fTrade.value) return false;
+  if(fBU.value && j["Business Unit"]!==fBU.value) return false;
+  if(fTech.value && j["Primary Technician"]!==fTech.value) return false;
+  const q=fSearch.value.trim().toLowerCase();
+  if(q){ const hay=[j["Customer Name"],j["Job #"],j["Tags"],j["Job Type"],j["Assigned Technicians"]].join(" ").toLowerCase(); if(!hay.includes(q)) return false; }
+  return true;
+}
+
+// ---------- schedule (grouped by date) ----------
+function renderSchedule(rows){
+  const byDay={};
+  rows.forEach(j=>{ const d=j["Scheduled Date"]||"Unscheduled"; (byDay[d]=byDay[d]||[]).push(j); });
+  const days=Object.keys(byDay).sort();
+  const el=document.getElementById("schedule");
+  if(!rows.length){ el.innerHTML='<div class="panel" style="text-align:center;color:var(--dim)">No jobs match these filters.</div>'; return; }
+  el.innerHTML = days.map(d=>{
+    const list=byDay[d].sort((a,b)=>b._val-a._val);
+    const dayTot=list.reduce((a,j)=>a+j._val,0);
+    return `<div class="day">
+      <div class="day-h"><span class="d">${fmtDate(d)}</span><span class="meta">${list.length} job${list.length>1?"s":""} · ${money(dayTot)}</span></div>
+      <div class="jobs">${list.map(jobCard).join("")}</div></div>`;
+  }).join("");
+}
+function jobCard(j){
+  const tags=(j["Tags"]||"").split(",").map(s=>s.trim()).filter(Boolean);
+  const bcl=TCLASS[j._trade]||"";
+  return `<div class="job" style="border-left-color:${TVAR[j._trade]||'var(--edge)'}">
+    <div class="jt"><div class="cust">${j["Customer Name"]||"—"}</div>
+      <div class="amt ${j._val?'':'noval'}">${j._val?money(j._val):"no price"}</div></div>
+    <div class="line"><span class="badge ${bcl}">${j._trade}</span>${j._com?'<span class="pill-com">COMMERCIAL</span>':''}
+      &nbsp; ${j["Job Type"]}</div>
+    <div class="line">Job #${j["Job #"]} &nbsp;·&nbsp; Lead: <b style="color:var(--ink)">${j["Primary Technician"]||"—"}</b>${j["Assigned Technicians"] && j["Assigned Technicians"]!==j["Primary Technician"]?" &nbsp;·&nbsp; Crew: "+j["Assigned Technicians"]:""}</div>
+    <div class="line">Sold ${shortDate(j["Sold On"])} · created ${shortDate(j["Created Date"])}</div>
+    ${tags.length?`<div class="tags">${tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>`:""}
+  </div>`;
+}
+
+// ---------- table ----------
+const COLS=[
+  {h:"Sched",f:j=>shortDate(j["Scheduled Date"]),s:j=>j["Scheduled Date"]||""},
+  {h:"Job #",f:j=>j["Job #"],s:j=>j["Job #"]},
+  {h:"Trade",f:j=>j._trade+(j._com?" (Com)":""),s:j=>j._trade},
+  {h:"Business Unit",f:j=>j["Business Unit"],s:j=>j["Business Unit"]},
+  {h:"Job Type",f:j=>j["Job Type"],s:j=>j["Job Type"]},
+  {h:"Customer",f:j=>j["Customer Name"],s:j=>j["Customer Name"]||""},
+  {h:"Lead Tech",f:j=>j["Primary Technician"],s:j=>j["Primary Technician"]||""},
+  {h:"Value",r:1,f:j=>j._val?money2(j._val):'<span class="noval">—</span>',s:j=>j._val},
+  {h:"Sold On",f:j=>shortDate(j["Sold On"]),s:j=>j["Sold On"]||""}
+];
+let sortI=0, sortDir=1;
+function renderTable(rows){
+  document.querySelector("#tbl thead").innerHTML="<tr>"+COLS.map((c,i)=>
+    `<th class="${c.r?'r':''}" data-i="${i}">${c.h}${sortI===i?(sortDir>0?" ▲":" ▼"):""}</th>`).join("")+"</tr>";
+  const sorted=[...rows].sort((a,b)=>{
+    const va=COLS[sortI].s(a), vb=COLS[sortI].s(b);
+    if(va<vb) return -1*sortDir; if(va>vb) return 1*sortDir; return 0;
+  });
+  const tot=sorted.reduce((a,j)=>a+j._val,0);
+  document.querySelector("#tbl tbody").innerHTML = sorted.map(j=>"<tr>"+COLS.map(c=>
+    `<td class="${c.r?'r':''}">${c.f(j)}</td>`).join("")+"</tr>").join("")
+    + `<tr style="font-weight:750"><td colspan="7" style="text-align:right;color:var(--dim)">Total (${sorted.length})</td><td class="r">${money2(tot)}</td><td></td></tr>`;
+  document.querySelectorAll("#tbl th").forEach(th=>th.onclick=()=>{
+    const i=+th.dataset.i; if(i===sortI) sortDir*=-1; else {sortI=i; sortDir= (COLS[i].h==="Value")?-1:1;}
+    renderTable(current());
+  });
+}
+
+// ---------- wire ----------
+function current(){ return DATA.filter(passes); }
+function refresh(){
+  const rows=current();
+  document.getElementById("count").textContent = rows.length+" of "+DATA.length+" jobs · "+money(rows.reduce((a,j)=>a+j._val,0));
+  renderSchedule(rows);
+  renderTable(rows);
+}
+[fTrade,fBU,fTech].forEach(s=>s.onchange=refresh);
+fSearch.oninput=refresh;
+document.getElementById("clr").onclick=()=>{fTrade.value="";fBU.value="";fTech.value="";fSearch.value="";refresh();};
+
+document.getElementById("note").innerHTML =
+  "Value = Jobs Total from the export. Jobs showing \u201cno price\u201d have a $0 Jobs Total (not yet priced/invoiced). "+
+  "Trade &amp; Residential/Commercial are derived from Business Unit (\u201c-Com-\u201d = Commercial). "+
+  "Generated "+new Date().toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})+".";
+
+refresh();
+</script>
+</body>
+</html>
