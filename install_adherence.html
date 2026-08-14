@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Schedule Adherence — Comfort by Design</title>
+<style>
+  :root{
+    --bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;
+    --accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;
+    --hvac:#4c8dff;--fire:#ff7a59;--elec:#f5c451;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1480px;margin:0 auto;padding:22px 22px 70px}
+  h1{margin:0;font-size:26px}
+  .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+  .sub{color:var(--dim);font-size:14px;margin-top:4px}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:20px 0 8px}
+  .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:16px 18px}
+  .kpi .k{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .kpi .val{font-size:30px;font-weight:750;margin-top:6px;line-height:1.1}
+  .kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+  .kpi.hero .val{color:var(--good)}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:16px 0}
+  .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin:16px 0}
+  .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:18px}
+  .panel h3{margin:0 0 12px;font-size:13px;letter-spacing:.3px;color:var(--dim);text-transform:uppercase}
+  .bar-row{display:grid;grid-template-columns:120px 1fr 108px;align-items:center;gap:10px;margin:9px 0;font-size:14px}
+  .bar-row .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;overflow:hidden}
+  .fill{height:100%;border-radius:8px}
+  .bar-row .amt{text-align:right;color:var(--dim);font-variant-numeric:tabular-nums;font-size:13px}
+  .note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.6}
+  .empty{background:var(--panel);border:1px dashed var(--edge);border-radius:12px;padding:26px;text-align:center;color:var(--dim)}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--edge);white-space:nowrap}
+  th{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none}
+  th.r,td.r{text-align:right;font-variant-numeric:tabular-nums}
+  tr:hover td{background:var(--panel)}
+  .twrap{overflow-x:auto;border:1px solid var(--edge);border-radius:12px;margin-top:6px}
+  .pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:11.5px;font-weight:700}
+  .p-same{background:rgba(43,212,167,.15);color:var(--good)}
+  .p-late{background:rgba(245,196,81,.15);color:var(--warn)}
+  .p-over{background:rgba(248,115,106,.15);color:var(--bad)}
+  .p-open{background:rgba(76,141,255,.15);color:var(--accent)}
+  .badge{display:inline-block;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:750;color:#0c0f14}
+  .b-hvac{background:var(--hvac)}.b-fire{background:var(--fire)}.b-elec{background:var(--elec)}
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0 4px}
+  .controls select{background:var(--panel);border:1px solid var(--edge);color:var(--ink);border-radius:9px;padding:8px 11px;font-size:14px}
+  .seg{display:flex;gap:0;border:1px solid var(--edge);border-radius:9px;overflow:hidden}
+  .seg button{background:var(--panel);color:var(--dim);border:0;padding:8px 13px;font-size:13px;cursor:pointer}
+  .seg button.on{background:var(--accent);color:#fff;font-weight:700}
+  .count{margin-left:auto;color:var(--dim);font-size:13px}
+  @media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.grid3,.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1><span class="dot"></span>Install Schedule Adherence</h1>
+  <div class="sub" id="sub"></div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="controls">
+    <div class="seg" id="seg"></div>
+    <select id="fTrade"><option value="">All trades</option></select>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="grid3">
+    <div class="panel"><h3>Same-day rate by trade</h3><div id="byTrade"></div></div>
+    <div class="panel"><h3>Same-day rate by business unit</h3><div id="byBU"></div></div>
+    <div class="panel"><h3>Same-day rate by lead tech</h3><div id="byTech"></div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel"><h3>Days from scheduled to completed</h3><div id="dist"></div></div>
+    <div class="panel"><h3>Same-day rate by scheduled month</h3><div id="trend"></div></div>
+  </div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Open / overdue — scheduled, not yet completed</h3>
+  <div id="open"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Tracked jobs</h3>
+  <div class="twrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+
+  <div class="note" id="note"></div>
+</div>
+
+<script>
+const LEDGER = /*DATA_START*/[{"job":"148933911","bu":"HVAC-Install-CBD","trade":"HVAC","com":false,"customer":"SHELDAHL, RITA","value":13733.0,"tech":"Chris B","scheduled_date":"2026-07-17","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-07-17"},{"job":"159896204","bu":"FIRE-Install-CBD","trade":"Fireplace","com":false,"customer":"CATES FINE HOMES, LLC","value":6479.3,"tech":"Campbell T","scheduled_date":"2026-08-13","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-13"},{"job":"158030465","bu":"FIRE-Install-CBD","trade":"Fireplace","com":false,"customer":"FRIESE, MICAH AND JENNY","value":4634.98,"tech":"Dale C","scheduled_date":"2026-08-13","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-13"},{"job":"155059308","bu":"FIRE-Install-Com-CBD","trade":"Fireplace","com":true,"customer":"LONE TREE CONSTRUCTION","value":6600.6,"tech":"Garrett G","scheduled_date":"2026-08-13","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-13"},{"job":"155532769","bu":"HVAC-Install-CBD","trade":"HVAC","com":false,"customer":"HAYNES, BRIAN & DAWN","value":15275.0,"tech":"Jason L","scheduled_date":"2026-08-13","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-13"},{"job":"159986563","bu":"HVAC-Install-CBD","trade":"HVAC","com":false,"customer":"FISCHER MINING LLC","value":5800.0,"tech":"Chris B","scheduled_date":"2026-08-13","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-13"},{"job":"159563162","bu":"FIRE-Install-Com-CBD","trade":"Fireplace","com":true,"customer":"1st CHOICE BUILDERS LLC","value":11624.75,"tech":"Garrett G","scheduled_date":"2026-08-14","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-14"},{"job":"159806862","bu":"HVAC-Install-CBD","trade":"HVAC","com":false,"customer":"JOHNSON, JACK AND DIANE","value":17314.7,"tech":"Chris B","scheduled_date":"2026-08-14","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-14"},{"job":"159831994","bu":"HVAC-Install-CBD","trade":"HVAC","com":false,"customer":"FEATHERSTONE, DON","value":16482.0,"tech":"Jason L","scheduled_date":"2026-08-14","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-14"},{"job":"160020512","bu":"ELEC-Install-CBD","trade":"Electrical","com":false,"customer":"OLSON, SCOTT AND KOURIK, BETH","value":0.0,"tech":"Buck S","scheduled_date":"2026-08-17","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-17"},{"job":"157121180","bu":"FIRE-Install-Com-CBD","trade":"Fireplace","com":true,"customer":"THE DETAIL COMPANY","value":6056.2,"tech":"Garrett G","scheduled_date":"2026-08-17","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-17"},{"job":"157200415","bu":"FIRE-Install-CBD","trade":"Fireplace","com":false,"customer":"SPRAFKA, CHARLIE AND KATHY","value":9080.0,"tech":"Dale C","scheduled_date":"2026-08-17","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-17"},{"job":"159979781","bu":"ELEC-Install-CBD","trade":"Electrical","com":false,"customer":"MAYNARD, CASEY","value":6906.0,"tech":"Jim J","scheduled_date":"2026-08-17","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-17"},{"job":"159990928","bu":"HVAC-Install-CBD","trade":"HVAC","com":false,"customer":"VETTA, CHRISTOPHER","value":0.0,"tech":"Noah M","scheduled_date":"2026-08-17","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-17"},{"job":"160020424","bu":"HVAC-Install-Com-CBD","trade":"HVAC","com":true,"customer":"VON LANG CONSTRUCTION","value":3940.0,"tech":"Campbell T","scheduled_date":"2026-08-17","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-17"},{"job":"160022925","bu":"FIRE-Install-CBD","trade":"Fireplace","com":false,"customer":"WAGNER, PATRICK","value":0.0,"tech":"Garrett G","scheduled_date":"2026-08-18","captured_on":"2026-08-13","completed_date":null,"days_to_complete":null,"on_time":null,"status":"open","reschedules":0,"current_scheduled_date":"2026-08-18"}]/*DATA_END*/;
+const TRACKING_SINCE = /*SINCE_START*/"2026-08-13"/*SINCE_END*/;
+const REFRESHED = /*STAMP_START*/"from initial setup (Aug 13, 2026)"/*STAMP_END*/;
+
+const money=v=>(v||v===0)?"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}):"—";
+const pct=(a,b)=>b?Math.round(a/b*100):null;
+const TVAR={HVAC:"var(--hvac)",Fireplace:"var(--fire)",Electrical:"var(--elec)"};
+const TCLASS={HVAC:"b-hvac",Fireplace:"b-fire",Electrical:"b-elec"};
+function parseK(s){const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c);}
+function keyOf(dt){return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");}
+function shortD(s){if(!s)return "—";const d=parseK(s);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"});}
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const DAY=86400000;
+
+LEDGER.forEach(j=>{
+  j._sched=parseK(j.scheduled_date);
+  j._resolved=!!j.completed_date;
+  if(j._resolved){
+    j._comp=parseK(j.completed_date);
+    j._dtc=(j.days_to_complete!=null)?j.days_to_complete:Math.round((j._comp-j._sched)/DAY);
+    j._same=j._dtc<=0;   // completed on (or before) the scheduled day
+    j._late=j._dtc>0;
+  }else{
+    j._overdue=j._sched<TODAY;
+    j._daysOpen=Math.round((TODAY-j._sched)/DAY);
+  }
+});
+
+// ----- scope: resolved cohort by scheduled-date window -----
+const WINDOWS={all:null,d30:30,d60:60,d90:90};
+let scope="all", fTrade="";
+function inWindow(j){
+  if(!fTrade||j.trade===fTrade){}else return false;
+  const w=WINDOWS[scope]; if(w==null) return true;
+  return (TODAY-j._sched)/DAY <= w;
+}
+function resolvedRows(){return LEDGER.filter(j=>j._resolved&&inWindow(j));}
+function openRows(){return LEDGER.filter(j=>!j._resolved&&inWindow(j));}
+
+const money0=money;
+function kpiCards(){
+  const R=resolvedRows(), O=openRows();
+  const same=R.filter(j=>j._same).length, late=R.filter(j=>j._late).length;
+  const over=O.filter(j=>j._overdue).length;
+  const rate=pct(same,R.length);
+  const lateDtc=R.filter(j=>j._late).map(j=>j._dtc);
+  const avgLate=lateDtc.length?(lateDtc.reduce((a,b)=>a+b,0)/lateDtc.length):null;
+  const all=[...R.map(j=>j._dtc)].sort((a,b)=>a-b);
+  const med=all.length?all[Math.floor((all.length-1)/2)]:null;
+  const cards=[
+    {k:"Completed on scheduled day",val:rate==null?"—":rate+"%",foot:R.length?same+" of "+R.length+" completed jobs":"no completions yet",hero:1},
+    {k:"Jobs resolved",val:R.length,foot:late+" finished late"},
+    {k:"Avg days late (when late)",val:avgLate==null?"—":avgLate.toFixed(1),foot:med==null?"":"median "+med+"d overall"},
+    {k:"Open / overdue",val:O.length,foot:over+" past scheduled date"},
+    {k:"Tracked total",val:LEDGER.filter(inWindow).length,foot:"since "+parseK(TRACKING_SINCE).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}
+  ];
+  document.getElementById("kpis").innerHTML=cards.map(c=>
+    `<div class="kpi${c.hero?' hero':''}"><div class="k">${c.k}</div><div class="val">${c.val}</div><div class="foot">${c.foot}</div></div>`).join("");
+}
+
+function rateBars(elId,keyFn){
+  const R=resolvedRows();
+  const g={};
+  R.forEach(j=>{const k=keyFn(j);if(!k)return;(g[k]=g[k]||{n:0,s:0});g[k].n++;if(j._same)g[k].s++;});
+  const ents=Object.entries(g).sort((a,b)=>(b[1].s/b[1].n)-(a[1].s/a[1].n));
+  const el=document.getElementById(elId);
+  if(!ents.length){el.innerHTML='<div style="color:var(--muted);font-size:13px">No completions yet.</div>';return;}
+  el.innerHTML=ents.map(([nm,o])=>{
+    const p=Math.round(o.s/o.n*100);
+    const col=p>=80?"var(--good)":p>=60?"var(--warn)":"var(--bad)";
+    return `<div class="bar-row"><div class="nm" title="${nm}">${nm}</div>
+      <div class="track"><div class="fill" style="width:${Math.max(3,p)}%;background:${col}"></div></div>
+      <div class="amt">${p}% · ${o.s}/${o.n}</div></div>`;
+  }).join("");
+}
+
+function distribution(){
+  const R=resolvedRows();
+  const el=document.getElementById("dist");
+  if(!R.length){el.innerHTML='<div style="color:var(--muted);font-size:13px">No completions recorded yet.</div>';return;}
+  const buckets=[["Same day",j=>j._dtc<=0],["1 day",j=>j._dtc===1],["2 days",j=>j._dtc===2],["3–5 days",j=>j._dtc>=3&&j._dtc<=5],["6–10 days",j=>j._dtc>=6&&j._dtc<=10],["11+ days",j=>j._dtc>=11]];
+  const max=Math.max(...buckets.map(b=>R.filter(b[1]).length),1);
+  el.innerHTML=buckets.map(([nm,fn])=>{
+    const n=R.filter(fn).length;const w=Math.max(2,n/max*100);
+    const col=nm==="Same day"?"var(--good)":"var(--accent)";
+    return `<div class="bar-row"><div class="nm">${nm}</div><div class="track"><div class="fill" style="width:${w}%;background:${col}"></div></div><div class="amt">${n}</div></div>`;
+  }).join("");
+}
+
+function trend(){
+  const R=resolvedRows();
+  const el=document.getElementById("trend");
+  if(!R.length){el.innerHTML='<div style="color:var(--muted);font-size:13px">Builds up as jobs complete.</div>';return;}
+  const g={};
+  R.forEach(j=>{const k=j.scheduled_date.slice(0,7);(g[k]=g[k]||{n:0,s:0});g[k].n++;if(j._same)g[k].s++;});
+  const ents=Object.entries(g).sort();
+  el.innerHTML=ents.map(([k,o])=>{
+    const p=Math.round(o.s/o.n*100);const col=p>=80?"var(--good)":p>=60?"var(--warn)":"var(--bad)";
+    const lbl=parseK(k+"-01").toLocaleDateString(undefined,{month:"short",year:"2-digit"});
+    return `<div class="bar-row"><div class="nm">${lbl}</div><div class="track"><div class="fill" style="width:${Math.max(3,p)}%;background:${col}"></div></div><div class="amt">${p}% · ${o.s}/${o.n}</div></div>`;
+  }).join("");
+}
+
+function openList(){
+  const O=openRows().slice().sort((a,b)=>(b._daysOpen||0)-(a._daysOpen||0));
+  const el=document.getElementById("open");
+  if(!O.length){el.innerHTML='<div class="empty">Nothing outstanding — every scheduled job in scope has completed.</div>';return;}
+  el.innerHTML='<div class="twrap"><table><thead><tr><th>Job #</th><th>Customer</th><th>Trade</th><th>Lead tech</th><th>Scheduled</th><th class="r">Days open</th><th>Status</th></tr></thead><tbody>'+
+    O.map(j=>{const od=j._overdue;return `<tr><td>${j.job}</td><td>${j.customer||"—"}</td><td><span class="badge ${TCLASS[j.trade]||''}">${j.trade}</span></td><td>${j.tech||"—"}</td><td>${shortD(j.scheduled_date)}</td><td class="r">${j._daysOpen}</td><td><span class="pill ${od?'p-over':'p-open'}">${od?'OVERDUE':'scheduled'}</span></td></tr>`;}).join("")+
+    '</tbody></table></div>';
+}
+
+let sortI=4,sortDir=1;
+const COLS=[
+  {h:"Job #",f:j=>j.job,s:j=>j.job},
+  {h:"Customer",f:j=>j.customer||"—",s:j=>j.customer||""},
+  {h:"Trade",f:j=>`<span class="badge ${TCLASS[j.trade]||''}">${j.trade}</span>`,s:j=>j.trade},
+  {h:"Lead tech",f:j=>j.tech||"—",s:j=>j.tech||""},
+  {h:"Scheduled",f:j=>shortD(j.scheduled_date),s:j=>j.scheduled_date},
+  {h:"Completed",f:j=>j._resolved?shortD(j.completed_date):"—",s:j=>j.completed_date||"9999"},
+  {h:"Days",r:1,f:j=>j._resolved?j._dtc:(j._daysOpen+"·open"),s:j=>j._resolved?j._dtc:999},
+  {h:"Result",f:j=>{if(!j._resolved)return `<span class="pill ${j._overdue?'p-over':'p-open'}">${j._overdue?'OVERDUE':'open'}</span>`;return j._same?'<span class="pill p-same">same day</span>':`<span class="pill p-late">+${j._dtc}d late</span>`;},s:j=>j._resolved?(j._same?0:j._dtc):1000}
+];
+function tbl(){
+  const rows=LEDGER.filter(inWindow);
+  document.querySelector("#tbl thead").innerHTML="<tr>"+COLS.map((c,i)=>`<th class="${c.r?'r':''}" data-i="${i}">${c.h}${sortI===i?(sortDir>0?" ▲":" ▼"):""}</th>`).join("")+"</tr>";
+  const s=rows.slice().sort((a,b)=>{const va=COLS[sortI].s(a),vb=COLS[sortI].s(b);return va<vb?-sortDir:va>vb?sortDir:0;});
+  document.querySelector("#tbl tbody").innerHTML=s.map(j=>"<tr>"+COLS.map(c=>`<td class="${c.r?'r':''}">${c.f(j)}</td>`).join("")+"</tr>").join("");
+  document.querySelectorAll("#tbl th").forEach(th=>th.onclick=()=>{const i=+th.dataset.i;if(i===sortI)sortDir*=-1;else{sortI=i;sortDir=1;}tbl();});
+}
+
+// ----- controls -----
+const seg=document.getElementById("seg");
+[["all","All time"],["d90","90d"],["d60","60d"],["d30","30d"]].forEach(([v,l])=>{const b=document.createElement("button");b.textContent=l;b.dataset.v=v;if(v===scope)b.className="on";b.onclick=()=>{scope=v;[...seg.children].forEach(x=>x.classList.toggle("on",x.dataset.v===v));render();};seg.appendChild(b);});
+const fT=document.getElementById("fTrade");
+[...new Set(LEDGER.map(j=>j.trade))].sort().forEach(t=>fT.add(new Option(t,t)));
+fT.onchange=()=>{fTrade=fT.value;render();};
+
+function render(){
+  const scoped=LEDGER.filter(inWindow);
+  document.getElementById("count").textContent=scoped.length+" jobs in scope · "+resolvedRows().length+" completed · "+openRows().length+" open";
+  kpiCards();rateBars("byTrade",j=>j.trade);rateBars("byBU",j=>j.bu);rateBars("byTech",j=>j.tech||null);distribution();trend();openList();tbl();
+}
+
+document.getElementById("sub").innerHTML="How often install jobs finish on the day they were scheduled &nbsp;·&nbsp; snapshot method &nbsp;·&nbsp; tracking since "+parseK(TRACKING_SINCE).toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"})+" &nbsp;·&nbsp; updated "+REFRESHED;
+document.getElementById("note").innerHTML="<b>Method:</b> each weekday morning we record the install jobs on that day's schedule (locking the date they were scheduled for), then watch the completed workbook to see when each one is finished. \u201cSame day\u201d = completed on the scheduled date; otherwise we count the days until completion. This captures true schedule slippage even when a job is later rescheduled (the completed sheet\u2019s own scheduled-date field moves with reschedules, so it is not used for this). Jobs still on the schedule but not yet completed show as open/overdue. Tracking began "+parseK(TRACKING_SINCE).toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"})+", so history fills in over the coming weeks.";
+
+render();
+</script>
+</body>
+</html>

@@ -57,7 +57,8 @@
     {id:"grossprofit",label:"Gross Profit",ico:"💰", file:"gp_dashboard.html"},
     {id:"service",    label:"Service",      ico:"🛠️", file:"service_dashboard.html"},
     {id:"svcmeeting", label:"Tech Meeting",  ico:"🧑‍🔧", file:"service_tech_meeting.html"},
-    {id:"schedinstalls", label:"Sched. Installs", ico:"🗓️", file:"scheduled_installs.html"}
+    {id:"schedinstalls", label:"Sched. Installs", ico:"🗓️", file:"scheduled_installs.html"},
+    {id:"adherence", label:"Adherence", ico:"⏱️", file:"install_adherence.html"}
   ];
   const nav = document.getElementById("nav");
   const frame = document.getElementById("frame");
@@ -81,7 +82,8 @@
     grossprofit:`.kpi .val{font-size:27px!important}.bucard .p{font-size:24px!important}`,
     service:    `.kpi .val{font-size:29px!important}`,
     svcmeeting: `.kpi .val{font-size:24px!important}.mv{font-size:27px!important}`,
-    schedinstalls:`.kpi .val{font-size:30px!important}.job .cust,.job .amt{font-size:17px!important}`
+    schedinstalls:`.kpi .val{font-size:30px!important}.job .cust,.job .amt{font-size:17px!important}`,
+    adherence:`.kpi .val{font-size:30px!important}`
   };
   let currentId = null;
   function injectBoost(){
