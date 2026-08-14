@@ -18,7 +18,7 @@
   .brand small{display:block;font-weight:500;color:var(--dim);font-size:11px;letter-spacing:.3px}
   nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
   .tab{appearance:none;border:1px solid var(--edge);background:var(--panel);color:var(--dim);
-       padding:9px 15px;border-radius:9px;cursor:pointer;font-weight:600;font-size:13.5px;transition:.12s}
+       padding:9px 15px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14.5px;transition:.12s}
   .tab:hover{color:var(--ink);border-color:#31414f}
   .tab.active{color:#fff;background:var(--accent);border-color:var(--accent);box-shadow:0 3px 12px rgba(76,141,255,.35)}
   .tab .ico{margin-right:7px}
@@ -62,17 +62,48 @@
   const frame = document.getElementById("frame");
   const loading = document.getElementById("loading");
 
+  // Roomier layout: bigger cards, bigger font, wider container.
+  // Injected into each dashboard on load (same-origin) so it survives daily rebuilds.
+  const BOOST_BASE = `
+    .wrap{max-width:min(1560px,96vw)!important}
+    body{font-size:16px!important}
+    .card,.kpi,.mcard,.bucard{padding:20px 22px!important}
+    table{font-size:15px!important}
+    h1{font-size:1.5em!important}
+  `;
+  const BOOST = {
+    revenue:    `.card .val{font-size:33px!important}`,
+    sales:      `.card .val{font-size:33px!important}`,
+    booked:     `.kpi .val{font-size:46px!important}.downame{font-size:27px!important}`,
+    fourdx:     `.card{padding:22px 24px!important}`,
+    lastmonth:  `.mcard .big{font-size:40px!important}`,
+    grossprofit:`.kpi .val{font-size:27px!important}.bucard .p{font-size:24px!important}`,
+    service:    `.kpi .val{font-size:29px!important}`,
+    svcmeeting: `.kpi .val{font-size:24px!important}.mv{font-size:27px!important}`
+  };
+  let currentId = null;
+  function injectBoost(){
+    try{
+      const d = frame.contentDocument; if(!d || !d.head) return;
+      let st = d.getElementById("cbd-roomier");
+      if(!st){ st = d.createElement("style"); st.id="cbd-roomier"; d.head.appendChild(st); }
+      st.textContent = BOOST_BASE + (BOOST[currentId]||"");
+    }catch(e){}
+  }
+
   function pick(t, btn){
     document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
     loading.classList.add("show");
+    currentId = t.id;
     frame.src = t.file;
     try{ localStorage.setItem("cbd_tab", t.id); }catch(e){}
   }
-  frame.addEventListener("load", ()=>loading.classList.remove("show"));
+  frame.addEventListener("load", ()=>{ loading.classList.remove("show"); injectBoost(); });
 
   let start = "revenue";
   try{ const s=localStorage.getItem("cbd_tab"); if(s && TABS.some(t=>t.id===s)) start=s; }catch(e){}
+  currentId = start;
 
   TABS.forEach(t=>{
     const b=document.createElement("button");
