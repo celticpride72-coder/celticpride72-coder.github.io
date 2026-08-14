@@ -15,47 +15,57 @@
  .bar-row{display:grid;grid-template-columns:120px 1fr 120px;align-items:center;gap:10px;margin:8px 0;font-size:14px}.bar-row .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
  .track{height:15px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;overflow:hidden}.fill{height:100%;border-radius:8px}.bar-row .amt{text-align:right;color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums}
  table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--edge)}th:first-child,td:first-child{text-align:left}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+ .yoy td,.yoy th{white-space:nowrap}.yoy .d{font-size:12px;font-weight:700}.up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--muted)}
+ .yoy tr:hover td{background:var(--panel2)}
  .note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
  @media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
 </style></head><body><div class="wrap">
  <h1><span class="dot"></span>Time to Install &amp; Backlog</h1>
  <div class="sub" id="sub"></div>
  <div class="kpis" id="kpis"></div>
+ <div class="panel" style="margin:14px 0"><h3 id="yoyH">Year over year</h3><div style="overflow-x:auto"><table class="yoy" id="yoy"></table></div></div>
  <div class="grid2">
-  <div class="panel"><h3>Sold → completed (days) distribution</h3><div id="dist"></div></div>
-  <div class="panel"><h3>Median days by trade</h3><div id="byTrade"></div></div>
+  <div class="panel"><h3>Sold → completed (days) distribution — 2026</h3><div id="dist"></div></div>
+  <div class="panel"><h3>Median days by trade — 2026</h3><div id="byTrade"></div></div>
  </div>
  <div class="grid2">
-  <div class="panel"><h3>Median sold→completed by month</h3><div id="trend"></div></div>
+  <div class="panel"><h3>Median sold→completed by month — 2026</h3><div id="trend"></div></div>
   <div class="panel"><h3>Scheduled backlog — aging by days since sold</h3><div id="backlog"></div></div>
  </div>
- <div class="panel" style="margin-top:14px"><h3>By business unit</h3><div class="twrap" style="overflow-x:auto"><table id="tbl"><thead><tr><th>Business unit</th><th>Jobs</th><th>Median days</th><th>Avg days</th><th>Revenue</th></tr></thead><tbody></tbody></table></div></div>
+ <div class="panel" style="margin-top:14px"><h3>By business unit — 2026</h3><div style="overflow-x:auto"><table id="tbl"><thead><tr><th>Business unit</th><th>Jobs</th><th>Median days</th><th>Avg days</th><th>Revenue</th></tr></thead><tbody></tbody></table></div></div>
  <div class="note" id="note"></div>
 </div>
 <script>
-const EMB=/*DATA_START*/{"asOf":"2026-08-10","today":"2026-08-13","overall":{"n":611,"avg":25.0,"med":11,"rev":4702434},"dist":[{"b":"0\u20137d","n":248},{"b":"8\u201314d","n":92},{"b":"15\u201330d","n":129},{"b":"31\u201360d","n":79},{"b":"61\u201390d","n":27},{"b":"90+d","n":36}],"byTrade":[{"trade":"HVAC","n":296,"avg":9.4,"med":5,"rev":2896599},{"trade":"Fireplace","n":247,"avg":46.0,"med":29,"rev":1555421},{"trade":"Electrical","n":47,"avg":22.6,"med":12,"rev":197361},{"trade":"Other","n":21,"avg":4.0,"med":2,"rev":53053}],"byBU":[{"bu":"HVAC-Install","n":289,"avg":9.4,"med":5,"rev":2839214},{"bu":"FIRE-Install","n":147,"avg":38.6,"med":27,"rev":971569},{"bu":"FIRE-Install-Com","n":100,"avg":56.9,"med":36,"rev":583852},{"bu":"ELEC-Install","n":47,"avg":22.6,"med":12,"rev":197361},{"bu":"PLMB-Install","n":21,"avg":4.0,"med":2,"rev":53053},{"bu":"HVAC-Install-Com","n":7,"avg":6.0,"med":6,"rev":57385}],"trend":[{"m":"2026-01","n":9,"avg":47.6,"med":9,"rev":65731},{"m":"2026-02","n":96,"avg":32.1,"med":22,"rev":755166},{"m":"2026-03","n":89,"avg":31.9,"med":21,"rev":648442},{"m":"2026-04","n":74,"avg":28.8,"med":12,"rev":531524},{"m":"2026-05","n":80,"avg":28.8,"med":8,"rev":573237},{"m":"2026-06","n":117,"avg":16.6,"med":6,"rev":993574},{"m":"2026-07","n":121,"avg":17.5,"med":8,"rev":949235},{"m":"2026-08","n":25,"avg":17.4,"med":7,"rev":185525}],"stages":{"soldToSched":10,"schedToComplete":0},"backlog":{"n":16,"val":123927,"age":[{"b":"0\u201314d","n":7,"val":68547},{"b":"15\u201330d","n":0,"val":0},{"b":"31\u201360d","n":3,"val":19771},{"b":"60+d","n":3,"val":35609},{"b":"no sold date","n":3,"val":0}],"avgDays":46}}/*DATA_END*/;
+const EMB=/*DATA_START*/{"asOf":"2026-08-10","today":"2026-08-13","overall":{"n":611,"avg":25.0,"med":11,"rev":4702434},"dist":[{"b":"0\u20137d","n":248},{"b":"8\u201314d","n":92},{"b":"15\u201330d","n":129},{"b":"31\u201360d","n":79},{"b":"61\u201390d","n":27},{"b":"90+d","n":36}],"byTrade":[{"trade":"HVAC","n":296,"avg":9.4,"med":5,"rev":2896599},{"trade":"Fireplace","n":247,"avg":46.0,"med":29,"rev":1555421},{"trade":"Electrical","n":47,"avg":22.6,"med":12,"rev":197361},{"trade":"Plumbing","n":21,"avg":4.0,"med":2,"rev":53053}],"byBU":[{"bu":"HVAC-Install","n":289,"avg":9.4,"med":5,"rev":2839214},{"bu":"FIRE-Install","n":147,"avg":38.6,"med":27,"rev":971569},{"bu":"FIRE-Install-Com","n":100,"avg":56.9,"med":36,"rev":583852},{"bu":"ELEC-Install","n":47,"avg":22.6,"med":12,"rev":197361},{"bu":"PLMB-Install","n":21,"avg":4.0,"med":2,"rev":53053},{"bu":"HVAC-Install-Com","n":7,"avg":6.0,"med":6,"rev":57385}],"trend":[{"m":"2026-01","n":9,"avg":47.6,"med":9,"rev":65731},{"m":"2026-02","n":96,"avg":32.1,"med":22,"rev":755166},{"m":"2026-03","n":89,"avg":31.9,"med":21,"rev":648442},{"m":"2026-04","n":74,"avg":28.8,"med":12,"rev":531524},{"m":"2026-05","n":80,"avg":28.8,"med":8,"rev":573237},{"m":"2026-06","n":117,"avg":16.6,"med":6,"rev":993574},{"m":"2026-07","n":121,"avg":17.5,"med":8,"rev":949235},{"m":"2026-08","n":25,"avg":17.4,"med":7,"rev":185525}],"stages":{"soldToSched":10,"schedToComplete":0},"backlog":{"n":16,"val":123927,"age":[{"b":"0\u201314d","n":7,"val":68547},{"b":"15\u201330d","n":0,"val":0},{"b":"31\u201360d","n":3,"val":19771},{"b":"60+d","n":3,"val":35609},{"b":"no sold date","n":3,"val":0}],"avgDays":46},"yoy":{"years":[2024,2025,2026],"cutoffLabel":"Jan 1 \u2013 Aug 10","rows":[{"label":"Median days (sold\u2192install)","better":"down","unit":"d","vals":[13,13,11]},{"label":"Average days","better":"down","unit":"d","vals":[22.1,24.3,25.0]},{"label":"Install jobs","better":"up","unit":"","vals":[672,519,611]},{"label":"Install revenue","better":"up","unit":"$","vals":[4407215,3702508,4702434]},{"label":"HVAC median","better":"down","unit":"d","vals":[5,3,5]},{"label":"Fireplace median","better":"down","unit":"d","vals":[27,23,29]},{"label":"Electrical median","better":"down","unit":"d","vals":[10,16,12]}]}}/*DATA_END*/;
 const REFRESHED=/*STAMP_START*/"from example workbook (Aug 10, 2026)"/*STAMP_END*/;
 const money=v=>(v||v===0)?"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}):"—";
-const TVAR={HVAC:"var(--hvac)",Fireplace:"var(--fire)",Electrical:"var(--elec)",Other:"var(--dim)"};
-const o=EMB.overall,b=EMB.backlog,st=EMB.stages;
+const moneyK=v=>{const k=Math.round(v/1000);return Math.abs(k)>=1000?"$"+(v/1000000).toFixed(2)+"M":"$"+k+"K";};
+const TVAR={HVAC:"var(--hvac)",Fireplace:"var(--fire)",Electrical:"var(--elec)",Plumbing:"#39c5cf",Other:"var(--dim)"};
+const o=EMB.overall,b=EMB.backlog,st=EMB.stages,Y=EMB.yoy;
+// KPI delta: 2026 median vs 2025 median (yoy row 0)
+const medRow=Y.rows[0].vals, med26=medRow[2], med25=medRow[1], dMed=med26-med25;
+const medDelta=dMed===0?'<span class="flat">— vs 2025</span>':`<span class="${dMed<0?'up':'down'}">${dMed<0?'▼':'▲'}${Math.abs(dMed)}d vs 2025</span>`;
 document.getElementById("kpis").innerHTML=[
- {k:"Median sold→install",v:o.med+"d",f:o.n+" install jobs",hero:1},
+ {k:"Median sold→install",v:o.med+"d",f:medDelta,hero:1},
  {k:"Average",v:o.avg+"d",f:"mean days"},
  {k:"Sold → scheduled",v:st.soldToSched+"d",f:"median"},
  {k:"Scheduled → done",v:st.schedToComplete+"d",f:"median"},
  {k:"Backlog jobs",v:b.n,f:"currently scheduled"},
  {k:"Backlog value",v:money(b.val),f:"avg "+b.avgDays+"d since sold"}
 ].map(c=>`<div class="kpi${c.hero?' hero':''}"><div class="k">${c.k}</div><div class="val">${c.v}</div><div class="foot">${c.f}</div></div>`).join("");
-function bars(el,items,label,val,colf,max){const mx=max||Math.max(...items.map(val),1);document.getElementById(el).innerHTML=items.map(x=>`<div class="bar-row"><div class="nm" title="${label(x)}">${label(x)}</div><div class="track"><div class="fill" style="width:${Math.max(2,val(x)/mx*100)}%;background:${colf(x)}"></div></div><div class="amt">${val(x)}${el==="dist"||el==="backlog"?"":"d"}</div></div>`).join("");}
-// distribution
+// ---- YoY table ----
+function fmt(v,u){return u==="$"?moneyK(v):u==="d"?v+"d":Number(v).toLocaleString();}
+function delta(a,c,better,u){const d=c-a;if(!d)return '<span class="flat">—</span>';const good=(better==="up")?d>0:d<0;const arrow=d>0?"▲":"▼";const val=u==="$"?moneyK(Math.abs(d)):u==="d"?Math.abs(Math.round(d*10)/10)+"d":Math.abs(d).toLocaleString();return `<span class="${good?'up':'down'}">${arrow}${val}</span>`;}
+document.getElementById("yoyH").textContent="Year over year — same period ("+Y.cutoffLabel+" each year)";
+document.getElementById("yoy").innerHTML=
+ "<thead><tr><th>Metric</th><th>2024</th><th>2025</th><th class='d'>vs ’24</th><th>2026</th><th class='d'>vs ’25</th></tr></thead><tbody>"+
+ Y.rows.map(r=>`<tr><td>${r.label}</td><td>${fmt(r.vals[0],r.unit)}</td><td>${fmt(r.vals[1],r.unit)}</td><td class="d">${delta(r.vals[0],r.vals[1],r.better,r.unit)}</td><td>${fmt(r.vals[2],r.unit)}</td><td class="d">${delta(r.vals[1],r.vals[2],r.better,r.unit)}</td></tr>`).join("")+"</tbody>";
+// ---- 2026 detail bars ----
 {const mx=Math.max(...EMB.dist.map(x=>x.n),1);document.getElementById("dist").innerHTML=EMB.dist.map(x=>`<div class="bar-row"><div class="nm">${x.b}</div><div class="track"><div class="fill" style="width:${Math.max(2,x.n/mx*100)}%;background:var(--accent)"></div></div><div class="amt">${x.n}</div></div>`).join("");}
-// by trade median
-{const mx=Math.max(...EMB.byTrade.map(x=>x.med),1);document.getElementById("byTrade").innerHTML=EMB.byTrade.map(x=>`<div class="bar-row"><div class="nm">${x.trade}</div><div class="track"><div class="fill" style="width:${Math.max(2,x.med/mx*100)}%;background:${TVAR[x.trade]}"></div></div><div class="amt">${x.med}d · ${x.n}</div></div>`).join("");}
-// trend
-{const mx=Math.max(...EMB.trend.map(x=>x.med),1);document.getElementById("trend").innerHTML=EMB.trend.map(x=>{const lbl=new Date(x.m+"-01").toLocaleDateString(undefined,{month:"short"});return `<div class="bar-row"><div class="nm">${lbl}</div><div class="track"><div class="fill" style="width:${Math.max(2,x.med/mx*100)}%;background:var(--accent2)"></div></div><div class="amt">${x.med}d · ${x.n}</div></div>`;}).join("");}
-// backlog aging
+{const mx=Math.max(...EMB.byTrade.map(x=>x.med),1);document.getElementById("byTrade").innerHTML=EMB.byTrade.map(x=>`<div class="bar-row"><div class="nm">${x.trade}</div><div class="track"><div class="fill" style="width:${Math.max(2,x.med/mx*100)}%;background:${TVAR[x.trade]||'var(--dim)'}"></div></div><div class="amt">${x.med}d · ${x.n}</div></div>`).join("");}
+{const mx=Math.max(...EMB.trend.map(x=>x.med),1);document.getElementById("trend").innerHTML=EMB.trend.map(x=>{const l=new Date(x.m+"-01").toLocaleDateString(undefined,{month:"short"});return `<div class="bar-row"><div class="nm">${l}</div><div class="track"><div class="fill" style="width:${Math.max(2,x.med/mx*100)}%;background:var(--accent2)"></div></div><div class="amt">${x.med}d · ${x.n}</div></div>`;}).join("");}
 {const mx=Math.max(...b.age.map(x=>x.val),1);document.getElementById("backlog").innerHTML=b.age.filter(x=>x.n).map(x=>`<div class="bar-row"><div class="nm">${x.b}</div><div class="track"><div class="fill" style="width:${Math.max(2,x.val/mx*100)}%;background:${x.b.startsWith("60")||x.b.startsWith("31")?"var(--warn)":"var(--accent)"}"></div></div><div class="amt">${money(x.val)} · ${x.n}</div></div>`).join("");}
 document.querySelector("#tbl tbody").innerHTML=EMB.byBU.map(x=>`<tr><td>${x.bu}</td><td>${x.n}</td><td>${x.med}d</td><td>${x.avg}d</td><td>${money(x.rev)}</td></tr>`).join("");
-document.getElementById("sub").innerHTML="How long from sale to completed install, plus what\u2019s in the scheduled backlog &nbsp;·&nbsp; data through "+EMB.asOf+" &nbsp;·&nbsp; updated "+REFRESHED;
-document.getElementById("note").innerHTML="<b>Scope:</b> 2026 completed install jobs that carry a Sold On date ("+o.n+" jobs). <b>Median sold→install</b> is the typical wait from sale to completed install; the two stage numbers split it into sold→scheduled and scheduled→done. <b>Backlog</b> is the currently-scheduled installs (from Kody Scheduled Install), aged by days since the job was sold. Fireplace jobs run longer than HVAC, largely surround/parts lead time.";
+document.getElementById("sub").innerHTML="Sale-to-install speed with year-over-year trend, plus the scheduled backlog &nbsp;·&nbsp; data through "+EMB.asOf+" &nbsp;·&nbsp; updated "+REFRESHED;
+document.getElementById("note").innerHTML="<b>Year over year</b> compares the same calendar window each year ("+Y.cutoffLabel+") so 2026 (partial) is fair against full prior years. For days metrics, ▼ (fewer days) is the improvement; for jobs and revenue, ▲ is the improvement. The lower detail panels cover 2026 completions. Backlog is the currently-scheduled installs aged by days since sold. Trade names were normalized across the 2024→2026 business-unit renames.";
 </script></body></html>
