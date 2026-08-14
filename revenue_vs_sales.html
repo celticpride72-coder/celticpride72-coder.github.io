@@ -1,0 +1,89 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revenue vs Sales — Monthly YoY — Comfort by Design</title>
+<style>
+ :root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--bad:#f8736a;--y24:#7c8a9c;--y25:#4c8dff;--y26:#2bd4a7}
+ *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ .wrap{max-width:1480px;margin:0 auto;padding:22px 22px 70px}h1{margin:0;font-size:26px}
+ .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+ .sub{color:var(--dim);font-size:14px;margin-top:4px}
+ .controls{display:flex;gap:10px;align-items:center;margin:16px 0 6px;flex-wrap:wrap}
+ .seg{display:flex;border:1px solid var(--edge);border-radius:9px;overflow:hidden}.seg button{background:var(--panel);color:var(--dim);border:0;padding:9px 16px;font-size:14px;cursor:pointer;font-weight:600}.seg button.on{background:var(--accent);color:#fff}
+ .legend{display:flex;gap:14px;margin-left:8px;flex-wrap:wrap}.lg{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--dim)}.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+ .count{margin-left:auto;color:var(--dim);font-size:13px}
+ .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:12px 0}
+ .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}
+ .kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}.kpi .val{font-size:26px;font-weight:750;margin-top:5px}.kpi .foot{font-size:12px;margin-top:5px}
+ .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:18px;margin:14px 0}.panel h3{margin:0 0 14px;font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+ .chart{display:grid;grid-template-columns:repeat(12,1fr);gap:8px;align-items:end;height:230px}
+ .mcol{display:flex;flex-direction:column;align-items:center;gap:5px;height:100%}
+ .bars{display:flex;align-items:flex-end;gap:3px;height:100%;width:100%;justify-content:center}
+ .bar{width:22%;border-radius:3px 3px 0 0;min-height:2px}.bar.partial{opacity:.55;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.25) 0 3px,transparent 3px 6px)}
+ .mlbl{font-size:11px;color:var(--muted)}
+ table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px 9px;text-align:right;border-bottom:1px solid var(--edge);white-space:nowrap}th:first-child,td:first-child{text-align:left}
+ th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px}.d{font-size:12px;font-weight:700}.up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--muted)}
+ tr.tot td{font-weight:750;border-top:2px solid var(--edge)}tr:hover td{background:var(--panel2)}
+ .twrap{overflow-x:auto}.note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+ @media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.chart{height:180px}}
+</style></head><body><div class="wrap">
+ <h1><span class="dot"></span>Revenue vs Sales — Monthly, Year over Year</h1>
+ <div class="sub" id="sub"></div>
+ <div class="controls">
+   <div class="seg" id="seg"></div>
+   <div class="legend"><span class="lg"><span class="sw" style="background:var(--y24)"></span>2024</span><span class="lg"><span class="sw" style="background:var(--y25)"></span>2025</span><span class="lg"><span class="sw" style="background:var(--y26)"></span>2026</span></div>
+   <span class="count" id="count"></span>
+ </div>
+ <div class="kpis" id="kpis"></div>
+ <div class="panel"><h3 id="chartH"></h3><div class="chart" id="chart"></div></div>
+ <div class="panel"><h3>Month by month</h3><div class="twrap"><table id="tbl"><thead></thead><tbody></tbody></table></div></div>
+ <div class="note" id="note"></div>
+</div>
+<script>
+let EMB=/*DATA_START*/{"asOf":"2026-08","revenue":{"2024":[889063,841919,566694,712722,684578,825415,889213,722070,888029,1050732,933383,710190],"2025":[835100,830166,658669,809438,874300,915222,1039138,876254,905219,1338293,983959,1216103],"2026":[993719,980229,851588,766576,767888,1198542,1120029,344135,null,null,null,null]},"sales":{"2024":[505499,279320,326823,283538,572078,530315,590277,429146,756210,561905,452582,497866],"2025":[487213,475289,495622,673500,660351,855181,729569,568014,1047646,1059139,888977,910168],"2026":[858925,632359,446246,493484,873503,933727,952536,620999,null,null,null,null]}}/*DATA_END*/;
+const REFRESHED=/*STAMP_START*/"live from Revenue & Sales tabs"/*STAMP_END*/;
+const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const YC={"2024":"var(--y24)","2025":"var(--y25)","2026":"var(--y26)"};
+const money=v=>v==null?"—":"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0});
+const moneyK=v=>v==null?"—":Math.abs(v)>=1000000?"$"+(v/1000000).toFixed(2)+"M":"$"+Math.round(v/1000)+"K";
+let metric="revenue";
+const seg=document.getElementById("seg");
+[["revenue","Revenue"],["sales","Sales"]].forEach(([v,l])=>{const b=document.createElement("button");b.textContent=l;if(v===metric)b.className="on";b.onclick=()=>{metric=v;[...seg.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");render();};seg.appendChild(b);});
+function pctDelta(cur,prev){if(cur==null||prev==null||prev===0)return '<span class="flat">—</span>';const d=(cur-prev)/prev*100;const g=d>=0;return `<span class="${g?'up':'down'}">${g?'▲':'▼'}${Math.abs(d).toFixed(0)}%</span>`;}
+function lastIdx(arr){let l=-1;for(let i=0;i<12;i++)if(arr&&arr[i]!=null)l=i;return l;}
+function render(){
+ const D=EMB[metric]||{}; const y24=D["2024"]||[],y25=D["2025"]||[],y26=D["2026"]||[];
+ const partial=lastIdx(y26); const aligned=partial-1; // last complete month index for YTD compare
+ document.getElementById("chartH").textContent=(metric==="revenue"?"Revenue":"Sales")+" by month — 2024 vs 2025 vs 2026";
+ // KPIs: latest complete month + aligned YTD
+ const sumTo=(a,n)=>{let s=0,ok=false;for(let i=0;i<=n;i++)if(a&&a[i]!=null){s+=a[i];ok=true;}return ok?s:null;};
+ const yt24=sumTo(y24,aligned),yt25=sumTo(y25,aligned),yt26=sumTo(y26,aligned);
+ const lm=aligned; // last complete month
+ const K=[
+  {k:(MN[lm]||"—")+" 2026",v:moneyK(y26[lm]),f:pctDelta(y26[lm],y25[lm])+" vs 2025"},
+  {k:"YTD 2026 (Jan–"+(MN[aligned]||"—")+")",v:moneyK(yt26),f:pctDelta(yt26,yt25)+" vs 2025"},
+  {k:"YTD 2025",v:moneyK(yt25),f:pctDelta(yt25,yt24)+" vs 2024"},
+  {k:"YTD 2024",v:moneyK(yt24),f:"baseline"}
+ ];
+ document.getElementById("kpis").innerHTML=K.map(c=>`<div class="kpi"><div class="k">${c.k}</div><div class="val">${c.v}</div><div class="foot">${c.f}</div></div>`).join("");
+ document.getElementById("count").textContent="values from the live "+(metric==="revenue"?"Revenue":"Sales")+" dashboard";
+ // chart
+ let mx=0;["2024","2025","2026"].forEach(y=>(D[y]||[]).forEach(v=>{if(v!=null&&v>mx)mx=v;}));mx=mx||1;
+ document.getElementById("chart").innerHTML=MN.map((mo,i)=>{
+   const bar=(y,idx)=>{const v=(D[y]||[])[i];if(v==null)return '';const h=Math.max(2,v/mx*100);const pt=(y==="2026"&&i===partial)?' partial':'';return `<div class="bar${pt}" style="height:${h}%;background:${YC[y]}" title="${y} ${mo}: ${money(v)}${(y==='2026'&&i===partial)?' (partial)':''}"></div>`;};
+   return `<div class="mcol"><div class="bars">${bar("2024")}${bar("2025")}${bar("2026")}</div><div class="mlbl">${mo}</div></div>`;
+ }).join("");
+ // table
+ document.querySelector("#tbl thead").innerHTML="<tr><th>Month</th><th>2024</th><th>2025</th><th class='d'>vs ’24</th><th>2026</th><th class='d'>vs ’25</th></tr>";
+ let rows=MN.map((mo,i)=>{const a=y24[i],b=y25[i],c=(y26[i]);const cp=(i===partial)?' *':'';return `<tr><td>${mo}${cp}</td><td>${moneyK(a)}</td><td>${moneyK(b)}</td><td class="d">${pctDelta(b,a)}</td><td>${moneyK(c)}${cp?'<span class="flat" style="font-weight:400"> partial</span>':''}</td><td class="d">${pctDelta(c,b)}</td></tr>`;}).join("");
+ rows+=`<tr class="tot"><td>YTD Jan–${MN[aligned]||"—"}</td><td>${moneyK(yt24)}</td><td>${moneyK(yt25)}</td><td class="d">${pctDelta(yt25,yt24)}</td><td>${moneyK(yt26)}</td><td class="d">${pctDelta(yt26,yt25)}</td></tr>`;
+ const fy24=sumTo(y24,11),fy25=sumTo(y25,11);
+ rows+=`<tr class="tot"><td>Full year</td><td>${moneyK(fy24)}</td><td>${moneyK(fy25)}</td><td class="d">${pctDelta(fy25,fy24)}</td><td>—</td><td class="d"><span class="flat">—</span></td></tr>`;
+ document.querySelector("#tbl tbody").innerHTML=rows;
+}
+document.getElementById("sub").innerHTML="Completed revenue vs sold estimates (Sales = the four Sales BUs) &nbsp;·&nbsp; "+REFRESHED;
+document.getElementById("note").innerHTML="<b>Revenue</b> is completed/earned revenue by month (from the Revenue dashboard). <b>Sales</b> is sold estimates by Sold-On month for the four Sales business units — HVAC-Sales, FIRE-Sales, and their commercial variants — exactly matching the Sales dashboard. This page reads both series live from those dashboards, so it always agrees with them and updates when they do. * marks the current, still-open month; the YTD row compares through the last complete month for fairness. ▲ = up vs the prior year.";
+// ---- live refresh from the two dashboards ----
+async function pull(file){try{const t=await (await fetch(file,{cache:"no-store"})).text();const m=t.match(/["']?monthly["']?\s*:\s*(\{[^}]*\})/);return m?JSON.parse(m[1]):null;}catch(e){return null;}}
+function toYear(d){const Y={};for(const k in d){const[y,mo]=k.split("-");(Y[y]=Y[y]||Array(12).fill(null))[parseInt(mo,10)-1]=Math.round(d[k]);}return Y;}
+if(typeof fetch==="function"){Promise.all([pull("revenue_dashboard.html"),pull("sales_dashboard.html")]).then(([r,s])=>{let ch=false;if(r){EMB.revenue=toYear(r);ch=true;}if(s){EMB.sales=toYear(s);ch=true;}if(ch)render();});}
+render();
+</script></body></html>
