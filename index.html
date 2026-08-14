@@ -58,7 +58,12 @@
     {id:"service",    label:"Service",      ico:"🛠️", file:"service_dashboard.html"},
     {id:"svcmeeting", label:"Tech Meeting",  ico:"🧑‍🔧", file:"service_tech_meeting.html"},
     {id:"schedinstalls", label:"Sched. Installs", ico:"🗓️", file:"scheduled_installs.html"},
-    {id:"adherence", label:"Adherence", ico:"⏱️", file:"install_adherence.html"}
+    {id:"adherence", label:"Adherence", ico:"⏱️", file:"install_adherence.html"},
+    {id:"flash", label:"Flash", ico:"⚡", file:"company_flash.html"},
+    {id:"techscore", label:"Tech Scorecard", ico:"🧰", file:"tech_scorecard.html"},
+    {id:"salesrep", label:"Sales Reps", ico:"💵", file:"sales_scorecard.html"},
+    {id:"callbacks", label:"Callbacks", ico:"🔁", file:"callbacks_dashboard.html"},
+    {id:"timetoinstall", label:"Time to Install", ico:"⏳", file:"time_to_install.html"}
   ];
   const nav = document.getElementById("nav");
   const frame = document.getElementById("frame");
@@ -83,7 +88,12 @@
     service:    `.kpi .val{font-size:29px!important}`,
     svcmeeting: `.kpi .val{font-size:24px!important}.mv{font-size:27px!important}`,
     schedinstalls:`.kpi .val{font-size:30px!important}.job .cust,.job .amt{font-size:17px!important}`,
-    adherence:`.kpi .val{font-size:30px!important}`
+    adherence:`.kpi .val{font-size:30px!important}`,
+    flash:`.tile .val{font-size:36px!important}`,
+    techscore:`.kpi .val{font-size:26px!important}`,
+    salesrep:`.kpi .val{font-size:26px!important}`,
+    callbacks:`.kpi .val{font-size:30px!important}`,
+    timetoinstall:`.kpi .val{font-size:26px!important}`
   };
   let currentId = null;
   function injectBoost(){
