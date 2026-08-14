@@ -70,7 +70,27 @@
   tr:hover td{background:var(--panel)}
   .twrap{overflow-x:auto;border:1px solid var(--edge);border-radius:12px}
   .foot-note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.6}
-  @media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.jobs{grid-template-columns:1fr}}
+
+  /* calendar (week grid) */
+  .legend{display:flex;gap:14px;margin:2px 0 12px;flex-wrap:wrap}
+  .legend .lg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim)}
+  .cal-head{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:6px}
+  .cal-head>div{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;text-align:center;font-weight:700}
+  .week-lbl{font-size:11.5px;color:var(--muted);margin:12px 2px 5px;font-weight:600}
+  .cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+  .cal-cell{min-height:80px;background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:8px 9px}
+  .cal-cell.we{background:#12161d}
+  .cal-cell.has{border-color:#33414f}
+  .cal-cell.today{outline:2px solid var(--accent2);outline-offset:-2px}
+  .cal-cell .cd{font-size:12px;color:var(--dim);font-weight:700}
+  .cal-cell.today .cd{color:var(--accent2)}
+  .cvals{font-size:12.5px;margin-top:6px;font-variant-numeric:tabular-nums}
+  .cdots{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+  .cdot{width:10px;height:10px;border-radius:3px;display:inline-block;flex:0 0 auto}
+  .cmore{font-size:10px;color:var(--muted);font-weight:700}
+
+  @media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.jobs{grid-template-columns:1fr}
+    .cal-head{display:none}.cal-week{grid-template-columns:repeat(2,1fr)}.cal-cell:not(.has){display:none}}
 </style>
 </head>
 <body>
@@ -99,6 +119,11 @@
     <span class="count" id="count"></span>
   </div>
 
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:24px 0 8px">Install calendar</h3>
+  <div class="legend" id="calLegend"></div>
+  <div id="calendar"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:30px 0 8px">Scheduled by day</h3>
   <div id="schedule"></div>
 
   <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:30px 0 8px">All scheduled installs</h3>
@@ -189,6 +214,40 @@ function passes(j){
   return true;
 }
 
+// ---------- calendar (week grid) ----------
+const WD=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const keyOf = dt => dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+const parseK = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
+function mondayOf(dt){ const x=new Date(dt); const off=(x.getDay()+6)%7; x.setDate(x.getDate()-off); x.setHours(0,0,0,0); return x; }
+const TODAY = keyOf(new Date());
+document.getElementById("calLegend").innerHTML =
+  ["HVAC","Fireplace","Electrical"].filter(t=>DATA.some(j=>j._trade===t))
+   .map(t=>`<span class="lg"><span class="cdot" style="background:${TVAR[t]}"></span>${t}</span>`).join("");
+function renderCalendar(rows){
+  const el=document.getElementById("calendar");
+  const byDate={};
+  rows.forEach(j=>{ const d=j["Scheduled Date"]; if(d){ (byDate[d]=byDate[d]||[]).push(j); } });
+  const dates=Object.keys(byDate).sort();
+  if(!dates.length){ el.innerHTML='<div class="panel" style="text-align:center;color:var(--dim)">No scheduled dates match these filters.</div>'; return; }
+  const weeks=[...new Set(dates.map(d=>keyOf(mondayOf(parseK(d)))))].sort();
+  el.innerHTML = '<div class="cal-head">'+WD.map(w=>`<div>${w}</div>`).join("")+'</div>' +
+    weeks.map(wk=>{
+      const mon=parseK(wk);
+      let cells="";
+      for(let i=0;i<7;i++){
+        const day=new Date(mon); day.setDate(mon.getDate()+i);
+        const k=keyOf(day); const list=(byDate[k]||[]).slice().sort((a,b)=>b._val-a._val);
+        const sum=list.reduce((a,j)=>a+j._val,0);
+        const dots=list.slice(0,8).map(j=>`<span class="cdot" style="background:${TVAR[j._trade]||'var(--dim)'}" title="${(j['Customer Name']||'').replace(/"/g,'')} · ${j._trade}${j._val?' · '+money(j._val):''}"></span>`).join("");
+        cells+=`<div class="cal-cell${i>=5?' we':''}${list.length?' has':''}${k===TODAY?' today':''}">
+          <div class="cd">${WD[i]} ${day.getDate()}</div>
+          ${list.length?`<div class="cvals"><b>${list.length}</b> job${list.length>1?"s":""} · ${money(sum)}</div><div class="cdots">${dots}${list.length>8?`<span class="cmore">+${list.length-8}</span>`:""}</div>`:""}
+        </div>`;
+      }
+      return `<div class="week-lbl">Week of ${mon.toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"})}</div><div class="cal-week">${cells}</div>`;
+    }).join("");
+}
+
 // ---------- schedule (grouped by date) ----------
 function renderSchedule(rows){
   const byDay={};
@@ -253,6 +312,7 @@ function current(){ return DATA.filter(passes); }
 function refresh(){
   const rows=current();
   document.getElementById("count").textContent = rows.length+" of "+DATA.length+" jobs · "+money(rows.reduce((a,j)=>a+j._val,0));
+  renderCalendar(rows);
   renderSchedule(rows);
   renderTable(rows);
 }
