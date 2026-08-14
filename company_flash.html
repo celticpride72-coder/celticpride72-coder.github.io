@@ -51,10 +51,14 @@ if(typeof fetch==="function"){
  fetch("installs_adherence_ledger.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{
    const el=document.getElementById("sameday"),sub=document.getElementById("samedaySub");if(!el)return;
    if(!j||!j.jobs){el.textContent="—";return;}
-   const R=j.jobs.filter(x=>x.status==="completed");
+   // resolved = completed OR missed. A job that was scheduled and never completed is an
+   // adherence failure and must stay in the denominator, otherwise this reads 100% forever.
+   const R=j.jobs.filter(x=>x.status==="completed"||x.status==="missed");
    if(!R.length){el.textContent="—";sub.textContent="no completions logged yet";return;}
-   const same=R.filter(x=>x.on_time).length;el.textContent=Math.round(same/R.length*100)+"%";
-   sub.textContent=same+" of "+R.length+" on scheduled day";
+   const same=R.filter(x=>x.status==="completed"&&x.on_time).length;
+   const miss=R.filter(x=>x.status==="missed").length;
+   el.textContent=Math.round(same/R.length*100)+"%";
+   sub.textContent=same+" of "+R.length+" on scheduled day"+(miss?" · "+miss+" never completed":"");
  }).catch(()=>{const el=document.getElementById("sameday");if(el)el.textContent="—";});
 }
 </script></body></html>
