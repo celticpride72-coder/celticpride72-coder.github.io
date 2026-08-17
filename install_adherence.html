@@ -79,8 +79,23 @@
     <div class="panel"><h3>Same-day rate by scheduled month</h3><div id="trend"></div></div>
   </div>
 
-  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Open / overdue — scheduled, not yet completed</h3>
-  <div id="open"></div>
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Completed on scheduled day</h3>
+  <div id="secSameDay"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Not completed on scheduled day</h3>
+  <div id="secNotSameDay"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Jobs past due</h3>
+  <div id="secPastDue"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Jobs scheduled today</h3>
+  <div id="secToday"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Jobs scheduled this week (not today)</h3>
+  <div id="secThisWeek"></div>
+
+  <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Jobs scheduled next week</h3>
+  <div id="secNextWeek"></div>
 
   <h3 style="color:var(--dim);text-transform:uppercase;font-size:14px;letter-spacing:.3px;margin:26px 0 6px">Tracked jobs</h3>
   <div class="twrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
@@ -102,6 +117,12 @@ function keyOf(dt){return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(
 function shortD(s){if(!s)return "—";const d=parseK(s);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"});}
 const TODAY=new Date();TODAY.setHours(0,0,0,0);
 const DAY=86400000;
+const DOW=TODAY.getDay();
+const MONOFF=(DOW+6)%7;
+const WEEK_START=new Date(TODAY); WEEK_START.setDate(TODAY.getDate()-MONOFF);
+const WEEK_END=new Date(WEEK_START); WEEK_END.setDate(WEEK_START.getDate()+6);
+const NEXTWK_START=new Date(WEEK_END); NEXTWK_START.setDate(WEEK_END.getDate()+1);
+const NEXTWK_END=new Date(NEXTWK_START); NEXTWK_END.setDate(NEXTWK_START.getDate()+6);
 
 LEDGER.forEach(j=>{
   j._sched=parseK(j.scheduled_date);
@@ -199,13 +220,44 @@ function trend(){
   }).join("");
 }
 
-function openList(){
-  const O=openRows().slice().sort((a,b)=>(b._daysOpen||0)-(a._daysOpen||0));
-  const el=document.getElementById("open");
-  if(!O.length){el.innerHTML='<div class="empty">Nothing outstanding — every scheduled job in scope has completed.</div>';return;}
-  el.innerHTML='<div class="twrap"><table><thead><tr><th>Job #</th><th>Customer</th><th>Trade</th><th>Lead tech</th><th>Scheduled</th><th class="r">Days open</th><th>Status</th></tr></thead><tbody>'+
-    O.map(j=>{const od=j._overdue;return `<tr><td>${j.job}</td><td>${j.customer||"—"}</td><td><span class="badge ${TCLASS[j.trade]||''}">${j.trade}</span></td><td>${j.tech||"—"}</td><td>${shortD(j.scheduled_date)}</td><td class="r">${j._daysOpen}</td><td><span class="pill ${od?'p-over':'p-open'}">${od?'OVERDUE':'scheduled'}</span></td></tr>`;}).join("")+
-    '</tbody></table></div>';
+function weekdayShort(s){return parseK(s).toLocaleDateString(undefined,{weekday:"short"});}
+
+function renderJobsTable(elId, rows, mode){
+  const el=document.getElementById(elId);
+  if(!rows.length){el.innerHTML='<div class="empty">No jobs in this group right now.</div>';return;}
+  let head="<tr><th>Job #</th><th>Customer</th><th>Trade</th><th>Lead tech</th><th>Scheduled</th>";
+  if(mode==="resultDone")head+="<th>Completed</th>";
+  if(mode==="resultLate")head+="<th>Completed</th><th class=\"r\">Result</th>";
+  if(mode==="overdue")head+="<th class=\"r\">Days overdue</th>";
+  head+="<th class=\"r\">Value</th></tr>";
+  const body=rows.map(j=>{
+    let row="<tr><td>"+j.job+"</td><td>"+(j.customer||"—")+"</td><td><span class=\"badge "+(TCLASS[j.trade]||'')+"\">"+j.trade+"</span></td><td>"+(j.tech||"—")+"</td><td>"+shortD(j.scheduled_date)+(mode==="upcoming"?' <span style="color:var(--muted)">('+weekdayShort(j.scheduled_date)+')</span>':"")+"</td>";
+    if(mode==="resultDone")row+="<td>"+shortD(j.completed_date)+"</td>";
+    if(mode==="resultLate"){
+      row+="<td>"+(j._missed?'<span class="pill p-over">never</span>':shortD(j.completed_date))+"</td>";
+      row+="<td class=\"r\">"+(j._missed?'<span class="pill p-over">missed</span>':'<span class="pill p-late">+'+j._dtc+'d</span>')+"</td>";
+    }
+    if(mode==="overdue")row+="<td class=\"r\">"+j._daysOpen+"d</td>";
+    row+="<td class=\"r\">"+money(j.value)+"</td></tr>";
+    return row;
+  }).join("");
+  el.innerHTML='<div class="twrap"><table><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
+}
+
+function sections(){
+  const rows=LEDGER.filter(inWindow);
+  const sameDay=rows.filter(j=>j._resolved&&!j._missed&&j._same).sort((a,b)=>b._sched-a._sched);
+  const notSameDay=rows.filter(j=>j._resolved&&(j._missed||j._late)).sort((a,b)=>b._sched-a._sched);
+  const pastDue=rows.filter(j=>!j._resolved&&j._overdue).sort((a,b)=>(b._daysOpen||0)-(a._daysOpen||0));
+  const today=rows.filter(j=>!j._resolved&&!j._overdue&&j._sched.getTime()===TODAY.getTime());
+  const thisWeek=rows.filter(j=>!j._resolved&&!j._overdue&&j._sched.getTime()>TODAY.getTime()&&j._sched<=WEEK_END).sort((a,b)=>a._sched-b._sched);
+  const nextWeek=rows.filter(j=>!j._resolved&&j._sched>=NEXTWK_START&&j._sched<=NEXTWK_END).sort((a,b)=>a._sched-b._sched);
+  renderJobsTable("secSameDay",sameDay,"resultDone");
+  renderJobsTable("secNotSameDay",notSameDay,"resultLate");
+  renderJobsTable("secPastDue",pastDue,"overdue");
+  renderJobsTable("secToday",today,"plain");
+  renderJobsTable("secThisWeek",thisWeek,"upcoming");
+  renderJobsTable("secNextWeek",nextWeek,"upcoming");
 }
 
 let sortI=4,sortDir=1;
@@ -237,7 +289,7 @@ fT.onchange=()=>{fTrade=fT.value;render();};
 function render(){
   const scoped=LEDGER.filter(inWindow);
   document.getElementById("count").textContent=scoped.length+" jobs in scope · "+resolvedRows().filter(j=>!j._missed).length+" completed · "+resolvedRows().filter(j=>j._missed).length+" never completed · "+openRows().length+" open";
-  kpiCards();rateBars("byTrade",j=>j.trade);rateBars("byBU",j=>j.bu);rateBars("byTech",j=>j.tech||null);distribution();trend();openList();tbl();
+  kpiCards();rateBars("byTrade",j=>j.trade);rateBars("byBU",j=>j.bu);rateBars("byTech",j=>j.tech||null);distribution();trend();sections();tbl();
 }
 
 document.getElementById("sub").innerHTML="How often install jobs finish on the day they were scheduled &nbsp;·&nbsp; snapshot method &nbsp;·&nbsp; tracking since "+parseK(TRACKING_SINCE).toLocaleDateString(undefined,{month:"long",day:"numeric",year:"numeric"})+" &nbsp;·&nbsp; updated "+REFRESHED;
