@@ -1,242 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
 <title>CBD Sales Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <style>
-:root{
-  --bg:#0e1117; --panel:#161b22; --panel2:#1c2230; --line:#2a3240;
-  --txt:#e6edf3; --muted:#8b98a9; --dim:#6b7889;
-  --green:#2ea043; --green-b:#3fb950; --amber:#d29922; --red:#f85149;
-  --blue:#4c8dff; --blue-d:#1f6feb; --hatch:#39414f;
-}
-*{box-sizing:border-box}
-body{margin:0;padding:24px;background:var(--bg);color:var(--txt);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
-h1{font-size:22px;margin:0 0 4px;letter-spacing:-.3px}
-h2{font-size:14px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);
-  margin:30px 0 12px;font-weight:600}
-.sub{color:var(--muted);font-size:13px;margin-bottom:6px}
-.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;min-width:0}
-.card .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
-.card .rng{font-size:10.5px;color:var(--dim);margin-top:3px}
-.card .val{font-size:26px;font-weight:700;margin:10px 0 12px;letter-spacing:-.5px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.metrics{display:flex;flex-direction:column;gap:7px}
-.m{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;gap:8px}
-.m .k{color:var(--muted);white-space:nowrap}
-.m .v{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.m .t{color:var(--dim);font-size:10.5px;font-variant-numeric:tabular-nums}
-.g{color:var(--green-b)}.a{color:var(--amber)}.r{color:var(--red)}.n{color:var(--muted)}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:right;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;
-  letter-spacing:.7px;padding:8px 10px;border-bottom:1px solid var(--line)}
-th:first-child,td:first-child{text-align:left}
-td{padding:9px 10px;border-bottom:1px solid #20262f;text-align:right;font-variant-numeric:tabular-nums}
-tr:last-child td{border-bottom:none}
-td.name{color:var(--txt)}
-.bar-wrap{height:8px;background:#20262f;border-radius:4px;overflow:hidden;min-width:70px}
-.bar{height:100%;border-radius:4px}
-.chart{width:100%;height:260px}
-.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
-.day{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
-.day .d{font-size:11px;color:var(--muted);font-weight:600}
-.day .dt{font-size:10px;color:var(--dim);margin-bottom:6px}
-.day .amt{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
-.day .gl{font-size:10px;color:var(--dim);margin-top:3px}
-.grid2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-footer{margin-top:32px;padding-top:14px;border-top:1px solid var(--line);
-  color:var(--dim);font-size:11.5px;line-height:1.7}
-@media(max-width:1100px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}}
+  :root {
+    --green:#16a34a; --amber:#d97706; --red:#dc2626; --blue:#2563eb; --gray:#6b7280;
+    --bg:#f4f6f9; --card:#ffffff; --border:#e5e7eb; --text:#111827; --subtext:#6b7280;
+  }
+  * { box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); margin:0; padding:24px 32px 60px; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  .subtitle { color:var(--subtext); font-size:14px; margin-bottom:24px; }
+  h2 { font-size:18px; margin:36px 0 12px; border-bottom:2px solid var(--border); padding-bottom:6px; }
+  .cards { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px 16px; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+  .card-label { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--subtext); }
+  .card-actual { font-size:22px; font-weight:700; margin:4px 0 8px; }
+  .card-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; margin-bottom:4px; color:var(--subtext); }
+  .card-sub { font-size:11px; color:var(--subtext); margin-top:8px; border-top:1px dashed var(--border); padding-top:6px; }
+  .badge { font-weight:600; font-size:12px; padding:2px 8px; border-radius:999px; }
+  .badge.good { background:#dcfce7; color:var(--green); }
+  .badge.warn { background:#fef3c7; color:var(--amber); }
+  .badge.bad { background:#fee2e2; color:var(--red); }
+  .badge.flat { background:#f3f4f6; color:var(--gray); }
+  .attain-row { display:grid; grid-template-columns:260px 1fr 70px 220px; align-items:center; gap:12px; margin-bottom:12px; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:10px 14px; }
+  .attain-label { font-size:13px; font-weight:600; }
+  .attain-track { position:relative; background:#eef0f3; border-radius:6px; height:14px; overflow:hidden; }
+  .attain-fill { height:100%; border-radius:6px; }
+  .attain-fill.good { background:var(--green); }
+  .attain-fill.warn { background:var(--amber); }
+  .attain-fill.bad { background:var(--red); }
+  .attain-fill.flat { background:var(--gray); }
+  .attain-pct { font-weight:700; font-size:13px; text-align:right; }
+  .attain-pct.good { color:var(--green); }
+  .attain-pct.warn { color:var(--amber); }
+  .attain-pct.bad { color:var(--red); }
+  .attain-nums { font-size:12px; color:var(--subtext); text-align:right; }
+  .chart-wrap { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px; }
+  .week-strip { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:10px; }
+  .wk-cell { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:10px; text-align:center; }
+  .wk-cell.future { opacity:0.5; }
+  .wk-dow { font-weight:700; font-size:13px; }
+  .wk-date { font-size:11px; color:var(--subtext); margin-bottom:6px; }
+  .wk-actual { font-weight:700; font-size:14px; }
+  .wk-goal { font-size:11px; color:var(--subtext); }
+  .wk-pending { font-size:10px; color:var(--amber); margin-top:4px; }
+  .wk-future { font-size:13px; color:var(--subtext); padding:14px 0; }
+  .breakdowns { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+  .breakdown-block h3 { font-size:14px; margin:0 0 8px; }
+  .bd-table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:8px; overflow:hidden; font-size:13px; }
+  .bd-table th { text-align:left; background:#f8fafc; font-size:11px; text-transform:uppercase; letter-spacing:0.03em; color:var(--subtext); padding:8px 10px; }
+  .bd-table td { padding:7px 10px; border-top:1px solid var(--border); }
+  .bd-table td.num, .bd-table th.num { text-align:right; }
+  footer { margin-top:40px; font-size:12px; color:var(--subtext); border-top:1px solid var(--border); padding-top:14px; }
+  .legend { font-size:12px; color:var(--subtext); margin-top:6px; }
+  .legend span { margin-right:14px; }
+  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:4px; }
+  .dot.good { background:var(--green); } .dot.warn { background:var(--amber); } .dot.bad { background:var(--red); }
 </style>
 </head>
 <body>
+  <h1>Sales Dashboard</h1>
+  <div class="subtitle">Comfort By Design &middot; HVAC + Fireplace sales (residential + commercial) &middot; Data as of August 15, 2026 &middot; Generated August 17, 2026</div>
 
-<h1>Comfort By Design &mdash; Sales Dashboard</h1>
-<div class="sub" id="hdr"></div>
+  <h2>Period to Date</h2>
+  <div class="cards">
+    
+    <div class="card">
+      <div class="card-label">Yesterday</div>
+      <div class="card-actual">$7,780</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge flat">—</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge flat">—</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge bad">-26.9%</span></div>
+      <div class="card-sub">Goal $0 &middot; Budget $0 &middot; LY $10,639</div>
+    </div>
 
-<h2>Period to date</h2>
-<div class="cards" id="kpiCards"></div>
+    <div class="card">
+      <div class="card-label">WTD</div>
+      <div class="card-actual">$0</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge flat">—</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge flat">—</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge flat">—</span></div>
+      <div class="card-sub">Goal $0 &middot; Budget $0 &middot; LY $0</div>
+    </div>
 
-<h2>Rolling windows <span style="text-transform:none;letter-spacing:0;color:var(--dim);font-weight:400">(anchored at data-as-of)</span></h2>
-<div class="cards" id="rollCards"></div>
+    <div class="card">
+      <div class="card-label">MTD</div>
+      <div class="card-actual">$640,703</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge good">160.2%</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge good">170.7%</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+101.9%</span></div>
+      <div class="card-sub">Goal $400,000 &middot; Budget $375,302 &middot; LY $317,407</div>
+    </div>
 
-<h2>Attainment to date</h2>
-<div class="panel">
-  <table id="attTable">
-    <thead><tr><th>Period</th><th>Actual</th><th>Goal</th><th>% Goal</th><th></th><th>Budget</th><th>% Budget</th><th>Last Yr</th><th>YoY</th></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
+    <div class="card">
+      <div class="card-label">QTD</div>
+      <div class="card-actual">$1,593,239</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge good">122.4%</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge good">127.0%</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+53.9%</span></div>
+      <div class="card-sub">Goal $1,301,259 &middot; Budget $1,254,304 &middot; LY $1,035,464</div>
+    </div>
 
-<h2>Monthly trend</h2>
-<div class="panel">
-  <svg class="chart" id="monthChart" viewBox="0 0 1200 300" preserveAspectRatio="none"></svg>
-  <div style="display:flex;gap:20px;margin-top:12px;font-size:11.5px;color:var(--muted);flex-wrap:wrap">
-    <span><span style="display:inline-block;width:11px;height:11px;background:var(--blue-d);border-radius:2px;vertical-align:-1px"></span> Monthly sold</span>
-    <span><span style="display:inline-block;width:18px;height:0;border-top:2px dashed var(--amber);vertical-align:4px"></span> 2026 Sales Goal</span>
-    <span><span style="display:inline-block;width:11px;height:11px;background:repeating-linear-gradient(45deg,var(--blue-d),var(--blue-d) 2px,#0e1117 2px,#0e1117 4px);border-radius:2px;vertical-align:-1px"></span> Current month (partial)</span>
+    <div class="card">
+      <div class="card-label">YTD</div>
+      <div class="card-actual">$5,831,483</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge warn">95.6%</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge good">103.7%</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+23.5%</span></div>
+      <div class="card-sub">Goal $6,102,161 &middot; Budget $5,625,076 &middot; LY $4,723,359</div>
+    </div>
   </div>
-</div>
 
-<h2>This week <span style="text-transform:none;letter-spacing:0;color:var(--dim);font-weight:400">(Monday start)</span></h2>
-<div class="wk" id="weekStrip"></div>
+  <h2>Rolling Windows</h2>
+  <div class="cards">
+    
+    <div class="card">
+      <div class="card-label">Last 30 Days</div>
+      <div class="card-actual">$1,077,921</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge good">126.7%</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge good">132.3%</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+64.6%</span></div>
+      <div class="card-sub">Goal $850,630 &middot; Budget $814,803 &middot; LY $654,836</div>
+    </div>
 
-<h2>Additional data &mdash; YTD 2026 breakdowns</h2>
-<div class="grid2">
-  <div class="panel"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px">By business unit</div>
-    <table id="tBU"><tbody></tbody></table></div>
-  <div class="panel"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px">By sales rep</div>
-    <table id="tRep"><tbody></tbody></table></div>
-  <div class="panel"><div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px">By lead source</div>
-    <table id="tSrc"><tbody></tbody></table></div>
-</div>
+    <div class="card">
+      <div class="card-label">Last 60 Days</div>
+      <div class="card-actual">$2,023,942</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge good">119.8%</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge good">124.8%</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+24.2%</span></div>
+      <div class="card-sub">Goal $1,689,373 &middot; Budget $1,622,270 &middot; LY $1,629,629</div>
+    </div>
 
-<footer id="foot"></footer>
+    <div class="card">
+      <div class="card-label">Last 90 Days</div>
+      <div class="card-actual">$3,107,450</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge good">122.4%</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge good">128.4%</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+40.0%</span></div>
+      <div class="card-sub">Goal $2,538,959 &middot; Budget $2,420,919 &middot; LY $2,219,266</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Last 180 Days</div>
+      <div class="card-actual">$4,640,582</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge bad">94.3%</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge good">102.0%</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+17.7%</span></div>
+      <div class="card-sub">Goal $4,922,511 &middot; Budget $4,549,364 &middot; LY $3,942,339</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Last 365 Days</div>
+      <div class="card-actual">$9,969,431</div>
+      <div class="card-row"><span>vs Goal</span><span class="badge flat">—</span></div>
+      <div class="card-row"><span>vs Budget</span><span class="badge flat">—</span></div>
+      <div class="card-row"><span>vs Last Yr</span><span class="badge good">+38.9%</span></div>
+      <div class="card-sub">Goal — &middot; Budget — &middot; LY $7,179,835</div>
+    </div>
+  </div>
+
+  <h2>Attainment to Date</h2>
+  <div class="attainment-panel">
+    
+    <div class="attain-row">
+      <div class="attain-label">YTD Actual vs Sales Goal</div>
+      <div class="attain-track">
+        <div class="attain-fill warn" style="width:95.6%"></div>
+        
+      </div>
+      <div class="attain-pct warn">95.6%</div>
+      <div class="attain-nums">$5,831,483 / $6,102,161</div>
+    </div>
+    <div class="attain-row">
+      <div class="attain-label">YTD Actual vs Install(HVAC/FP) Budget</div>
+      <div class="attain-track">
+        <div class="attain-fill good" style="width:100.0%"></div>
+        <div class="attain-over">100%+</div>
+      </div>
+      <div class="attain-pct good">103.7%</div>
+      <div class="attain-nums">$5,831,483 / $5,625,076</div>
+    </div>
+    <div class="attain-row">
+      <div class="attain-label">QTD Actual vs Sales Goal</div>
+      <div class="attain-track">
+        <div class="attain-fill good" style="width:100.0%"></div>
+        <div class="attain-over">100%+</div>
+      </div>
+      <div class="attain-pct good">122.4%</div>
+      <div class="attain-nums">$1,593,239 / $1,301,259</div>
+    </div>
+    <div class="attain-row">
+      <div class="attain-label">QTD Actual vs Install(HVAC/FP) Budget</div>
+      <div class="attain-track">
+        <div class="attain-fill good" style="width:100.0%"></div>
+        <div class="attain-over">100%+</div>
+      </div>
+      <div class="attain-pct good">127.0%</div>
+      <div class="attain-nums">$1,593,239 / $1,254,304</div>
+    </div>
+    <div class="attain-row">
+      <div class="attain-label">MTD Actual vs Sales Goal</div>
+      <div class="attain-track">
+        <div class="attain-fill good" style="width:100.0%"></div>
+        <div class="attain-over">100%+</div>
+      </div>
+      <div class="attain-pct good">160.2%</div>
+      <div class="attain-nums">$640,703 / $400,000</div>
+    </div>
+    <div class="attain-row">
+      <div class="attain-label">MTD Actual vs Install(HVAC/FP) Budget</div>
+      <div class="attain-track">
+        <div class="attain-fill good" style="width:100.0%"></div>
+        <div class="attain-over">100%+</div>
+      </div>
+      <div class="attain-pct good">170.7%</div>
+      <div class="attain-nums">$640,703 / $375,302</div>
+    </div>
+  </div>
+
+  <h2>Monthly Trend</h2>
+  <div class="chart-wrap">
+    <canvas id="monthlyChart" height="90"></canvas>
+  </div>
+
+  <h2>This Week (Monday start)</h2>
+  <div class="week-strip">
+    
+    <div class="wk-cell pending">
+      <div class="wk-dow">Mon</div>
+      <div class="wk-date">Aug 17</div>
+      <div class="wk-actual">$0</div><div class="wk-goal">Goal $40,000</div><div class="wk-pending">data pending</div>
+    </div>
+
+    <div class="wk-cell future">
+      <div class="wk-dow">Tue</div>
+      <div class="wk-date">Aug 18</div>
+      <div class="wk-future">—</div>
+    </div>
+
+    <div class="wk-cell future">
+      <div class="wk-dow">Wed</div>
+      <div class="wk-date">Aug 19</div>
+      <div class="wk-future">—</div>
+    </div>
+
+    <div class="wk-cell future">
+      <div class="wk-dow">Thu</div>
+      <div class="wk-date">Aug 20</div>
+      <div class="wk-future">—</div>
+    </div>
+
+    <div class="wk-cell future">
+      <div class="wk-dow">Fri</div>
+      <div class="wk-date">Aug 21</div>
+      <div class="wk-future">—</div>
+    </div>
+
+    <div class="wk-cell future">
+      <div class="wk-dow">Sat</div>
+      <div class="wk-date">Aug 22</div>
+      <div class="wk-future">—</div>
+    </div>
+
+    <div class="wk-cell future">
+      <div class="wk-dow">Sun</div>
+      <div class="wk-date">Aug 23</div>
+      <div class="wk-future">—</div>
+    </div>
+  </div>
+
+  <h2>Additional Data &mdash; YTD 2026 Breakdowns</h2>
+  <div class="breakdowns">
+    
+    <div class="breakdown-block">
+      <h3>By Business Unit</h3>
+      <table class="bd-table">
+        <thead><tr><th>Name</th><th class="num">YTD Sales</th><th class="num">Share</th></tr></thead>
+        <tbody><tr><td>HVAC-Sales-CBD</td><td class="num">$3,198,369</td><td class="num">54.8%</td></tr><tr><td>FIRE-Sales-CBD</td><td class="num">$1,175,700</td><td class="num">20.2%</td></tr><tr><td>HVAC-Sales-Com-CBD</td><td class="num">$735,302</td><td class="num">12.6%</td></tr><tr><td>FIRE-Sales-Com-CBD</td><td class="num">$722,112</td><td class="num">12.4%</td></tr></tbody>
+      </table>
+    </div>
+    <div class="breakdown-block">
+      <h3>By Sales Rep</h3>
+      <table class="bd-table">
+        <thead><tr><th>Name</th><th class="num">YTD Sales</th><th class="num">Share</th></tr></thead>
+        <tbody><tr><td>Aaron Fischer</td><td class="num">$3,732,219</td><td class="num">64.0%</td></tr><tr><td>Noah Meshak</td><td class="num">$1,996,744</td><td class="num">34.2%</td></tr><tr><td>Michael K</td><td class="num">$65,756</td><td class="num">1.1%</td></tr><tr><td>Lee P</td><td class="num">$31,499</td><td class="num">0.5%</td></tr><tr><td>Collin Lieffort</td><td class="num">$5,185</td><td class="num">0.1%</td></tr><tr><td>Kurtis K</td><td class="num">$79</td><td class="num">0.0%</td></tr></tbody>
+      </table>
+    </div>
+    <div class="breakdown-block">
+      <h3>By Lead Source (originating BU)</h3>
+      <table class="bd-table">
+        <thead><tr><th>Name</th><th class="num">YTD Sales</th><th class="num">Share</th></tr></thead>
+        <tbody><tr><td>Direct / No Lead</td><td class="num">$3,616,115</td><td class="num">62.0%</td></tr><tr><td>HVAC-Service-CBD</td><td class="num">$1,598,238</td><td class="num">27.4%</td></tr><tr><td>HVAC-Scheduled Service-CBD</td><td class="num">$349,823</td><td class="num">6.0%</td></tr><tr><td>FIRE-Service-CBD</td><td class="num">$264,636</td><td class="num">4.5%</td></tr><tr><td>FIRE-Scheduled Service-CBD</td><td class="num">$2,670</td><td class="num">0.0%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot good"></span>&ge;100% of target (or YoY growth)</span>
+    <span><span class="dot warn"></span>95&ndash;99.9% of target</span>
+    <span><span class="dot bad"></span>&lt;95% of target (or YoY decline)</span>
+  </div>
+
+  <footer>
+    Sales = HVAC + Fireplace sales, summed by "Estimates Subtotal" dated by "Sold On", matched across all historical business-unit names (residential + commercial), excluding Electrical, Plumbing, and Retail. Weeks start Monday. Goal/Budget and Last-Year comparisons are anchored to the actuals' last populated Sold On date (August 15, 2026).
+  </footer>
 
 <script>
-const DATA = {
-  dataAsOf:"2026-08-13", today:"2026-08-14",
-  kpi:{
-    yesterday:{label:"Yesterday", actual:7523.80,  goal:40000,      budget:37530.19,   lastYear:18343.30,  start:"2026-08-13", end:"2026-08-13"},
-    wtd:      {label:"WTD",       actual:75809.00, goal:160000,     budget:150120.76,  lastYear:95098.65,  start:"2026-08-10", end:"2026-08-14"},
-    mtd:      {label:"MTD",       actual:628523.28,goal:360000,     budget:337771.71,  lastYear:271767.65, start:"2026-08-01", end:"2026-08-14"},
-    qtd:      {label:"QTD",       actual:1581059.66,goal:1261259.35,budget:1216773.76, lastYear:989824.70, start:"2026-07-01", end:"2026-08-14"},
-    ytd:      {label:"YTD",       actual:5819303.32,goal:6062161.42,budget:5587546.20, lastYear:4677719.92,start:"2026-01-01", end:"2026-08-14"}
+const ctx = document.getElementById('monthlyChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["Jan '24", "Feb '24", "Mar '24", "Apr '24", "May '24", "Jun '24", "Jul '24", "Aug '24", "Sep '24", "Oct '24", "Nov '24", "Dec '24", "Jan '25", "Feb '25", "Mar '25", "Apr '25", "May '25", "Jun '25", "Jul '25", "Aug '25", "Sep '25", "Oct '25", "Nov '25", "Dec '25", "Jan '26", "Feb '26", "Mar '26", "Apr '26", "May '26", "Jun '26", "Jul '26", "Aug '26"],
+    datasets: [
+      {
+        label: 'Actual Sales',
+        data: [505499.09, 279319.95, 326822.98, 283537.71, 572078.31, 530314.93, 590277.14, 429146.31, 756209.92, 561904.93, 452581.5, 497865.81, 487212.78, 475288.64, 495621.85, 673499.71, 660351.22, 855181.12, 729568.67, 568014.04, 1047646.03, 1059139.44, 888977.05, 910167.58, 858925.3, 632359.01, 446245.73, 493483.67, 873502.81, 933727.14, 952536.38, 640702.73],
+        backgroundColor: ["#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#2563eb", "#f0ad4e"],
+        order: 2
+      },
+      {
+        label: '2026 Sales Goal',
+        data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 760000.0, 763000.0, 741052.63, 830000.0, 853000.0, 853849.44, 901259.35, 840000.0],
+        type: 'line',
+        borderColor: '#111827',
+        borderDash: [6,4],
+        pointRadius: 0,
+        borderWidth: 2,
+        spanGaps: false,
+        order: 1
+      }
+    ]
   },
-  trailing:{
-    d30: {label:"Last 30 days", actual:1148383.72, goal:892562.34,  budget:857182.01,  lastYear:689183.76,  start:"2026-07-15"},
-    d60: {label:"Last 60 days", actual:2074018.57, goal:1726995.40, budget:1658332.54, lastYear:1655937.52, start:"2026-06-15"},
-    d90: {label:"Last 90 days", actual:3104949.92, goal:2498958.79, budget:2383388.95, lastYear:2173627.17, start:"2026-05-16"},
-    d180:{label:"Last 180 days",actual:4646001.45, goal:4920661.42, budget:4548612.20, lastYear:3916307.57, start:"2026-02-15"},
-    d365:{label:"Last 365 days",actual:10010594.83,goal:null,       budget:null,       lastYear:7149697.30, start:"2025-08-14"}
-  },
-  monthly:{"2024-01":505499,"2024-02":279320,"2024-03":326823,"2024-04":283538,"2024-05":572078,"2024-06":530315,"2024-07":590277,"2024-08":429146,"2024-09":756210,"2024-10":561905,"2024-11":452582,"2024-12":497866,"2025-01":487213,"2025-02":475289,"2025-03":495622,"2025-04":673500,"2025-05":660351,"2025-06":855181,"2025-07":729569,"2025-08":568014,"2025-09":1047646,"2025-10":1059139,"2025-11":888977,"2025-12":910168,"2026-01":858925,"2026-02":632359,"2026-03":446246,"2026-04":493484,"2026-05":873503,"2026-06":933727,"2026-07":952536,"2026-08":628523},
-  monthlyGoal:{"2026-01":760000,"2026-02":763000,"2026-03":741053,"2026-04":830000,"2026-05":853000,"2026-06":853849,"2026-07":901259,"2026-08":840000},
-  weekDaily:[{d:"2026-08-10",dow:"Mon",a:14469,g:40000},{d:"2026-08-11",dow:"Tue",a:26091,g:40000},{d:"2026-08-12",dow:"Wed",a:27726,g:40000},{d:"2026-08-13",dow:"Thu",a:7524,g:40000},{d:"2026-08-14",dow:"Fri",a:0,g:40000}],
-  byBU:[["HVAC-Sales-CBD",3189217],["FIRE-Sales-CBD",1172672],["HVAC-Sales-Com-CBD",735302],["FIRE-Sales-Com-CBD",722112]],
-  byRep:[["Aaron Fischer",3727820],["Noah Meshak",1988965],["Michael K",65756],["Lee P",31499],["Collin Lieffort",5185],["Kurtis K",79]],
-  bySrc:[["Direct / no lead BU",3613087],["HVAC-Service-CBD",1589087],["HVAC-Scheduled Service-CBD",349823],["FIRE-Service-CBD",264637],["FIRE-Scheduled Service-CBD",2670]]
-};
-
-const usd = n => "$" + Math.round(n).toLocaleString("en-US");
-const usdK = n => n>=1e6 ? "$"+(n/1e6).toFixed(2)+"M" : "$"+Math.round(n/1000)+"k";
-const fmtD = s => { const p=s.split("-"); return p[1].replace(/^0/,"")+"/"+p[2].replace(/^0/,""); };
-
-function attCls(p){ if(p===null) return "n"; if(p>=100) return "g"; if(p>=95) return "a"; return "r"; }
-function pct(a,t){ if(t===null||t===0) return null; return a/t*100; }
-function pctTxt(p){ return p===null ? "&mdash;" : p.toFixed(1)+"%"; }
-function yoy(a,l){ if(!l) return null; return (a-l)/l*100; }
-function yoyTxt(y){ return y===null ? "&mdash;" : (y>=0?"+":"")+y.toFixed(1)+"%"; }
-function yoyCls(y){ return y===null ? "n" : (y>=0?"g":"r"); }
-
-function cardHTML(o, rangeTxt){
-  const pg=pct(o.actual,o.goal), pb=pct(o.actual,o.budget), yy=yoy(o.actual,o.lastYear);
-  return `<div class="card">
-    <div class="lbl">${o.label}</div>
-    <div class="rng">${rangeTxt}</div>
-    <div class="val">${usd(o.actual)}</div>
-    <div class="metrics">
-      <div class="m"><span class="k">vs Goal</span><span><span class="t">${o.goal===null?"":usdK(o.goal)+" &nbsp;"}</span><span class="v ${attCls(pg)}">${pctTxt(pg)}</span></span></div>
-      <div class="m"><span class="k">vs Budget</span><span><span class="t">${o.budget===null?"":usdK(o.budget)+" &nbsp;"}</span><span class="v ${attCls(pb)}">${pctTxt(pb)}</span></span></div>
-      <div class="m"><span class="k">vs Last Yr</span><span><span class="t">${usdK(o.lastYear)} &nbsp;</span><span class="v ${yoyCls(yy)}">${yoyTxt(yy)}</span></span></div>
-    </div></div>`;
-}
-
-document.getElementById("hdr").innerHTML =
-  `Sold estimates vs Goal, Budget &amp; Last Year &nbsp;&bull;&nbsp; data as of <b>${DATA.dataAsOf}</b> &nbsp;&bull;&nbsp; generated ${DATA.today}`;
-
-document.getElementById("kpiCards").innerHTML =
-  ["yesterday","wtd","mtd","qtd","ytd"].map(k=>{
-    const o=DATA.kpi[k];
-    const rng = k==="yesterday" ? fmtD(o.start) : fmtD(o.start)+" &ndash; "+fmtD(o.end);
-    return cardHTML(o, rng);
-  }).join("");
-
-document.getElementById("rollCards").innerHTML =
-  ["d30","d60","d90","d180","d365"].map(k=>{
-    const o=DATA.trailing[k];
-    return cardHTML(o, fmtD(o.start)+" &ndash; "+fmtD(DATA.dataAsOf));
-  }).join("");
-
-// attainment table
-const rows = ["yesterday","wtd","mtd","qtd","ytd"].map(k=>DATA.kpi[k])
-  .concat(["d30","d60","d90","d180","d365"].map(k=>DATA.trailing[k]));
-document.querySelector("#attTable tbody").innerHTML = rows.map(o=>{
-  const pg=pct(o.actual,o.goal), pb=pct(o.actual,o.budget), yy=yoy(o.actual,o.lastYear);
-  const w = pg===null?0:Math.min(pg,140)/140*100;
-  const col = pg===null?"#30363d":(pg>=100?"var(--green)":pg>=95?"var(--amber)":"var(--red)");
-  return `<tr>
-    <td class="name">${o.label}</td>
-    <td><b>${usd(o.actual)}</b></td>
-    <td class="n">${o.goal===null?"&mdash;":usd(o.goal)}</td>
-    <td class="${attCls(pg)}"><b>${pctTxt(pg)}</b></td>
-    <td style="width:110px"><div class="bar-wrap"><div class="bar" style="width:${w}%;background:${col}"></div></div></td>
-    <td class="n">${o.budget===null?"&mdash;":usd(o.budget)}</td>
-    <td class="${attCls(pb)}"><b>${pctTxt(pb)}</b></td>
-    <td class="n">${usd(o.lastYear)}</td>
-    <td class="${yoyCls(yy)}"><b>${yoyTxt(yy)}</b></td>
-  </tr>`;
-}).join("");
-
-// monthly chart
-(function(){
-  const months = Object.keys(DATA.monthly).sort();
-  const cur = DATA.dataAsOf.slice(0,7);
-  const W=1200,H=300,PL=64,PR=14,PT=16,PB=42;
-  const max = Math.max(...months.map(m=>DATA.monthly[m]), ...Object.values(DATA.monthlyGoal))*1.08;
-  const iw=W-PL-PR, ih=H-PT-PB;
-  const bw = iw/months.length;
-  let s = `<defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-    <rect width="6" height="6" fill="#0e1117"/><rect width="3" height="6" fill="#1f6feb"/></pattern></defs>`;
-  // gridlines
-  for(let i=0;i<=4;i++){ const y=PT+ih-ih*i/4; const v=max*i/4;
-    s+=`<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="#242b36" stroke-width="1"/>`;
-    s+=`<text x="${PL-8}" y="${y+4}" fill="#6b7889" font-size="11" text-anchor="end">${v>=1e6?"$"+(v/1e6).toFixed(1)+"M":"$"+Math.round(v/1000)+"k"}</text>`; }
-  months.forEach((m,i)=>{
-    const v=DATA.monthly[m], h=ih*v/max, x=PL+i*bw+bw*0.14, w=bw*0.72, y=PT+ih-h;
-    const isCur = m===cur;
-    s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="${isCur?'url(#hatch)':'#1f6feb'}" ${isCur?'stroke="#4c8dff" stroke-width="1"':''}/>`;
-    const g=DATA.monthlyGoal[m];
-    if(g){ const gy=PT+ih-ih*g/max;
-      s+=`<line x1="${x-2}" y1="${gy}" x2="${x+w+2}" y2="${gy}" stroke="#d29922" stroke-width="2" stroke-dasharray="5,3"/>`; }
-    if(m.slice(5)==="01" || i===0 || i===months.length-1 || m.slice(5)==="07"){
-      s+=`<text x="${x+w/2}" y="${H-24}" fill="#8b98a9" font-size="10.5" text-anchor="middle">${m}</text>`; }
-    else if(months.length<=40){
-      s+=`<text x="${x+w/2}" y="${H-24}" fill="#4b5665" font-size="9" text-anchor="middle">${m.slice(5)}</text>`; }
-  });
-  document.getElementById("monthChart").innerHTML=s;
-})();
-
-// week strip
-document.getElementById("weekStrip").innerHTML = DATA.weekDaily.map(d=>{
-  const p = d.g ? d.a/d.g*100 : null;
-  return `<div class="day"><div class="d">${d.dow}</div><div class="dt">${fmtD(d.d)}</div>
-    <div class="amt ${attCls(p)}">${usd(d.a)}</div>
-    <div class="gl">goal ${d.g?usdK(d.g):"&mdash;"} &middot; ${pctTxt(p)}</div></div>`;
-}).join("");
-
-function breakdown(id, arr){
-  const tot = arr.reduce((s,x)=>s+x[1],0);
-  document.querySelector("#"+id+" tbody").innerHTML = arr.map(([k,v])=>{
-    const p=v/tot*100;
-    return `<tr><td class="name">${k}</td><td><b>${usd(v)}</b></td>
-      <td class="n" style="width:52px">${p.toFixed(1)}%</td>
-      <td style="width:90px"><div class="bar-wrap"><div class="bar" style="width:${p}%;background:var(--blue-d)"></div></div></td></tr>`;
-  }).join("");
-}
-breakdown("tBU", DATA.byBU);
-breakdown("tRep", DATA.byRep);
-breakdown("tSrc", DATA.bySrc);
-
-document.getElementById("foot").innerHTML =
-  `<b>Sales</b> = sum of <i>Estimates Subtotal</i> dated by <i>Sold On</i> for <b>HVAC + Fireplace sales</b> business units, matched across all historical BU names (residential + commercial). Electrical, plumbing and retail BUs excluded.<br>
-   Goal = <i>Sales Goal</i>; Budget = <i>Install(HVAC/FP) Goal</i> from CBD 2026 Revenue Budget &rarr; Daily Goals. 2025 daily goals are not populated, so <b>Last 365 days</b> shows no Goal/Budget.<br>
-   Weeks start Monday. Goal/Budget/Last-Year totals are anchored to the actuals' last populated Sold On date (<b>${DATA.dataAsOf}</b>); "Yesterday" is that same day. Last-year comparisons align to the same elapsed days ending 364 days earlier.<br>
-   Attainment colors: <span class="g">&ge;100%</span> &middot; <span class="a">95&ndash;99.9%</span> &middot; <span class="r">&lt;95%</span>. YoY: <span class="g">positive</span> &middot; <span class="r">negative</span>. Sources: Sales4dx.xlsx, CBD 2026 Revenue Budget.xlsx (SharePoint).`;
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      y: { ticks: { callback: (v) => '$' + (v/1000).toFixed(0) + 'k' } }
+    }
+  }
+});
 </script>
 </body>
 </html>
