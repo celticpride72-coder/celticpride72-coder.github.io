@@ -1,6 +1,6 @@
 {
  "tracking_since": "2026-08-13",
- "last_updated": "2026-08-16",
+ "last_updated": "2026-08-17",
  "jobs": [
   {
    "job": "148933911",
@@ -122,10 +122,10 @@
    "tech": "Garrett G",
    "scheduled_date": "2026-08-14",
    "captured_on": "2026-08-13",
-   "completed_date": null,
-   "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "completed_date": "2026-08-13",
+   "days_to_complete": -1,
+   "on_time": true,
+   "status": "completed",
    "reschedules": 0,
    "current_scheduled_date": "2026-08-14",
    "last_seen": "2026-08-14"
@@ -140,10 +140,10 @@
    "tech": "Chris B",
    "scheduled_date": "2026-08-14",
    "captured_on": "2026-08-13",
-   "completed_date": null,
-   "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "completed_date": "2026-08-13",
+   "days_to_complete": -1,
+   "on_time": true,
+   "status": "completed",
    "reschedules": 0,
    "current_scheduled_date": "2026-08-14",
    "last_seen": "2026-08-14"
@@ -158,10 +158,10 @@
    "tech": "Jason L",
    "scheduled_date": "2026-08-14",
    "captured_on": "2026-08-13",
-   "completed_date": null,
-   "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "completed_date": "2026-08-13",
+   "days_to_complete": -1,
+   "on_time": true,
+   "status": "completed",
    "reschedules": 0,
    "current_scheduled_date": "2026-08-14",
    "last_seen": "2026-08-14"
@@ -345,6 +345,40 @@
    "reschedules": 0,
    "current_scheduled_date": "2026-08-24",
    "last_seen": "2026-08-14"
+  },
+  {
+   "job": "159833624",
+   "bu": "FIRE-Install-CBD",
+   "trade": "Fireplace",
+   "com": false,
+   "customer": "BURKE, PAT",
+   "value": 3560.0,
+   "tech": "Dale C",
+   "scheduled_date": "2026-08-19",
+   "captured_on": "2026-08-17",
+   "completed_date": null,
+   "days_to_complete": null,
+   "on_time": null,
+   "status": "open",
+   "reschedules": 0,
+   "current_scheduled_date": "2026-08-19"
+  },
+  {
+   "job": "160217253",
+   "bu": "HVAC-Install-CBD",
+   "trade": "HVAC",
+   "com": false,
+   "customer": "TOMPKINS, DANIELLE",
+   "value": 4399.45,
+   "tech": "Dale C",
+   "scheduled_date": "2026-08-20",
+   "captured_on": "2026-08-17",
+   "completed_date": null,
+   "days_to_complete": null,
+   "on_time": null,
+   "status": "open",
+   "reschedules": 0,
+   "current_scheduled_date": "2026-08-20"
   }
  ]
 }
