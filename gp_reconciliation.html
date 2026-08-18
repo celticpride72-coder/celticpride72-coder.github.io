@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GP Reconciliation — ServiceTitan vs Financials</title>
+<style>
+ :root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a}
+ *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ .wrap{max-width:1280px;margin:0 auto;padding:22px 22px 70px}h1{margin:0;font-size:26px}
+ .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+ .sub{color:var(--dim);font-size:14px;margin-top:4px}
+ .controls{display:flex;gap:10px;align-items:center;margin:16px 0 6px;flex-wrap:wrap}
+ .seg{display:flex;border:1px solid var(--edge);border-radius:9px;overflow:hidden}.seg button{background:var(--panel);color:var(--dim);border:0;padding:9px 15px;font-size:14px;cursor:pointer;font-weight:650}.seg button.on{background:var(--accent);color:#fff}
+ .leg{margin-left:auto;color:var(--muted);font-size:12px}
+ .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:12px 0}
+ .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:14px 16px}
+ .kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}.kpi .val{font-size:25px;font-weight:750;margin-top:5px}.kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+ .grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:8px}@media(max-width:980px){.grid2{grid-template-columns:1fr}}
+ .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:8px 6px 10px}.panel.pad{padding:16px}
+ .panel h3{margin:0 0 10px;font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+ table{width:100%;border-collapse:collapse;font-size:13.5px}
+ th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--edge);white-space:nowrap}th:first-child,td:first-child{text-align:left}
+ th{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+ tbody tr:hover td{background:var(--panel2)}
+ tr.lvl0 td{font-weight:750}tr.lvl0{border-top:1px solid #2c3644}tr.lvl1 td:first-child{padding-left:26px;color:var(--dim);font-weight:600}tr.company td{background:#141b26}
+ td.g{color:var(--good)}td.a{color:var(--warn)}td.b{color:var(--bad)}
+ .st{color:#8fb8ff}.fin{color:#7ee0c6}
+ .brow{display:grid;grid-template-columns:110px 1fr 78px;align-items:center;gap:9px;margin:8px 0;font-size:13px}
+ .btrack{position:relative;height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:6px;overflow:hidden}
+ .bfill{position:absolute;top:0;bottom:0;border-radius:5px}
+ .brow .bv{text-align:right;font-variant-numeric:tabular-nums;font-size:12px}
+ .note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+</style></head><body><div class="wrap">
+ <h1><span class="dot"></span>GP Reconciliation — ServiceTitan vs Financials</h1>
+ <div class="sub" id="sub"></div>
+ <div class="controls"><div class="seg" id="seg"></div><span class="leg"><span class="st">■</span> ServiceTitan &nbsp; <span class="fin">■</span> Financials (P&amp;L)</span></div>
+ <div class="kpis" id="kpis"></div>
+ <div class="grid2">
+   <div class="panel"><table id="tbl"><thead><tr><th>Group</th><th>ST GP%</th><th>Fin GP%</th><th>Δ pts</th><th>ST GP$</th><th>Fin GP$</th><th>Δ GP$</th><th>ST Rev</th><th>Fin Rev</th><th>Δ Rev</th></tr></thead><tbody></tbody></table></div>
+   <div class="panel pad"><h3>Biggest GP% gaps (ServiceTitan − Financials)</h3><div id="bars"></div></div>
+ </div>
+ <div class="note" id="note"></div>
+</div>
+<script>
+const REC=/*DATA_START*/{"ytd":{"Company":{"stRev":6574.41,"stGP":52.6,"finRev":6803,"finGP":49.9},"Service":{"stRev":1082.07,"stGP":66.7,"finRev":1071,"finGP":34.6},"Install":{"stRev":5087.51,"stGP":50.4,"finRev":5306,"finGP":54.2},"Install FP":{"stRev":1903.14,"stGP":47.8,"finRev":2041,"finGP":44.1},"Install HVAC":{"stRev":3184.37,"stGP":51.9,"finRev":3265,"finGP":60.6},"Electrical":{"stRev":341.77,"stGP":39.7,"finRev":362,"finGP":35.7},"Plumbing":{"stRev":63.05,"stGP":62.0,"finRev":65,"finGP":25.0}},"jul":{"Company":{"stRev":1092.98,"stGP":53.6,"finRev":1127,"finGP":53.8},"Service":{"stRev":116.87,"stGP":72.4,"finRev":112,"finGP":-33.0},"Install":{"stRev":925.62,"stGP":51.1,"finRev":963,"finGP":66.2},"Install FP":{"stRev":228.24,"stGP":48.5,"finRev":248,"finGP":43.6},"Install HVAC":{"stRev":697.38,"stGP":51.9,"finRev":715,"finGP":74.0},"Electrical":{"stRev":13.83,"stGP":51.2,"finRev":13,"finGP":-78.3},"Plumbing":{"stRev":36.66,"stGP":59.2,"finRev":39,"finGP":44.1}},"q2":{"Company":{"stRev":2683.04,"stGP":53.0,"finRev":2863,"finGP":49.3},"Service":{"stRev":434.02,"stGP":65.4,"finRev":423,"finGP":34.5},"Install":{"stRev":2041.42,"stGP":51.0,"finRev":2203,"finGP":52.5},"Install FP":{"stRev":584.65,"stGP":48.6,"finRev":693,"finGP":43.4},"Install HVAC":{"stRev":1456.77,"stGP":51.9,"finRev":1510,"finGP":56.7},"Electrical":{"stRev":181.21,"stGP":43.6,"finRev":211,"finGP":52.4},"Plumbing":{"stRev":26.39,"stGP":65.9,"finRev":26,"finGP":-2.9}},"q1":{"Company":{"stRev":2798.39,"stGP":51.9,"finRev":2813,"finGP":48.8},"Service":{"stRev":531.18,"stGP":66.6,"finRev":536,"finGP":48.8},"Install":{"stRev":2120.48,"stGP":49.5,"finRev":2140,"finGP":50.6},"Install FP":{"stRev":1090.25,"stGP":47.3,"finRev":1100,"finGP":44.6},"Install HVAC":{"stRev":1030.23,"stGP":51.9,"finRev":1040,"finGP":56.9},"Electrical":{"stRev":146.73,"stGP":33.8,"finRev":138,"finGP":21.3},"Plumbing":{"stRev":0.0,"stGP":null,"finRev":0,"finGP":null}}}/*DATA_END*/;
+const REFRESHED=/*STAMP_START*/"July 2026 data · ST=example workbook, Fin=PNLv3.07"/*STAMP_END*/;
+const PL={ytd:"YTD 2026 · Jan–Jul",jul:"July 2026",q2:"Q2 2026 · Apr–Jun",q1:"Q1 2026 · Jan–Mar"};
+const ORDER=[["Company",0],["Service",0],["Install",0],["Install FP",1],["Install HVAC",1],["Electrical",0],["Plumbing",0]];
+let per="ytd";
+const money=v=>v==null?"—":(Math.abs(v)>=1000?"$"+(v/1000).toFixed(2)+"M":"$"+Math.round(v)+"K");
+const dmoney=v=>v==null?"—":(v>=0?"+":"−")+money(Math.abs(v));
+const pf=v=>v==null?"—":v.toFixed(1)+"%";
+const gp$=(r)=> (r.stRev==null)?null : {st:r.stGP==null?null:r.stRev*r.stGP/100, fin:(r.finGP==null||r.finRev==null)?null:r.finRev*r.finGP/100};
+function magCls(d){if(d==null)return"";const a=Math.abs(d);return a>=10?"b":a>=3?"a":"g";}
+const seg=document.getElementById("seg");
+[["ytd","YTD"],["jul","July"],["q2","Q2"],["q1","Q1"]].forEach(([v,l])=>{const b=document.createElement("button");b.textContent=l;if(v===per)b.className="on";b.onclick=()=>{per=v;[...seg.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");render();};seg.appendChild(b);});
+function render(){
+ const R=REC[per], co=R["Company"];
+ const dPts=(co.stGP==null||co.finGP==null)?null:co.stGP-co.finGP;
+ const g=gp$(co); const dGP$=(g&&g.st!=null&&g.fin!=null)?g.st-g.fin:null;
+ const dRev=(co.stRev!=null&&co.finRev!=null)?co.stRev-co.finRev:null;
+ // biggest gap group
+ let big=null; ORDER.forEach(([nm])=>{const r=R[nm];if(nm==="Company"||!r)return;const gg=gp$(r);if(!gg||gg.st==null||gg.fin==null)return;const dg=gg.st-gg.fin;if(!big||Math.abs(dg)>Math.abs(big.dg))big={nm,dg,d:r.stGP-r.finGP};});
+ document.getElementById("kpis").innerHTML=[
+  {k:"Company GP% — ServiceTitan",v:pf(co.stGP),f:"completed workbook"},
+  {k:"Company GP% — Financials",v:pf(co.finGP),f:"Power BI P&L"},
+  {k:"GP% gap",v:(dPts==null?"—":(dPts>=0?"+":"")+dPts.toFixed(1)+" pts"),f:dGP$==null?"":dmoney(dGP$)+" GP$ · "+dmoney(dRev)+" rev",cls:magCls(dPts)},
+  {k:"Biggest $ gap",v:big?big.nm:"—",f:big?(dmoney(big.dg)+" GP$ · "+(big.d>=0?"+":"")+big.d.toFixed(1)+" pts"):"",cls:big?magCls(big.d):""}
+ ].map(c=>`<div class="kpi"><div class="k">${c.k}</div><div class="val" ${c.cls?'style="color:var(--'+(c.cls==='g'?'good':c.cls==='a'?'warn':'bad')+')"':''}>${c.v}</div><div class="foot">${c.f}</div></div>`).join("");
+ document.querySelector("#tbl tbody").innerHTML=ORDER.map(([nm,lvl])=>{
+  const r=R[nm]; if(!r)return"";
+  const dp=(r.stGP==null||r.finGP==null)?null:r.stGP-r.finGP;
+  const gg=gp$(r); const dg=(gg&&gg.st!=null&&gg.fin!=null)?gg.st-gg.fin:null;
+  const dr=(r.stRev!=null&&r.finRev!=null)?r.stRev-r.finRev:null;
+  return `<tr class="lvl${lvl}${nm==='Company'?' company':''}"><td>${nm}</td>`+
+   `<td class="st">${pf(r.stGP)}</td><td class="fin">${pf(r.finGP)}</td><td class="${magCls(dp)}">${dp==null?"—":(dp>=0?"+":"")+dp.toFixed(1)}</td>`+
+   `<td class="st">${gg?money(gg.st):"—"}</td><td class="fin">${gg?money(gg.fin):"—"}</td><td class="${magCls(dp)}">${dg==null?"—":dmoney(dg)}</td>`+
+   `<td class="st">${money(r.stRev)}</td><td class="fin">${money(r.finRev)}</td><td>${dr==null?"—":dmoney(dr)}</td></tr>`;
+ }).join("");
+ // bars: Δpts by group (excl Company), sorted by |Δ|
+ const items=ORDER.filter(([nm])=>nm!=="Company").map(([nm])=>{const r=R[nm];return (r&&r.stGP!=null&&r.finGP!=null)?{nm,d:r.stGP-r.finGP}:null;}).filter(Boolean).sort((a,b)=>Math.abs(b.d)-Math.abs(a.d));
+ const mx=Math.max(...items.map(x=>Math.abs(x.d)),1);
+ document.getElementById("bars").innerHTML=items.map(x=>{const w=Math.abs(x.d)/mx*100;const col=x.d>=0?"#8fb8ff":"#f5b74e";const left=x.d>=0?50:50-w/2;
+   return `<div class="brow"><div title="${x.nm}" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${x.nm}</div><div class="btrack"><div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--edge)"></div><div class="bfill" style="left:${left}%;width:${w/2}%;background:${col}"></div></div><div class="bv">${x.d>=0?"+":""}${x.d.toFixed(1)} pts</div></div>`;}).join("")+'<div style="font-size:11px;color:var(--muted);margin-top:8px">Right/blue = ServiceTitan higher · Left/amber = Financials higher</div>';
+}
+document.getElementById("sub").innerHTML="Where ServiceTitan job-cost GP% diverges from the Financials (P&amp;L) GP% &nbsp;·&nbsp; "+REFRESHED;
+document.getElementById("note").innerHTML="<b>ServiceTitan</b> GP% = Jobs Gross Margin ÷ Revenue on completed jobs (by completion date), grouped to match the P&amp;L departments (Sales appointments, Retail and Shop &amp; Parts excluded). <b>Financials</b> GP% = the Power BI P&amp;L, revenue-weighted to groups. GP$ = revenue × GP%. <b>Why they differ:</b> ServiceTitan job costing generally excludes fully-burdened/unapplied labor, warranty, inventory &amp; PO adjustments, and overhead that the P&amp;L carries — which is why <b>Service</b> shows a large positive gap (ST looks profitable, the P&amp;L absorbs the allocated labor). Revenue also differs from timing (completion vs GL/invoice) and department mapping. Δ = ServiceTitan − Financials; |Δ| ≥ 10 pts is flagged red, ≥ 3 amber. Both sides update monthly with the Financials refresh.";
+render();
+</script></body></html>
