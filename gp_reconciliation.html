@@ -37,18 +37,12 @@
    <div class="panel pad"><h3>Biggest GP% gaps (ServiceTitan − Financials)</h3><div id="bars"></div></div>
  </div>
 
- <h2 style="font-size:18px;margin:34px 0 2px;border-bottom:1px solid var(--edge);padding-bottom:7px;color:#cfe">Current-month projection — ServiceTitan MTD → projected Financials GP%</h2>
- <div class="sub" id="mtdsub" style="margin-bottom:8px"></div>
- <div class="panel"><table id="mtd"><thead><tr><th>Group</th><th>ST MTD Rev</th><th>ST MTD GP%</th><th>YTD gap (pts)</th><th>Projected Fin GP%</th><th>Proj Fin GP$</th></tr></thead><tbody></tbody></table></div>
- <div class="note" id="mtdnote"></div>
 
  <div class="note" id="note"></div>
 </div>
 <script>
 const REC=/*DATA_START*/{"ytd":{"Company":{"stRev":6574.41,"stGP":52.6,"finRev":6803,"finGP":49.9},"Service":{"stRev":1082.07,"stGP":66.7,"finRev":1071,"finGP":34.6},"Install":{"stRev":5087.51,"stGP":50.4,"finRev":5306,"finGP":54.2},"Install FP":{"stRev":1903.14,"stGP":47.8,"finRev":2041,"finGP":44.1},"Install HVAC":{"stRev":3184.37,"stGP":51.9,"finRev":3265,"finGP":60.6},"Electrical":{"stRev":341.77,"stGP":39.7,"finRev":362,"finGP":35.7},"Plumbing":{"stRev":63.05,"stGP":62.0,"finRev":65,"finGP":25.0}},"jul":{"Company":{"stRev":1092.98,"stGP":53.6,"finRev":1127,"finGP":53.8},"Service":{"stRev":116.87,"stGP":72.4,"finRev":112,"finGP":-33.0},"Install":{"stRev":925.62,"stGP":51.1,"finRev":963,"finGP":66.2},"Install FP":{"stRev":228.24,"stGP":48.5,"finRev":248,"finGP":43.6},"Install HVAC":{"stRev":697.38,"stGP":51.9,"finRev":715,"finGP":74.0},"Electrical":{"stRev":13.83,"stGP":51.2,"finRev":13,"finGP":-78.3},"Plumbing":{"stRev":36.66,"stGP":59.2,"finRev":39,"finGP":44.1}},"q2":{"Company":{"stRev":2683.04,"stGP":53.0,"finRev":2863,"finGP":49.3},"Service":{"stRev":434.02,"stGP":65.4,"finRev":423,"finGP":34.5},"Install":{"stRev":2041.42,"stGP":51.0,"finRev":2203,"finGP":52.5},"Install FP":{"stRev":584.65,"stGP":48.6,"finRev":693,"finGP":43.4},"Install HVAC":{"stRev":1456.77,"stGP":51.9,"finRev":1510,"finGP":56.7},"Electrical":{"stRev":181.21,"stGP":43.6,"finRev":211,"finGP":52.4},"Plumbing":{"stRev":26.39,"stGP":65.9,"finRev":26,"finGP":-2.9}},"q1":{"Company":{"stRev":2798.39,"stGP":51.9,"finRev":2813,"finGP":48.8},"Service":{"stRev":531.18,"stGP":66.6,"finRev":536,"finGP":48.8},"Install":{"stRev":2120.48,"stGP":49.5,"finRev":2140,"finGP":50.6},"Install FP":{"stRev":1090.25,"stGP":47.3,"finRev":1100,"finGP":44.6},"Install HVAC":{"stRev":1030.23,"stGP":51.9,"finRev":1040,"finGP":56.9},"Electrical":{"stRev":146.73,"stGP":33.8,"finRev":138,"finGP":21.3},"Plumbing":{"stRev":0.0,"stGP":null,"finRev":0,"finGP":null}}}/*DATA_END*/;
 const REFRESHED=/*STAMP_START*/"July 2026 data · ST=example workbook, Fin=PNLv3.07"/*STAMP_END*/;
-const STMTD=/*MTD_START*/{"Company":{"rev":234.2,"gp":48.6},"Service":{"rev":30.7,"gp":66.7},"Install":{"rev":192.1,"gp":46.0},"Install FP":{"rev":70.4,"gp":43.7},"Install HVAC":{"rev":121.8,"gp":47.4},"Electrical":{"rev":6.6,"gp":23.7},"Plumbing":{"rev":4.7,"gp":68.4}}/*MTD_END*/;
-const MTDMETA=/*MTDMETA_START*/{"label":"August 2026 MTD","through":"2026-08-10","excl":"last 5 days excluded"}/*MTDMETA_END*/;
 const PL={ytd:"YTD 2026 · Jan–Jul",jul:"July 2026",q2:"Q2 2026 · Apr–Jun",q1:"Q1 2026 · Jan–Mar"};
 const ORDER=[["Company",0],["Service",0],["Install",0],["Install FP",1],["Install HVAC",1],["Electrical",0],["Plumbing",0]];
 let per="ytd";
@@ -90,18 +84,5 @@ function render(){
 }
 document.getElementById("sub").innerHTML="Where ServiceTitan job-cost GP% diverges from the Financials (P&amp;L) GP% &nbsp;·&nbsp; "+REFRESHED;
 document.getElementById("note").innerHTML="<b>ServiceTitan</b> GP% = Jobs Gross Margin ÷ Revenue on completed jobs (by completion date), grouped to match the P&amp;L departments (Sales appointments, Retail and Shop &amp; Parts excluded). <b>Financials</b> GP% = the Power BI P&amp;L, revenue-weighted to groups. GP$ = revenue × GP%. <b>Why they differ:</b> ServiceTitan job costing generally excludes fully-burdened/unapplied labor, warranty, inventory &amp; PO adjustments, and overhead that the P&amp;L carries — which is why <b>Service</b> shows a large positive gap (ST looks profitable, the P&amp;L absorbs the allocated labor). Revenue also differs from timing (completion vs GL/invoice) and department mapping. Δ = ServiceTitan − Financials; |Δ| ≥ 10 pts is flagged red, ≥ 3 amber. Both sides update monthly with the Financials refresh.";
-function renderMTD(){
- document.getElementById("mtdsub").innerHTML=MTDMETA.label+" (through "+MTDMETA.through+" · "+MTDMETA.excl+") · Financials projected by applying each group’s YTD ServiceTitan−Financials gap to the current ServiceTitan MTD.";
- document.querySelector("#mtd tbody").innerHTML=ORDER.map(([nm,lvl])=>{
-   const st=STMTD[nm], y=REC.ytd[nm];
-   if(!st||st.gp==null)return `<tr class="lvl${lvl}"><td>${nm}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
-   const gap=(y&&y.stGP!=null&&y.finGP!=null)?(y.stGP-y.finGP):null;
-   const proj=(gap==null)?null:st.gp-gap;
-   const projGP=(proj==null)?null:st.rev*proj/100;
-   return `<tr class="lvl${lvl}${nm==='Company'?' company':''}"><td>${nm}</td><td class="st">${money(st.rev)}</td><td class="st">${pf(st.gp)}</td><td>${gap==null?"—":(gap>=0?"+":"")+gap.toFixed(1)}</td><td class="fin" style="font-weight:750">${pf(proj)}</td><td class="fin">${projGP==null?"—":money(projGP)}</td></tr>`;
- }).join("");
- document.getElementById("mtdnote").innerHTML="<b>Projected Fin GP%</b> = ServiceTitan MTD GP% − that group’s YTD gap (ServiceTitan − Financials). It carries the ServiceTitan-vs-P&amp;L relationship observed year-to-date onto the current month’s ServiceTitan actuals, to estimate where the P&amp;L will likely land before it’s posted. Directional only — monthly cost allocations (esp. Service labor) vary. ST MTD excludes the last 5 days for data completeness; Proj Fin GP$ uses ServiceTitan MTD revenue as the base.";
-}
-renderMTD();
 render();
 </script></body></html>

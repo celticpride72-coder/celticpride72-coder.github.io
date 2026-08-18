@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GP Projection — Current-Month Financials Estimate</title>
+<style>
+ :root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--st:#8fb8ff;--fin:#7ee0c6}
+ *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ .wrap{max-width:1180px;margin:0 auto;padding:22px 22px 70px}h1{margin:0;font-size:26px}
+ .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+ .sub{color:var(--dim);font-size:14px;margin-top:4px}
+ .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+ .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}
+ .kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}.kpi .val{font-size:27px;font-weight:750;margin-top:5px}.kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+ .kpi .val.st{color:var(--st)}.kpi .val.fin{color:var(--fin)}
+ .grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;margin-top:8px}@media(max-width:980px){.grid2{grid-template-columns:1fr}}
+ .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:8px 6px 10px}.panel.pad{padding:16px}
+ .panel h3{margin:0 0 12px;font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+ table{width:100%;border-collapse:collapse;font-size:14px}
+ th,td{padding:10px 11px;text-align:right;border-bottom:1px solid var(--edge);white-space:nowrap}th:first-child,td:first-child{text-align:left}
+ th{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}
+ tbody tr:hover td{background:var(--panel2)}
+ tr.lvl0 td{font-weight:750}tr.lvl0{border-top:1px solid #2c3644}tr.lvl1 td:first-child{padding-left:26px;color:var(--dim);font-weight:600}tr.company td{background:#141b26}
+ td.st{color:var(--st)}td.fin{color:var(--fin);font-weight:750}
+ .brow{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:9px;margin:9px 0;font-size:13px}
+ .pair{display:flex;flex-direction:column;gap:3px}
+ .ptrack{height:10px;background:var(--panel2);border:1px solid var(--edge);border-radius:5px;overflow:hidden}.pfill{height:100%;border-radius:5px}
+ .brow .bv{text-align:right;font-variant-numeric:tabular-nums;font-size:12px;white-space:nowrap}
+ .legend{display:flex;gap:16px;font-size:12px;color:var(--dim);margin-top:8px}.chip{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:5px}
+ .note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+</style></head><body><div class="wrap">
+ <h1><span class="dot"></span>GP Projection — Current-Month Financials Estimate</h1>
+ <div class="sub" id="sub"></div>
+ <div class="kpis" id="kpis"></div>
+ <div class="grid2">
+   <div class="panel"><table id="tbl"><thead><tr><th>Group</th><th>ST MTD Rev</th><th>ST MTD GP%</th><th>YTD gap (pts)</th><th>Projected Fin GP%</th><th>Proj Fin GP$</th></tr></thead><tbody></tbody></table></div>
+   <div class="panel pad"><h3>ServiceTitan MTD vs Projected Financials GP%</h3><div id="bars"></div>
+     <div class="legend"><span><span class="chip" style="background:var(--st)"></span>ServiceTitan MTD</span><span><span class="chip" style="background:var(--fin)"></span>Projected Financials</span></div>
+   </div>
+ </div>
+ <div class="note" id="note"></div>
+</div>
+<script>
+const YTD=/*DATA_START*/{"ytd":{"Company":{"stRev":6574.41,"stGP":52.6,"finRev":6803,"finGP":49.9},"Service":{"stRev":1082.07,"stGP":66.7,"finRev":1071,"finGP":34.6},"Install":{"stRev":5087.51,"stGP":50.4,"finRev":5306,"finGP":54.2},"Install FP":{"stRev":1903.14,"stGP":47.8,"finRev":2041,"finGP":44.1},"Install HVAC":{"stRev":3184.37,"stGP":51.9,"finRev":3265,"finGP":60.6},"Electrical":{"stRev":341.77,"stGP":39.7,"finRev":362,"finGP":35.7},"Plumbing":{"stRev":63.05,"stGP":62.0,"finRev":65,"finGP":25.0}}}/*DATA_END*/.ytd;
+const STMTD=/*MTD_START*/{"Company":{"rev":234.2,"gp":48.6},"Service":{"rev":30.7,"gp":66.7},"Install":{"rev":192.1,"gp":46.0},"Install FP":{"rev":70.4,"gp":43.7},"Install HVAC":{"rev":121.8,"gp":47.4},"Electrical":{"rev":6.6,"gp":23.7},"Plumbing":{"rev":4.7,"gp":68.4}}/*MTD_END*/;
+const MTDMETA=/*MTDMETA_START*/{"label":"August 2026 MTD","through":"2026-08-10","excl":"last 5 days excluded"}/*MTDMETA_END*/;
+const ORDER=[["Company",0],["Service",0],["Install",0],["Install FP",1],["Install HVAC",1],["Electrical",0],["Plumbing",0]];
+const money=v=>v==null?"—":(Math.abs(v)>=1000?"$"+(v/1000).toFixed(2)+"M":"$"+Math.round(v)+"K");
+const pf=v=>v==null?"—":v.toFixed(1)+"%";
+function proj(nm){const st=STMTD[nm],y=YTD[nm];if(!st||st.gp==null)return null;const gap=(y&&y.stGP!=null&&y.finGP!=null)?(y.stGP-y.finGP):null;const p=(gap==null)?null:st.gp-gap;return {rev:st.rev,gp:st.gp,gap,proj:p,projGP:(p==null)?null:st.rev*p/100};}
+const co=proj("Company");
+document.getElementById("sub").innerHTML=MTDMETA.label+" (through "+MTDMETA.through+" · "+MTDMETA.excl+") &nbsp;·&nbsp; Financials estimated by applying each group’s YTD ServiceTitan−Financials gap to the current ServiceTitan MTD";
+// biggest downward adjustment (ST higher than projected Fin) by $
+let big=null; ORDER.forEach(([nm])=>{if(nm==="Company")return;const p=proj(nm);if(!p||p.proj==null)return;const d=(p.rev*p.gp/100)-(p.projGP);if(!big||Math.abs(d)>Math.abs(big.d))big={nm,d,gap:p.gap};});
+document.getElementById("kpis").innerHTML=[
+ {k:"ServiceTitan GP% — MTD",v:pf(co.gp),f:"company · "+money(co.rev)+" rev",cls:"st"},
+ {k:"Projected Financials GP%",v:pf(co.proj),f:"company estimate",cls:"fin"},
+ {k:"Projected GP$ — company",v:money(co.projGP),f:"at ST MTD revenue"},
+ {k:"Biggest adjustment",v:big?big.nm:"—",f:big?((big.gap>=0?"−":"+")+Math.abs(big.gap).toFixed(1)+" pts vs ServiceTitan"):""}
+].map(c=>`<div class="kpi"><div class="k">${c.k}</div><div class="val ${c.cls||''}">${c.v}</div><div class="foot">${c.f}</div></div>`).join("");
+document.querySelector("#tbl tbody").innerHTML=ORDER.map(([nm,lvl])=>{const p=proj(nm);
+ if(!p)return `<tr class="lvl${lvl}"><td>${nm}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
+ return `<tr class="lvl${lvl}${nm==='Company'?' company':''}"><td>${nm}</td><td class="st">${money(p.rev)}</td><td class="st">${pf(p.gp)}</td><td>${p.gap==null?"—":(p.gap>=0?"+":"")+p.gap.toFixed(1)}</td><td class="fin">${pf(p.proj)}</td><td class="fin">${money(p.projGP)}</td></tr>`;
+}).join("");
+// paired bars (ST MTD vs Projected Fin), scaled to max GP% among shown
+const rows=ORDER.filter(([nm])=>nm!=="Company").map(([nm])=>{const p=proj(nm);return p?{nm,st:p.gp,fin:p.proj}:null;}).filter(Boolean);
+const mx=Math.max(...rows.flatMap(r=>[r.st,r.fin==null?0:r.fin]),1);
+document.getElementById("bars").innerHTML=rows.map(r=>`<div class="brow"><div title="${r.nm}" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.nm}</div><div class="pair"><div class="ptrack"><div class="pfill" style="width:${Math.max(2,r.st/mx*100)}%;background:var(--st)"></div></div><div class="ptrack"><div class="pfill" style="width:${r.fin==null?0:Math.max(2,r.fin/mx*100)}%;background:var(--fin)"></div></div></div><div class="bv">${pf(r.st)} → <b style="color:var(--fin)">${pf(r.fin)}</b></div></div>`).join("");
+document.getElementById("note").innerHTML="<b>Projected Financials GP%</b> = ServiceTitan MTD GP% − that group’s YTD gap (ServiceTitan − Financials, from the GP Reconciliation). It carries the year-to-date relationship between ServiceTitan job-costing and the P&amp;L onto the current month’s ServiceTitan actuals — an early estimate of where the Financials GP% will land before the P&amp;L is posted. ServiceTitan MTD excludes the last 5 days for data completeness; Proj GP$ uses ServiceTitan MTD revenue. Directional only — monthly cost allocations (especially Service labor) vary. See the GP Reconciliation tab for the full ServiceTitan-vs-Financials detail.";
+</script></body></html>
