@@ -1,0 +1,258 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gross Profit Financials — Comfort by Design</title>
+<style>
+ :root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--i:#4c8dff;--s:#2bd4a7;--e:#f5c451;--p:#a371f7;--gray:#586372}
+ *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ .wrap{max-width:1200px;margin:0 auto;padding:22px 22px 70px}h1{margin:0;font-size:26px}
+ .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+ .sub{color:var(--dim);font-size:14px;margin-top:4px}
+ .sech{font-size:18px;margin:34px 0 2px;border-bottom:1px solid var(--edge);padding-bottom:7px;color:#cfe}
+ .sech.qoqh{margin-top:20px}
+ .controls{display:flex;gap:10px;align-items:center;margin:12px 0 6px;flex-wrap:wrap}
+ .seg{display:flex;border:1px solid var(--edge);border-radius:9px;overflow:hidden}
+ .seg button{background:var(--panel);color:var(--dim);border:0;padding:8px 15px;font-size:13.5px;cursor:pointer;font-weight:650}
+ .seg button.on{background:var(--accent);color:#fff}
+ .hint{color:var(--muted);font-size:12px;margin-left:6px}
+ .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:10px 0 4px}
+ .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:14px 16px}
+ .kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+ .kpi .val{font-size:26px;font-weight:750;margin-top:5px}.kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+ .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:6px 4px 8px;margin-top:8px}
+ .panel.pad{padding:16px 16px 14px}
+ table{width:100%;border-collapse:collapse;font-size:14px}
+ th,td{padding:10px 12px;text-align:right;border-bottom:1px solid var(--edge);white-space:nowrap}
+ th:first-child,td:first-child{text-align:left}
+ th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+ tbody tr:hover td{background:var(--panel2)}
+ td.pos{color:var(--good)}td.neg{color:var(--bad)}
+ tr.lvl0 td{font-weight:750}tr.lvl0{border-top:1px solid #2c3644}
+ tr.lvl1 td:first-child{padding-left:30px;color:var(--dim);font-weight:600}
+ tr.company td{background:#141b26}
+ .actcell{font-weight:750}
+ .qoq td.ytd,.qoq th.ytd{background:#141b26;font-weight:750}
+ .spark{vertical-align:middle}
+ .agrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}@media(max-width:900px){.agrid{grid-template-columns:1fr}}
+ .card{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:14px 16px}
+ .card h4{margin:0 0 12px;font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+ .brow{display:grid;grid-template-columns:120px 1fr 92px;align-items:center;gap:10px;margin:7px 0;font-size:13.5px}
+ .btrack{position:relative;height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:6px;overflow:hidden}
+ .bfill{position:absolute;top:0;bottom:0;border-radius:5px}
+ .brow .bv{text-align:right;font-variant-numeric:tabular-nums;font-size:12.5px}
+ .mixbar{display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid var(--edge);margin:4px 0 2px}
+ .mixbar span{display:block;height:100%}
+ .mixlbl{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-bottom:8px;flex-wrap:wrap;gap:6px}
+ .seg-i{background:var(--i)}.seg-s{background:var(--s)}.seg-e{background:var(--e)}.seg-p{background:var(--p)}
+ .cost{display:grid;grid-template-columns:120px 1fr 66px;align-items:center;gap:10px;margin:8px 0;font-size:13px}
+ .ctrack{position:relative;height:20px;background:var(--panel2);border:1px solid var(--edge);border-radius:5px;overflow:hidden}
+ .cseg{position:absolute;top:0;bottom:0}.cwage{background:var(--warn)}.cmat{background:var(--i)}.coth{background:var(--gray)}
+ .cbe{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff;opacity:.8}
+ .cgp{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+ .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--dim);margin-top:10px}.chip{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:5px}
+ .watch li{margin:6px 0;font-size:13.5px;list-style:none}.watch ul{padding-left:0;margin:0}
+ .wtag{font-weight:750}
+ .note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.6}
+ .aibadge{background:rgba(76,141,255,.15);color:var(--accent);font-weight:750;font-size:11px;padding:3px 9px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
+ .actgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}@media(max-width:900px){.actgrid{grid-template-columns:1fr}}
+ .act{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:14px 16px}
+ .act .ah{font-weight:750;font-size:14px;margin-bottom:6px;color:#cfe}
+ .act .ab{font-size:12.5px;color:var(--dim);line-height:1.5;margin-bottom:9px}
+ .act .af{font-size:12.5px;color:var(--ink);border-top:1px solid var(--edge);padding-top:8px;line-height:1.5}
+ .act .af b{color:var(--accent2)}
+</style></head><body><div class="wrap">
+ <h1><span class="dot"></span>Gross Profit Financials</h1>
+ <div class="sub" id="sub"></div>
+
+ <h2 class="sech qoqh">Quarter over Quarter — Gross Profit %</h2>
+ <div class="panel qoq"><table id="qoq"><thead><tr>
+   <th>Group</th><th>Q1</th><th>Q2</th><th>Δ QoQ (pts)</th><th>July</th><th class="ytd">YTD</th><th>Trend</th>
+ </tr></thead><tbody></tbody></table></div>
+
+ <h2 class="sech">Analysis</h2>
+ <div class="controls">
+   <span style="color:var(--dim);font-size:13px">Period:</span><div class="seg" id="apSeg"></div>
+ </div>
+ <div class="agrid">
+   <div class="card"><h4 id="bridgeH">GP$ variance vs Budget — by department</h4><div class="controls" style="margin:0 0 8px"><div class="seg" id="brSeg"></div></div><div id="bridge"></div></div>
+   <div class="card"><h4>Profit mix — where the money is made</h4><div id="mix"></div></div>
+   <div class="card"><h4>Cost structure (% of revenue)</h4><div id="cost"></div>
+     <div class="legend"><span><span class="chip cwage" style="background:var(--warn)"></span>Wages</span><span><span class="chip" style="background:var(--i)"></span>Materials</span><span><span class="chip" style="background:var(--gray)"></span>Other cost</span><span>│ white line = 100% (breakeven); gap after costs = GP</span></div>
+   </div>
+   <div class="card watch"><h4 id="watchH">Watch list — below budget GP$</h4><div id="watch"></div></div>
+ </div>
+
+ <div id="sections"></div>
+
+ <h2 class="sech">Potential Actions to Improve GP%</h2>
+ <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0 2px">
+   <span class="aibadge">🤖 RESEARCHED WITH AI · AUG 2026</span>
+   <span style="color:var(--muted);font-size:12px">HVAC &amp; hearth industry benchmarks, mapped to CBD's numbers above. Directional guidance — validate against your own P&amp;L before acting.</span>
+ </div>
+ <div class="actgrid">
+   <div class="act"><div class="ah">1 · Grow maintenance / membership agreements</div>
+     <div class="ab">Maintenance work runs <b>55–65% GP</b> vs 35–45% on transactional repair. Shops with 30%+ of revenue from memberships beat emergency-only operations by <b>4–6 net margin points</b>, with 80%+ retention and higher follow-on sales.</div>
+     <div class="af"><b>For CBD:</b> Service ran negative GP in July and is ~$76K under budget YTD — shifting the service mix toward agreements is the highest-margin way to pull it back into the black and smooth shoulder seasons.</div></div>
+   <div class="act"><div class="ah">2 · Raise technician billable efficiency &amp; utilization</div>
+     <div class="ab">Most shops run <b>55–65% billable efficiency</b>; target 70–80%. Lifting 60%→75% on ~6 techs can add ~$500K revenue with no new headcount; a 10% efficiency gain lifts net profit several points.</div>
+     <div class="af"><b>For CBD:</b> service wages are ~70%+ of service revenue — better dispatch/routing, enforced job closeout, and right-sizing labor to demand is the fastest lever on the negative Service GP.</div></div>
+   <div class="act"><div class="ah">3 · Move to option-based (Good–Better–Best) pricing</div>
+     <div class="ab">Presenting tiered options with IAQ/accessory add-ons moves average ticket <b>$1,800–$3,200</b> and lifts attach rates (IAQ 8%→34% in top shops); premium tiers carry the highest GP.</div>
+     <div class="af"><b>For CBD:</b> applies to both service and install — a higher ticket at a higher margin without adding trucks or leads.</div></div>
+   <div class="act"><div class="ah">4 · Tighten material/equipment markup &amp; estimating</div>
+     <div class="ab">Holding <b>50–55% GP</b> typically requires materials at <b>2.5–3.5× wholesale</b> and equipment near <b>300–400% markup</b>, with actual job costs fed back into estimates.</div>
+     <div class="af"><b>For CBD:</b> Fireplace-Install materials run ~47% of revenue (vs ~21% HVAC) and its GP has slipped below budget and prior year — a markup/estimating review on surrounds &amp; parts is the direct fix.</div></div>
+   <div class="act"><div class="ah">5 · Negotiate procurement — volume, terms, rebates</div>
+     <div class="ab">As volume grows, negotiate better pricing and rebates on equipment, copper/steel, and hearth surrounds/parts; bulk agreements let you hold margin even on competitive bids.</div>
+     <div class="af"><b>For CBD:</b> the material-heavy Fireplace installs benefit most — vendor rebates and bulk terms drop straight to GP.</div></div>
+   <div class="act"><div class="ah">6 · Cut callbacks / raise first-time-fix rate</div>
+     <div class="ab">Target <b>80%+ first-time-fix</b>; callbacks above ~2% of weekly revenue are a margin leak — every repeat visit is a truck roll with labor cost and zero revenue.</div>
+     <div class="af"><b>For CBD:</b> the Callbacks dashboard shows ~13% of jobs needing 2+ visits — each avoided repeat is pure GP recovered.</div></div>
+   <div class="act"><div class="ah">7 · Protect installation-labor pricing (hearth)</div>
+     <div class="ab">Hearth retailers make their profit on installation labor, parts, accessories and service — the norm is to discount the unit but <b>not the install</b>; hearth service/maintenance runs 60–70% GP.</div>
+     <div class="af"><b>For CBD:</b> guard Fireplace-install labor pricing and grow attached service, parts &amp; inspections rather than competing on install price.</div></div>
+   <div class="act"><div class="ah">8 · Job-costing discipline — price off fully-burdened cost</div>
+     <div class="ab">Start every price from fully-loaded labor (wage + burden + truck + overhead/hour) plus true material cost (freight + inventory carry), and enforce job closeout before invoicing.</div>
+     <div class="af"><b>For CBD:</b> the departments missing budget GP (Service, Fireplace Install) are exactly where actual-vs-estimate feedback catches the leakage.</div></div>
+ </div>
+ <div class="note">Sources: ServiceTitan, Simpro, FieldEdge, Pipeline&nbsp;On, ApplauseHQ, Striven (hearth), Contracting Business, CEO Finance Academy, Profitability Partners — HVAC &amp; hearth profit-margin and operations research, 2025–2026. AI-synthesized; benchmarks are industry ranges, not CBD-specific promises.</div>
+
+ <div class="note" id="note"></div>
+</div>
+<script>
+const META={company:"Comfort by Design", year:2026, refresh:"08/18/26", source:"Power BI Financial Summary — PNLv3.07"};
+const SRC=[
+ {id:"jul", label:"July 2026 · Month", depts:{
+   hvacI:{label:"HVAC Install",nr:714.64,dBud:44.07,dPy:60.09,gp:{a:74.0,b:56.7,p:54.8},wage:{a:5.2,b:6.6,p:4.5},mat:{a:20.8,b:36.5,p:40.7}},
+   fpI:{label:"Fireplace Install",nr:248.07,dBud:25.90,dPy:31.00,gp:{a:43.6,b:46.7,p:57.7},wage:{a:8.8,b:9.2,p:8.3},mat:{a:46.8,b:43.8,p:34.0}},
+   hvacS:{label:"HVAC Service",nr:102.24,dBud:-12.61,dPy:0.235,gp:{a:-5.7,b:46.7,p:52.8},wage:{a:51.4,b:37.3,p:33.8},mat:{a:54.3,b:15.9,p:13.4}},
+   fpS:{label:"Fireplace Service",nr:9.661,dBud:-9.69,dPy:9.986,gp:{a:-322.2,b:40.9,p:9990.2},wage:{a:306.1,b:50.5,p:-8839.3},mat:{a:116.1,b:8.6,p:-1051.0}},
+   elec:{label:"Electrical",nr:13.37,dBud:-9.90,dPy:-13.53,gp:{a:-78.3,b:29.4,p:13.7},wage:{a:128.4,b:37.9,p:53.3},mat:{a:49.8,b:32.4,p:33.0}},
+   plmb:{label:"Plumbing",nr:38.63,dBud:38.63,dPy:38.63,gp:{a:44.1,b:null,p:null},wage:{a:31.0,b:null,p:null},mat:{a:24.9,b:null,p:null}}
+ }},
+ {id:"q2", label:"Q2 2026 · Apr–Jun (QTD through June)", depts:{
+   hvacI:{label:"HVAC Install",nr:1510,dBud:-140,dPy:-56.21,gp:{a:56.7,b:57.0,p:58.8},wage:{a:7.2,b:6.6,p:6.1},mat:{a:36.1,b:36.2,p:35.1}},
+   fpI:{label:"Fireplace Install",nr:692.85,dBud:95.57,dPy:125.43,gp:{a:43.4,b:46.7,p:41.1},wage:{a:10.6,b:9.2,p:11.5},mat:{a:46.0,b:43.8,p:46.5}},
+   hvacS:{label:"HVAC Service",nr:344.84,dBud:43.47,dPy:67.08,gp:{a:42.7,b:46.7,p:49.9},wage:{a:41.0,b:37.3,p:32.3},mat:{a:16.3,b:15.9,p:17.8}},
+   fpS:{label:"Fireplace Service",nr:78.19,dBud:-11.87,dPy:10.93,gp:{a:-1.7,b:40.9,p:-6.1},wage:{a:103.9,b:50.5,p:98.4},mat:{a:-2.2,b:8.6,p:7.8}},
+   elec:{label:"Electrical",nr:210.69,dBud:50.73,dPy:65.29,gp:{a:52.4,b:29.4,p:22.2},wage:{a:36.9,b:37.9,p:48.2},mat:{a:10.7,b:32.4,p:29.6}},
+   plmb:{label:"Plumbing",nr:26.39,dBud:26.39,dPy:26.39,gp:{a:-2.9,b:null,p:null},wage:{a:79.3,b:null,p:null},mat:{a:23.6,b:null,p:null}}
+ }},
+ {id:"q1", label:"Q1 2026 · Jan–Mar (QTD through March)", depts:{
+   hvacI:{label:"HVAC Install",nr:1040,dBud:204.31,dPy:299.68,gp:{a:56.9,b:58.2,p:52.2},wage:{a:7.8,b:6.6,p:10.3},mat:{a:35.3,b:34.7,p:37.5}},
+   fpI:{label:"Fireplace Install",nr:1100,dBud:117.03,dPy:185.31,gp:{a:44.6,b:46.6,p:53.4},wage:{a:8.9,b:9.2,p:8.6},mat:{a:46.3,b:43.9,p:37.7}},
+   hvacS:{label:"HVAC Service",nr:271.43,dBud:13.51,dPy:41.47,gp:{a:35.9,b:46.6,p:43.3},wage:{a:58.3,b:37.3,p:39.4},mat:{a:5.8,b:16.0,p:17.3}},
+   fpS:{label:"Fireplace Service",nr:264.29,dBud:27.54,dPy:10.57,gp:{a:62.1,b:40.9,p:52.9},wage:{a:29.3,b:50.5,p:35.8},mat:{a:8.5,b:8.6,p:11.2}},
+   elec:{label:"Electrical",nr:137.50,dBud:-31.61,dPy:-29.74,gp:{a:21.3,b:29.3,p:44.8},wage:{a:50.5,b:37.9,p:34.2},mat:{a:28.2,b:32.5,p:21.1}}
+ }}
+];
+const GROUPS=[
+ ["Company",0,["hvacI","fpI","hvacS","fpS","elec","plmb"]],
+ ["Service — HVAC + Fireplace",0,["hvacS","fpS"]],
+ ["Install — HVAC + Fireplace",0,["hvacI","fpI"]],
+ ["Install — Fireplace",1,["fpI"]],["Install — HVAC",1,["hvacI"]],
+ ["Electrical",0,["elec"]],["Plumbing",0,["plmb"]]
+];
+const DEPTKEYS=["hvacI","fpI","hvacS","fpS","elec","plmb"];
+const SEGMENTS=[["Install",["hvacI","fpI"],"i"],["Service",["hvacS","fpS"],"s"],["Electrical",["elec"],"e"],["Plumbing",["plmb"],"p"]];
+const METRICS={gp:{label:"GP %",better:"up"},wage:{label:"Wages %",better:"down"},mat:{label:"Material %",better:"down"}};
+function buildYTD(src){const keys=new Set();src.forEach(p=>Object.keys(p.depts).forEach(k=>keys.add(k)));const out={};
+ keys.forEach(k=>{const pr=src.filter(p=>p.depts[k]).map(p=>p.depts[k]);const nr=pr.reduce((s,d)=>s+d.nr,0),dBud=pr.reduce((s,d)=>s+d.dBud,0),dPy=pr.reduce((s,d)=>s+d.dPy,0);
+  const metric=mk=>{let aNR=0,aX=0,bNR=0,bX=0,pNR=0,pX=0;pr.forEach(d=>{const m=d[mk];aNR+=d.nr;aX+=d.nr*m.a/100;if(m.b!=null){const b=d.nr-d.dBud;bNR+=b;bX+=b*m.b/100;}if(m.p!=null){const p=d.nr-d.dPy;pNR+=p;pX+=p*m.p/100;}});return {a:aNR?aX/aNR*100:null,b:bNR?bX/bNR*100:null,p:pNR?pX/pNR*100:null};};
+  out[k]={label:pr[0].label,nr,dBud,dPy,gp:metric("gp"),wage:metric("wage"),mat:metric("mat")};});
+ return out;}
+const YTD={id:"ytd",label:"YTD 2026 · Jan–Jul",depts:buildYTD(SRC)};
+const BYID={};[YTD,...SRC].forEach(p=>BYID[p.id]=p);
+const RENDER=[YTD,...SRC];
+const state={};RENDER.forEach(p=>state[p.id]="gp");
+let apState="ytd", brState="bud";
+function agg(depts,keys,mk){keys=keys.filter(k=>depts[k]);if(!keys.length)return null;let aNR=0,bNR=0,pNR=0,aX=0,bX=0,pX=0;
+ keys.forEach(k=>{const d=depts[k],m=d[mk],nr=d.nr;aNR+=nr;aX+=nr*m.a/100;if(m.b!=null){const b=nr-d.dBud;bNR+=b;bX+=b*m.b/100;}if(m.p!=null){const p=nr-d.dPy;pNR+=p;pX+=p*m.p/100;}});
+ return {nr:aNR,a:aNR?aX/aNR*100:null,b:bNR?bX/bNR*100:null,p:pNR?pX/pNR*100:null};}
+// dollar helper: returns actGP$, budGP$, pyGP$ (K)
+function dol(depts,keys){keys=keys.filter(k=>depts[k]);let aNR=0,ag=0,bg=0,pg=0;
+ keys.forEach(k=>{const d=depts[k],nr=d.nr;aNR+=nr;ag+=nr*d.gp.a/100;if(d.gp.b!=null)bg+=(nr-d.dBud)*d.gp.b/100;if(d.gp.p!=null)pg+=(nr-d.dPy)*d.gp.p/100;});
+ return {nr:aNR,ag,bg,pg};}
+const moneyM=v=>v==null?"—":(Math.abs(v)>=1000?"$"+(v/1000).toFixed(2)+"M":"$"+Math.round(v)+"K");
+const dK=v=>(v>=0?"+$":"−$")+Math.abs(Math.round(v)).toLocaleString()+"K";
+const pf=v=>v==null?"—":v.toFixed(1)+"%";
+const gb=(d,better)=>d==null?"":((better==="up")?d>=0:d<=0)?"pos":"neg";
+document.getElementById("sub").innerHTML=META.company+" &nbsp;·&nbsp; FY"+META.year+" &nbsp;·&nbsp; source: "+META.source+" (last refresh "+META.refresh+")";
+// ---- sparkline ----
+function spark(vals){const pts=vals.map((v,i)=>[i,v]).filter(x=>x[1]!=null);if(pts.length<2)return '<span style="color:var(--muted)">—</span>';
+ const ys=pts.map(p=>p[1]),mn=Math.min(...ys),mx=Math.max(...ys),rng=(mx-mn)||1;const W=54,H=16;
+ const X=i=>4+i*(W-8)/(vals.length-1),Y=v=>H-2-((v-mn)/rng)*(H-4);
+ const poly=pts.map(p=>X(p[0]).toFixed(0)+","+Y(p[1]).toFixed(0)).join(" ");
+ const net=ys[ys.length-1]-ys[0],col=net>=0?"var(--good)":"var(--bad)";
+ const arrow=net>=0?"▲":"▼";
+ return '<svg class="spark" width="'+W+'" height="'+H+'"><polyline points="'+poly+'" fill="none" stroke="'+col+'" stroke-width="1.6"/></svg> <span style="color:'+col+';font-weight:700">'+arrow+"</span>";}
+// ---- QoQ ----
+function gpA(pid,keys){const g=agg(BYID[pid].depts,keys,"gp");return g?g.a:null;}
+document.querySelector("#qoq tbody").innerHTML=GROUPS.map(([label,lvl,keys])=>{
+ const q1=gpA("q1",keys),q2=gpA("q2",keys),jul=gpA("jul",keys),ytd=gpA("ytd",keys);
+ const d=(q1==null||q2==null)?null:q2-q1;const dc=d==null?'<td>—</td>':`<td class="${d>=0?'pos':'neg'}">${d>=0?'+':''}${d.toFixed(1)}</td>`;
+ return `<tr class="lvl${lvl}${label==='Company'?' company':''}"><td>${label}</td><td>${pf(q1)}</td><td>${pf(q2)}</td>${dc}<td>${pf(jul)}</td><td class="ytd">${pf(ytd)}</td><td>${spark([q1,q2,jul])}</td></tr>`;
+}).join("");
+// ---- Analysis controls ----
+const apSeg=document.getElementById("apSeg");
+[["ytd","YTD"],["jul","July"],["q2","Q2"],["q1","Q1"]].forEach(([v,l])=>{const b=document.createElement("button");b.textContent=l;if(v===apState)b.className="on";b.onclick=()=>{apState=v;[...apSeg.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");renderAnalysis();};apSeg.appendChild(b);});
+const brSeg=document.getElementById("brSeg");
+[["bud","vs Budget"],["py","vs Prior Yr"]].forEach(([v,l])=>{const b=document.createElement("button");b.textContent=l;if(v===brState)b.className="on";b.onclick=()=>{brState=v;[...brSeg.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");renderAnalysis();};brSeg.appendChild(b);});
+function renderAnalysis(){
+ const P=BYID[apState],depts=P.depts,pl=P.label.split(" · ")[0];
+ // ---- Bridge (GP$ variance by dept) ----
+ const rows=DEPTKEYS.filter(k=>depts[k]).map(k=>{const d=dol(depts,[k]);const base=brState==="bud"?d.bg:d.pg;const varr=d.ag-base;return {label:depts[k].label,v:varr,hasBase:(brState==="bud"?depts[k].gp.b!=null:depts[k].gp.p!=null)};});
+ rows.sort((a,b)=>b.v-a.v);const mx=Math.max(...rows.map(r=>Math.abs(r.v)),1);
+ const coD=dol(depts,GROUPS[0][2]);const coVar=coD.ag-(brState==="bud"?coD.bg:coD.pg);
+ document.getElementById("bridgeH").textContent="GP$ variance "+(brState==="bud"?"vs Budget":"vs Prior Year")+" — "+pl+"  (total "+dK(coVar)+")";
+ document.getElementById("bridge").innerHTML=rows.map(r=>{const w=Math.abs(r.v)/mx*100;const col=r.v>=0?"var(--good)":"var(--bad)";const left=r.v>=0?50:50-w/2;
+   return `<div class="brow"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.label}${r.hasBase?"":' <span style="color:var(--muted)">(no base)</span>'}</div><div class="btrack"><div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--edge)"></div><div class="bfill" style="left:${left}%;width:${w/2}%;background:${col}"></div></div><div class="bv" style="color:${col}">${dK(r.v)}</div></div>`;
+ }).join("");
+ // ---- Profit mix ----
+ const co=dol(depts,GROUPS[0][2]);
+ const segs=SEGMENTS.map(([nm,keys,c])=>{const d=dol(depts,keys);return {nm,c,nr:d.nr,gp:d.ag};});
+ const revBar=segs.map(s=>`<span class="seg-${s.c}" style="width:${Math.max(0,s.nr/co.nr*100)}%" title="${s.nm} ${(s.nr/co.nr*100).toFixed(0)}% of revenue"></span>`).join("");
+ document.getElementById("mix").innerHTML=
+  '<div style="font-size:11px;color:var(--muted);margin-bottom:2px">Share of revenue</div><div class="mixbar">'+revBar+'</div>'+
+  '<div class="mixlbl">'+segs.map(s=>`<span><span class="chip seg-${s.c}"></span>${s.nm} ${(s.nr/co.nr*100).toFixed(0)}%</span>`).join("")+'</div>'+
+  '<table style="margin-top:6px"><thead><tr><th>Segment</th><th>Revenue</th><th>Rev %</th><th>GP $</th><th>GP$ %</th></tr></thead><tbody>'+
+  segs.map(s=>`<tr><td><span class="chip seg-${s.c}"></span>${s.nm}</td><td>${moneyM(s.nr)}</td><td>${(s.nr/co.nr*100).toFixed(0)}%</td><td class="${s.gp<0?'neg':''}">${dK(s.gp).replace('+','')}</td><td class="${s.gp<0?'neg':''}">${(s.gp/co.ag*100).toFixed(0)}%</td></tr>`).join("")+
+  `<tr class="lvl0"><td>Company</td><td>${moneyM(co.nr)}</td><td>100%</td><td>${dK(co.ag).replace('+','')}</td><td>100%</td></tr></tbody></table>`;
+ // ---- Cost structure ----
+ const cg=[["Company",GROUPS[0][2]]].concat(SEGMENTS.map(s=>[s[0],s[1]]));
+ const rowsC=cg.map(([nm,keys])=>{const g=agg(depts,keys,"gp"),w=agg(depts,keys,"wage"),m=agg(depts,keys,"mat");if(!g)return null;const oth=100-g.a-w.a-m.a;return {nm,gp:g.a,wage:w.a,mat:m.a,oth,cost:w.a+m.a+Math.max(oth,0)};}).filter(Boolean);
+ const cmax=Math.max(100,...rowsC.map(r=>r.wage+r.mat+Math.max(r.oth,0)))*1.02;
+ document.getElementById("cost").innerHTML=rowsC.map(r=>{const seg=(v,cls,l)=>v<=0?"":`<div class="cseg ${cls}" style="left:${l/cmax*100}%;width:${v/cmax*100}%"></div>`;let x=0;const w=seg(r.wage,"cwage",0);x+=r.wage;const mm=seg(r.mat,"cmat",x);x+=r.mat;const o=seg(Math.max(r.oth,0),"coth",x);
+   return `<div class="cost"><div>${r.nm}</div><div class="ctrack">${w}${mm}${o}<div class="cbe" style="left:${100/cmax*100}%"></div></div><div class="cgp ${r.gp<0?'neg':(r.gp>=50?'pos':'')}">${r.gp.toFixed(0)}%</div></div>`;
+ }).join("");
+ // ---- Watch list (below budget GP$) ----
+ const wl=DEPTKEYS.filter(k=>depts[k]&&depts[k].gp.b!=null).map(k=>{const d=dol(depts,[k]);const v=d.ag-d.bg;const g=agg(depts,[k],"gp");return {label:depts[k].label,v,pts:g.a-g.b};}).filter(r=>r.v<0).sort((a,b)=>a.v-b.v);
+ document.getElementById("watchH").textContent="Watch list — below budget GP$ — "+pl;
+ document.getElementById("watch").innerHTML=wl.length?'<ul>'+wl.map(r=>`<li>🔻 <span class="wtag">${r.label}</span> — <span class="neg">${dK(r.v)}</span> vs budget <span style="color:var(--muted)">(${r.pts>=0?'+':''}${r.pts.toFixed(1)} pts GP)</span></li>`).join("")+'</ul>':'<div style="color:var(--dim);font-size:13.5px">All departments at or above budget GP$ this period. 👍</div>';
+}
+renderAnalysis();
+// ---- detail sections ----
+document.getElementById("sections").innerHTML=RENDER.map(p=>`
+ <h2 class="sech">${p.label}</h2>
+ <div class="controls"><div class="seg">${Object.keys(METRICS).map(k=>`<button data-sec="${p.id}" data-m="${k}"${state[p.id]===k?' class="on"':''}>${METRICS[k].label}</button>`).join("")}</div><span class="hint" id="hint_${p.id}"></span></div>
+ <div class="kpis" id="kpis_${p.id}"></div>
+ <div class="panel"><table id="tbl_${p.id}"><thead><tr><th>Group</th><th>Net Revenue</th><th class="hA">Act</th><th class="hB">Bud</th><th>Δ Bud (pts)</th><th class="hP">PY</th><th>Δ PY (pts)</th></tr></thead><tbody></tbody></table></div>
+`).join("");
+function renderSection(p){const mk=state[p.id],M=METRICS[mk],better=M.better,depts=p.depts;
+ document.querySelectorAll('[data-sec="'+p.id+'"]').forEach(b=>b.classList.toggle("on",b.dataset.m===mk));
+ document.getElementById("hint_"+p.id).textContent=better==="up"?"Higher is better — green = above budget / prior year":"Lower is better — green = under budget / prior year";
+ const tbl=document.getElementById("tbl_"+p.id);tbl.querySelector(".hA").textContent="Act "+M.label;tbl.querySelector(".hB").textContent="Bud "+M.label;tbl.querySelector(".hP").textContent="PY "+M.label;
+ const co=agg(depts,GROUPS[0][2],mk);const dB=co.b==null?null:co.a-co.b,dP=co.p==null?null:co.a-co.p;
+ document.getElementById("kpis_"+p.id).innerHTML=[
+  {k:"Net Revenue",v:moneyM(co.nr),f:p.label.split(" · ")[0]},{k:"Actual "+M.label,v:pf(co.a),f:"company blended"},
+  {k:"vs Budget",v:dB==null?"—":(dB>=0?"+":"")+dB.toFixed(1)+" pts",f:"Bud "+pf(co.b),cls:gb(dB,better)},
+  {k:"vs Prior Year",v:dP==null?"—":(dP>=0?"+":"")+dP.toFixed(1)+" pts",f:"PY "+pf(co.p),cls:gb(dP,better)}
+ ].map(c=>`<div class="kpi"><div class="k">${c.k}</div><div class="val" ${c.cls?'style="color:var(--'+(c.cls==='pos'?'good':'bad')+')"':''}>${c.v}</div><div class="foot">${c.f}</div></div>`).join("");
+ tbl.querySelector("tbody").innerHTML=GROUPS.map(([label,lvl,keys])=>{const g=agg(depts,keys,mk);
+  if(!g)return `<tr class="lvl${lvl}"><td>${label}</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>`;
+  const dBu=g.b==null?null:g.a-g.b,dPy=g.p==null?null:g.a-g.p;const actCls=(mk==="gp")?(g.a<0?"neg":(g.a>=50?"pos":"")):"";
+  const dc=x=>x==null?'<td>—</td>':`<td class="${gb(x,better)}">${x>=0?'+':''}${x.toFixed(1)}</td>`;
+  return `<tr class="lvl${lvl}${label==='Company'?' company':''}"><td>${label}</td><td>${moneyM(g.nr)}</td><td class="actcell ${actCls}">${pf(g.a)}</td><td>${pf(g.b)}</td>${dc(dBu)}<td>${pf(g.p)}</td>${dc(dPy)}</tr>`;
+ }).join("");}
+document.querySelectorAll("[data-sec]").forEach(b=>b.onclick=()=>{state[b.dataset.sec]=b.dataset.m;renderSection(BYID[b.dataset.sec]);});
+RENDER.forEach(renderSection);
+document.getElementById("note").innerHTML="Rollups use revenue-weighted percentages (Actual by Act NR, Budget by Budget NR, PY by PY NR) — reproduces the Power BI grand total (exact for July; within a few tenths on the quarters where the source shows large install revenues only to $0.01M). <b>YTD</b> = Q1+Q2+July. <b>Analysis</b> (period selector applies to all four cards): the <b>GP$ variance</b> bars show each department's contribution to the company's beat/miss and sum to the total; <b>Profit mix</b> is each segment's share of revenue vs GP$; <b>Cost structure</b> stacks Wages+Materials+Other against the 100% breakeven line (gap after costs = GP, overflow = negative GP); the <b>Watch list</b> flags departments whose GP$ is under budget. For Wages%/Material% lower is better. Plumbing began in Q2. Edit the SRC block to update figures.";
+</script></body></html>
