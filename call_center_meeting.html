@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Call Center Meeting</title><style>
+:root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--accent:#2bd4a7;--blue:#4c8dff;--red:#ff6b6b;--amber:#f5b74e;--green:#38d39f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 18px 70px}
+h1{font-size:22px;margin:0 0 2px;font-weight:800}.sub{color:var(--dim);font-size:12.5px;margin-bottom:8px}
+h2.sec{font-size:15px;margin:26px 0 10px;font-weight:750;border-bottom:1px solid var(--edge);padding-bottom:6px;color:#cfe}
+.cards3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}@media(max-width:820px){.cards3{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:11px;padding:12px 13px}
+.chead{display:flex;justify-content:space-between;align-items:center;gap:8px}.chead h3{font-size:13.5px;margin:0;font-weight:750}
+.base{color:var(--dim);font-size:10.5px;margin:5px 0 8px;line-height:1.4}
+.pill{font-size:10.5px;font-weight:750;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.g{background:rgba(56,211,159,.15);color:var(--green)}.a{background:rgba(245,183,78,.15);color:var(--amber)}.r{background:rgba(255,107,107,.15);color:var(--red)}.n{background:#222c38;color:var(--dim)}
+.up{background:rgba(56,211,159,.15);color:var(--green)}.down{background:rgba(255,107,107,.15);color:var(--red)}
+table{width:100%;border-collapse:collapse}.wt td,.wt th{font-size:11.5px;padding:5px 6px;border-bottom:1px solid var(--edge);text-align:right}.wt td:first-child,.wt th:first-child{text-align:left}.wt th{color:var(--dim);font-weight:650}
+.mcards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}@media(max-width:820px){.mcards{grid-template-columns:1fr 1fr}}
+.mcard{background:var(--panel);border:1px solid var(--edge);border-radius:11px;padding:12px 13px}.ml{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.4px}.mv{font-size:21px;font-weight:800;margin:3px 0 6px}.mc{display:flex;gap:6px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--edge);border-radius:9px;overflow:hidden;margin:2px 0 10px}.seg button{background:var(--panel);color:var(--dim);border:0;padding:7px 15px;cursor:pointer;font-weight:650;font-size:12.5px}.seg button.active{background:var(--accent);color:#06231b}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}@media(max-width:820px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:10px 12px}.kpi .lab{color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}.kpi .val{font-size:18px;font-weight:750;margin-top:2px}.kpi .row{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}.tag{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:20px}
+.st{width:100%;border-collapse:collapse;margin-top:6px}.st td,.st th{font-size:12px;padding:6px 9px;border-bottom:1px solid var(--edge);text-align:right}.st td:first-child,.st th:first-child{text-align:left}.st th{background:#12161d;color:var(--dim);font-weight:650}.st tr.tot td{font-weight:750;background:#12161d}
+.grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px}@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.vc{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:4px 0 8px}.vc h4{font-size:12.5px;margin:9px 11px 4px}.bt{width:100%}.bt td{font-size:11.5px;padding:5px 11px;border-bottom:1px solid var(--edge)}.bar{height:14px;background:var(--accent);border-radius:3px;display:inline-block;vertical-align:middle;opacity:.85}
+.notes{background:var(--panel2);border:1px dashed var(--edge);border-radius:10px;padding:12px 14px;color:var(--dim);min-height:70px}
+footer{margin-top:22px;color:var(--dim);font-size:11px}
+@media print{body{background:#fff;color:#000}.card,.mcard,.kpi,.vc,.notes{border-color:#ccc}}
+
+.dim{color:var(--dim)}.bkhero{background:var(--panel);border:1px solid var(--edge);border-radius:11px;padding:11px 13px;margin-bottom:10px;font-size:13px}
+.vc h4{font-size:12.5px;margin:9px 11px 4px}
+</style></head><body><div class="wrap">
+<h1>Call Center Meeting</h1>
+<div class="sub" id="sub">Assembling from the live CBD dashboards…</div>
+
+<h2 class="sec">4DX Scoreboard — WIG 1 · 2 · 3</h2>
+<div id="wig"><div class="dim" style="font-size:12px">Loading 4DX…</div></div>
+
+<h2 class="sec">Company Revenue — Rolling Windows</h2>
+<div id="rev"><div class="dim" style="font-size:12px">Loading revenue…</div></div>
+
+<h2 class="sec">Booked Jobs <span class="dim" id="bk_asof" style="font-size:11px;font-weight:400"></span></h2>
+<div class="bkhero" id="bk_yest">Loading booked jobs…</div>
+<h4 style="margin:14px 0 6px;font-size:13px">Period to date</h4>
+<div class="mcards" id="bk_periods"></div>
+<h4 style="margin:16px 0 6px;font-size:13px">Rolling windows</h4>
+<div class="mcards" id="bk_rolling"></div>
+<div class="grid2" style="grid-template-columns:1fr;margin-top:10px"><div class="vc"><h4>Monthly booked jobs (last 12)</h4><table class="bt" id="bk_monthly"></table></div></div>
+
+<h2 class="sec">Talking Points / Additional Data</h2>
+<div class="notes">Add anything not on the dashboards here before the meeting (staffing, call volume, conversion, scripts, training, recognition, goals…).</div>
+
+<footer id="foot">Sources: 4DX Scoreboard (WIG 1–3) &amp; Revenue rolling windows mirror the Service meeting page; Booked Jobs pulled live from the Booked Jobs dashboard. Auto-assembled from the published dashboards.</footer>
+</div>
+<script>
+function extractObj(t,marker){var i=t.indexOf(marker);if(i<0)return null;var s=t.indexOf('{',i),d=0;for(var j=s;j<t.length;j++){if(t[j]==='{')d++;else if(t[j]==='}'){d--;if(d===0)return t.slice(s,j+1);}}return null;}
+var prep=null, bkAsOf=null;
+function setSub(){var parts=[];var mn=new Date();mn.setDate(0);var rev=new Date();rev.setDate(1);rev.setDate(0);var review=rev.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+ document.getElementById('sub').innerHTML='Review month: <b>'+review+'</b> &middot; 4DX &amp; Revenue mirror the Service meeting page'+(prep?' (as of '+prep+')':'')+' &middot; Booked Jobs live'+(bkAsOf?' (as of '+bkAsOf+')':'');}
+setSub();
+// ---- lift 4DX + Revenue sections from the Service meeting page ----
+fetch('service_tech_meeting.html',{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){
+ var doc=new DOMParser().parseFromString(t,'text/html');
+ var secs=[].slice.call(doc.querySelectorAll('h2.sec'));
+ function nextOf(re){var h=secs.filter(function(x){return re.test(x.textContent);})[0];return h?h.nextElementSibling:null;}
+ var wig=nextOf(/4DX/i), rev=nextOf(/Revenue/i);
+ if(wig)document.getElementById('wig').innerHTML=wig.outerHTML;
+ if(rev)document.getElementById('rev').innerHTML=rev.outerHTML;
+ var m=t.match(/prepared ([A-Za-z]+ \d+, \d+)/);if(m){prep=m[1];setSub();}
+}).catch(function(){document.getElementById('wig').innerHTML='<div class="notes">Could not load 4DX/Revenue from the Service meeting page.</div>';});
+// ---- Booked Jobs (live JSON) ----
+function pct(a,g){return g?Math.round(a/g*100):null;}
+function goalPill(a,g){var p=pct(a,g);if(p==null)return '<span class="pill n">no goal</span>';var c=p>=100?'g':p>=95?'a':'r';return '<span class="pill '+c+'">'+p+'% of goal</span>';}
+function yoyPill(a,ly){if(ly==null||ly===0)return '<span class="pill n">—</span>';var d=(a-ly)/ly*100,c=d>=0?'up':'down';return '<span class="pill '+c+'">'+(d>=0?'▲':'▼')+' '+Math.abs(d).toFixed(0)+'% YoY</span>';}
+function bcard(lab,o){return '<div class="mcard"><div class="ml">'+lab+'</div><div class="mv">'+Math.round(o.actual).toLocaleString()+'</div><div class="mc">'+goalPill(o.actual,o.goal)+yoyPill(o.actual,o.lastYear)+'</div></div>';}
+fetch('booked_jobs_dashboard.html',{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){
+ var D=JSON.parse(extractObj(t,'const DATA'));
+ bkAsOf=D.dataAsOf;document.getElementById('bk_asof').textContent='· as of '+D.dataAsOf;setSub();
+ var y=D.yesterday;document.getElementById('bk_yest').innerHTML='<b>Yesterday</b> ('+y.weekday+' '+y.date.slice(5)+'): <b style="font-size:16px">'+y.actual+'</b> booked &nbsp; '+goalPill(y.actual,y.goal)+' '+yoyPill(y.actual,y.lastYear)+' &nbsp;<span class="dim">(last year '+y.lastYear+' on '+y.lastYearDate.slice(5)+')</span>';
+ var P=D.periods;document.getElementById('bk_periods').innerHTML=['WTD','MTD','QTD','YTD'].map(function(k){return bcard(k,P[k]);}).join('');
+ document.getElementById('bk_rolling').innerHTML=D.rolling.map(function(o){return bcard('Last '+o.N+' days',o);}).join('');
+ var mk=Object.keys(D.monthly).sort().slice(-12);var mx=Math.max.apply(null,mk.map(function(k){return D.monthly[k];}));
+ document.getElementById('bk_monthly').innerHTML=mk.map(function(k){var v=D.monthly[k];var w=Math.max(2,v/mx*170);var col=k.slice(0,4)==='2026'?'var(--accent)':'var(--blue)';var lbl=new Date(k+'-01').toLocaleDateString(undefined,{month:'short',year:'2-digit'});return '<tr><td style="width:74px">'+lbl+'</td><td style="text-align:right;width:52px">'+v+'</td><td><span class="bar" style="width:'+w+'px;background:'+col+'"></span></td></tr>';}).join('');
+}).catch(function(){document.getElementById('bk_yest').innerHTML='<div class="notes">Could not load the Booked Jobs dashboard.</div>';});
+</script></body></html>
