@@ -1,182 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
 <title>2026 4DX Scoreboard — Comfort by Design</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  :root{
-    --bg:#0f1720; --card:#18222e; --card2:#1e2a38; --line:#2b3a4c;
-    --tx:#e9eef4; --mut:#93a4b8;
-    --green:#2ea36b; --amber:#c9922b; --red:#c0483f; --grey:#5b6b7d;
-    --greenbg:rgba(46,163,107,.16); --amberbg:rgba(201,146,43,.16);
-    --redbg:rgba(192,72,63,.16); --greybg:rgba(91,107,125,.16);
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--tx);
-       font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
-  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 56px}
-  header{border-left:4px solid #3b82f6;background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px}
-  h1{margin:0 0 6px;font-size:23px;letter-spacing:.2px}
-  .sub{color:var(--mut);font-size:13.5px}
-  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
-  .chip{font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:999px;border:1px solid var(--line)}
-  .c-g{background:var(--greenbg);color:#7fd3a8;border-color:rgba(46,163,107,.45)}
-  .c-a{background:var(--amberbg);color:#e6c274;border-color:rgba(201,146,43,.45)}
-  .c-r{background:var(--redbg);color:#e79b93;border-color:rgba(192,72,63,.45)}
-  .c-n{background:var(--greybg);color:#a9b7c6;border-color:rgba(91,107,125,.5)}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px}
-  .chead{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:4px}
-  h2{margin:0;font-size:17.5px;font-weight:650}
-  .pill{font-size:12px;font-weight:700;letter-spacing:.3px;padding:4px 11px;border-radius:999px;white-space:nowrap}
-  .p-g{background:var(--greenbg);color:#7fd3a8;border:1px solid rgba(46,163,107,.5)}
-  .p-a{background:var(--amberbg);color:#e6c274;border:1px solid rgba(201,146,43,.5)}
-  .p-r{background:var(--redbg);color:#e79b93;border:1px solid rgba(192,72,63,.5)}
-  .p-n{background:var(--greybg);color:#a9b7c6;border:1px solid rgba(91,107,125,.55)}
-  .stale{background:rgba(201,146,43,.14);color:#e6c274;border:1px dashed rgba(201,146,43,.6);
-         font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px}
-  .base{color:var(--mut);font-size:13px;margin:6px 0 14px}
-  .base b{color:var(--tx)}
-  table{width:100%;border-collapse:collapse;font-size:14px}
-  th{text-align:left;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);
-     font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
-  td{padding:10px;border-bottom:1px solid rgba(43,58,76,.55);vertical-align:top}
-  tr:last-child td{border-bottom:none}
-  td.k{font-weight:650;white-space:nowrap}
-  td.v{font-weight:700;font-variant-numeric:tabular-nums}
-  .g{color:#7fd3a8}.a{color:#e6c274}.r{color:#e79b93}.n{color:var(--mut)}
-  .sm{display:block;color:var(--mut);font-size:12px;font-weight:400;margin-top:2px}
-  .note{color:var(--mut);font-size:13px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
-  footer{color:var(--mut);font-size:12.5px;margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}
+:root { --bg:#0f1720; --card:#18222e; --card2:#1e2a38; --line:#2b3a4c; --tx:#e9eef4; --mut:#93a4b8; --green:#2ea36b; --amber:#c9922b; --red:#c0483f; --grey:#5b6b7d; --greenbg:rgba(46,163,107,.16); --amberbg:rgba(201,146,43,.16); --redbg:rgba(192,72,63,.16); --greybg:rgba(91,107,125,.16); }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--tx); font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+.wrap { max-width:1120px; margin:0 auto; padding:28px 20px 56px; }
+header { border-left:4px solid #3b82f6; background:var(--card); border-radius:10px; padding:18px 22px; margin-bottom:22px; }
+h1 { margin:0 0 6px; font-size:23px; letter-spacing:.2px; }
+.sub { color:var(--mut); font-size:13.5px; }
+.chips { display:flex; flex-wrap:wrap; gap:9px; margin-top:14px; }
+.chip { font-size:12.5px; font-weight:600; padding:5px 11px; border-radius:999px; border:1px solid var(--line); }
+.c-g { background:var(--greenbg); color:#7fd3a8; border-color:rgba(46,163,107,.45); }
+.c-a { background:var(--amberbg); color:#e6c274; border-color:rgba(201,146,43,.45); }
+.c-r { background:var(--redbg); color:#e79b93; border-color:rgba(192,72,63,.45); }
+.c-n { background:var(--greybg); color:#a9b7c6; border-color:rgba(91,107,125,.5); }
+.card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; margin-bottom:18px; }
+.chead { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:4px; }
+h2 { margin:0; font-size:17.5px; font-weight:650; }
+.pill { font-size:12px; font-weight:700; letter-spacing:.3px; padding:4px 11px; border-radius:999px; white-space:nowrap; }
+.p-g { background:var(--greenbg); color:#7fd3a8; border:1px solid rgba(46,163,107,.5); }
+.p-a { background:var(--amberbg); color:#e6c274; border:1px solid rgba(201,146,43,.5); }
+.p-r { background:var(--redbg); color:#e79b93; border:1px solid rgba(192,72,63,.5); }
+.p-n { background:var(--greybg); color:#a9b7c6; border:1px solid rgba(91,107,125,.55); }
+.stale { background:rgba(201,146,43,.14); color:#e6c274; border:1px dashed rgba(201,146,43,.6); font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:6px; }
+.base { color:var(--mut); font-size:13px; margin:6px 0 14px; }
+.base b { color:var(--tx); }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th { text-align:left; font-size:11.5px; letter-spacing:.6px; text-transform:uppercase; color:var(--mut); font-weight:600; padding:8px 10px; border-bottom:1px solid var(--line); }
+td { padding:10px; border-bottom:1px solid rgba(43,58,76,.55); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+td.k { font-weight:650; white-space:nowrap; }
+td.v { font-weight:700; font-variant-numeric:tabular-nums; }
+.g { color:#7fd3a8; }
+.a { color:#e6c274; }
+.r { color:#e79b93; }
+.n { color:var(--mut); }
+.sm { display:block; color:var(--mut); font-size:12px; font-weight:400; margin-top:2px; }
+.note { color:var(--mut); font-size:13px; margin-top:14px; padding-top:12px; border-top:1px solid var(--line); }
+footer { color:var(--mut); font-size:12.5px; margin-top:26px; padding-top:16px; border-top:1px solid var(--line); }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header>
-    <h1>&#127919; 2026 4DX Scoreboard &mdash; Comfort by Design</h1>
-    <div class="sub">4 Wildly Important Goals &middot; As of Tue, Aug 18, 2026 &middot; Last Month (July) / MTD (August 1&ndash;18) / YTD, each vs Goal &amp; Last Year</div>
-    <div class="chips">
-      <span class="chip c-g">&#128994; 1 ahead</span>
-      <span class="chip c-a">&#128993; 1 behind target</span>
-      <span class="chip c-r">&#128308; 1 off track</span>
-      <span class="chip c-n">&#9898; 1 not started</span>
-    </div>
-  </header>
+<header>
+<h1>🎯 2026 4DX Scoreboard — Comfort by Design</h1>
+<div class="sub">4 Wildly Important Goals · As of Wed, Aug 19, 2026 · Last Month (July) / MTD (August 1–19) / YTD, each vs Goal &amp; Last Year</div>
+<div class="chips">
+<span class="chip c-g">🟢 1 ahead</span>
+<span class="chip c-a">🟡 1 behind target</span>
+<span class="chip c-r">🔴 1 off track</span>
+<span class="chip c-n">⚪ 1 not started</span>
+</div>
+</header>
 
-  <!-- WIG 1 -->
-  <div class="card">
-    <div class="chead">
-      <h2>WIG 1 &middot; Sales from Tech-Generated Leads</h2>
-      <span class="pill p-g">&#128994; AHEAD OF PACE</span>
-    </div>
-    <div class="base">2025 baseline <b>$3,243,320</b> &rarr; 2026 target <b>$3,750,000</b> &middot; Source: Sales4dx (Estimates Subtotal, lead from any Service BU, dated by Sold On)</div>
-    <table>
-      <thead><tr><th>Period</th><th>Actual</th><th>vs Goal</th><th>vs Last Yr</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="k">Last Month &middot; Jul</td>
-          <td class="v">$383,878<span class="sm">41 sold estimates</span></td>
-          <td class="v g">129% of $297K</td>
-          <td class="v g">+48.1% YoY<span class="sm">Jul 2025: $259,130</span></td>
-        </tr>
-        <tr>
-          <td class="k">MTD &middot; Aug 1&ndash;18</td>
-          <td class="v">$93,381<span class="sm">13 sold &middot; 18 days in &middot; flat vs Aug 17</span></td>
-          <td class="v r">60% of $156K</td>
-          <td class="v r">&minus;48.8% YoY<span class="sm">Aug 1&ndash;18 2025: $182,514</span></td>
-        </tr>
-        <tr>
-          <td class="k">YTD</td>
-          <td class="v">$2,275,165<span class="sm">270 sold estimates</span></td>
-          <td class="v g">108% of $2.11M</td>
-          <td class="v g">+26.3% YoY<span class="sm">YTD 2025: $1,800,894</span></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="note">Fully refreshed live from Sales4dx and the 2026 Revenue Budget. Validation: the 2025 full-year total computes to $3,243,320, matching the stated baseline exactly. YTD remains ahead of pace at 108% of budget and +26.3% YoY. <b>August is the concern:</b> no new tech-generated sales landed on Aug 18 (still 13 sold, same dollars as yesterday), so MTD slipped further to 60% of budget and is now down 48.8% against a strong August 2025 comp. The month needs roughly $63K in the remaining 13 days just to reach budget.</div>
-  </div>
+<section class="card">
+<div class="chead">
+<h2>WIG 1 · Sales from Tech-Generated Leads</h2>
+<span class="pill p-g">🟢 AHEAD OF PACE</span>
+</div>
+<div class="base">2025 baseline <b>$3,243,320</b> → 2026 target <b>$3,750,000</b> · Source: Sales4dx (Estimates Subtotal, lead from any Service BU, dated by Sold On)</div>
+<table>
+<thead><tr><th>Period</th><th>Actual</th><th>vs Goal</th><th>vs Last Yr</th></tr></thead>
+<tbody>
+<tr>
+<td class="k">Last Month · Jul</td>
+<td class="v">$383,878<span class="sm">41 sold estimates</span></td>
+<td class="v g">129% of $297K</td>
+<td class="v g">+48.1% YoY<span class="sm">Jul 2025: $259,130</span></td>
+</tr>
+<tr>
+<td class="k">MTD · Aug 1–19</td>
+<td class="v">$102,510<span class="sm">14 sold · 19 days in</span></td>
+<td class="v r">61% of $169K</td>
+<td class="v r">−50.7% YoY<span class="sm">Aug 1–19 2025: $207,978</span></td>
+</tr>
+<tr>
+<td class="k">YTD</td>
+<td class="v">$2,284,294<span class="sm">271 sold estimates</span></td>
+<td class="v g">108% of $2.12M</td>
+<td class="v g">+25.1% YoY<span class="sm">YTD 2025: $1,826,358</span></td>
+</tr>
+</tbody>
+</table>
+<p class="note">Fully refreshed live from Sales4dx and the 2026 Revenue Budget. Validation: the 2025 full-year total computes to $3,243,320, matching the stated baseline exactly. YTD remains ahead of pace at 108% of budget and +25.1% YoY. August ticked up one sale from yesterday's read ($93,381 → $102,510, 13 → 14 sold) but MTD is still only 61% of budget and down 50.7% against a strong August 2025 comp — the month needs roughly $67K in the remaining 12 days just to reach budget.</p>
+</section>
 
-  <!-- WIG 2 -->
-  <div class="card">
-    <div class="chead">
-      <h2>WIG 2 &middot; Sales Closing %</h2>
-      <span class="pill p-a">&#128993; BEHIND TARGET</span>
-    </div>
-    <div class="base">2025 baseline <b>60%</b> &rarr; 2026 target <b>65%</b> &middot; Source: Power BI HVAC Install &middot; Total (Non Retail) Conv CY vs PY (AOP/SVP = Michael Bala, Company = Comfort by Design)</div>
-    <table>
-      <thead><tr><th>Period</th><th>Actual</th><th>vs Goal</th><th>vs Last Yr</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="k">Last Month &middot; Jul</td>
-          <td class="v">59.3%<span class="sm">118 leads &middot; 70 sales &middot; closed month</span></td>
-          <td class="v r">&minus;5.7 pts vs 65%</td>
-          <td class="v n">&mdash;<span class="sm">no single-month PY in report</span></td>
-        </tr>
-        <tr>
-          <td class="k">MTD &middot; Aug 1&ndash;18</td>
-          <td class="v">37.7%<span class="sm">53 leads &middot; 20 sales</span></td>
-          <td class="v r">&minus;27.3 pts vs 65%</td>
-          <td class="v n">&mdash;<span class="sm">no single-month PY in report</span></td>
-        </tr>
-        <tr>
-          <td class="k">YTD <span class="sm">through Aug 18, incl. partial August</span></td>
-          <td class="v">58.7%<span class="sm">663 leads &middot; 389 sales</span></td>
-          <td class="v r">&minus;6.3 pts vs 65%</td>
-          <td class="v g">+0.3 pts<span class="sm">2025: 58.4% &middot; +28 BPS</span></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="note">MTD and YTD read live from Power BI this run. <b>August continues to deteriorate &mdash; closing is 37.7% on 53 leads (20 sales), down from 39.2% yesterday and far off July's 59.3%.</b> That weak partial month is now dragging the YTD figure down: including August, YTD sits at 58.7% (barely ahead of last year's 58.4%, +28 BPS) versus 60.6% when measured through July only, the last complete month. July's figure is carried from yesterday's live read &mdash; the month is closed, so it is stable; the Month slicer would not reopen this run to re-verify it.</div>
-  </div>
+<section class="card">
+<div class="chead">
+<h2>WIG 2 · Sales Closing %</h2>
+<span class="pill p-a">🟡 BEHIND TARGET</span>
+</div>
+<div class="base">2025 baseline <b>60%</b> → 2026 target <b>65%</b> · Source: Power BI HVAC Install · Total (Non Retail) Conv CY vs PY (AOP/SVP = Michael Bala, Company = Comfort by Design)</div>
+<table>
+<thead><tr><th>Period</th><th>Actual</th><th>vs Goal</th><th>vs Last Yr</th></tr></thead>
+<tbody>
+<tr>
+<td class="k">Last Month · Jul</td>
+<td class="v">59.3%<span class="sm">118 leads · 70 sales · closed month · carried</span></td>
+<td class="v r">−5.7 pts vs 65%</td>
+<td class="v n">—<span class="sm">no single-month PY in report</span></td>
+</tr>
+<tr>
+<td class="k">MTD · Aug 1–18<span class="sm">carried from prior read</span></td>
+<td class="v">37.7%<span class="sm">53 leads · 20 sales</span></td>
+<td class="v r">−27.3 pts vs 65%</td>
+<td class="v n">—<span class="sm">no single-month PY in report</span></td>
+</tr>
+<tr>
+<td class="k">YTD<span class="sm">through Aug 19, incl. partial August</span></td>
+<td class="v">58.9%<span class="sm">665 leads · 392 sales</span></td>
+<td class="v r">−6.1 pts vs 65%</td>
+<td class="v g">+20 BPS<span class="sm">2025: 58.8%</span></td>
+</tr>
+</tbody>
+</table>
+<p class="note">YTD read live from Power BI this run: 665 leads / 392 sales, 58.9% closing, up slightly from 58.7% yesterday and now +20 BPS ahead of last year (58.8%). The Scope slicer (YTD → MTD) would not reliably switch this run despite repeated attempts, so July (closed month) and the Aug 1–18 MTD read are carried forward from the prior live reads — flagged carried above, not fabricated. Re-attempt the Month/Scope slicers next run.</p>
+</section>
 
-  <!-- WIG 3 -->
-  <div class="card">
-    <div class="chead">
-      <h2>WIG 3 &middot; Net Promoter Score (NPS)</h2>
-      <span class="pill p-r">&#128308; BELOW TARGET</span>
-      <span class="stale">STALE &mdash; held from Aug 10 read</span>
-    </div>
-    <div class="base">2025 baseline <b>83</b> &rarr; 2026 target <b>86</b> &middot; Source: Qualtrics NPS &middot; Comfort by Design</div>
-    <table>
-      <thead><tr><th>Period</th><th>Actual</th><th>vs Goal</th><th>vs Last Yr</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="k">Last Month &middot; Jul</td>
-          <td class="v">70<span class="sm">82 responses</span></td>
-          <td class="v r">&minus;16 pts vs 86</td>
-          <td class="v r">&minus;16 pts<span class="sm">Jul 2025: 86</span></td>
-        </tr>
-        <tr>
-          <td class="k">MTD &middot; Aug</td>
-          <td class="v">76<span class="sm">21 responses &middot; as of Aug 10</span></td>
-          <td class="v r">&minus;10 pts vs 86</td>
-          <td class="v r">&minus;8 pts<span class="sm">Aug 2025: 84 (n=19)</span></td>
-        </tr>
-        <tr>
-          <td class="k">YTD</td>
-          <td class="v">81.1<span class="sm">920 responses &middot; as of Aug 10</span></td>
-          <td class="v r">&minus;4.9 pts vs 86</td>
-          <td class="v r">&minus;0.9 pts<span class="sm">2025: 82</span></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="note"><b>Not refreshed this run.</b> Qualtrics redirected to a username/password login again, so every figure above is carried forward unchanged from the Aug 10 read and is now 8 days stale. Nothing was estimated or fabricated. The story as of that read: July NPS landed at 70, down 16 points from July 2025, and YTD sits at 81.1 &mdash; below both the 86 target and the 83 baseline. Re-authenticate in Qualtrics to refresh.</div>
-  </div>
+<section class="card">
+<div class="chead">
+<h2>WIG 3 · Net Promoter Score (NPS)</h2>
+<span class="pill p-r">🔴 BELOW TARGET</span>
+<span class="stale">STALE — held from Aug 10 read</span>
+</div>
+<div class="base">2025 baseline <b>83</b> → 2026 target <b>86</b> · Source: Qualtrics NPS · Comfort by Design</div>
+<table>
+<thead><tr><th>Period</th><th>Actual</th><th>vs Goal</th><th>vs Last Yr</th></tr></thead>
+<tbody>
+<tr>
+<td class="k">Last Month · Jul</td>
+<td class="v">70<span class="sm">82 responses</span></td>
+<td class="v r">−16 pts vs 86</td>
+<td class="v r">−16 pts<span class="sm">Jul 2025: 86</span></td>
+</tr>
+<tr>
+<td class="k">MTD · Aug</td>
+<td class="v">76<span class="sm">21 responses · as of Aug 10</span></td>
+<td class="v r">−10 pts vs 86</td>
+<td class="v r">−8 pts<span class="sm">Aug 2025: 84 (n=19)</span></td>
+</tr>
+<tr>
+<td class="k">YTD</td>
+<td class="v">81.1<span class="sm">920 responses · as of Aug 10</span></td>
+<td class="v r">−4.9 pts vs 86</td>
+<td class="v r">−0.9 pts<span class="sm">2025: 82</span></td>
+</tr>
+</tbody>
+</table>
+<p class="note">Not refreshed this run. Qualtrics redirected to a username/password login again (no valid session), so every figure above is carried forward unchanged from the Aug 10 read and is now 9 days stale. Nothing was estimated or fabricated. The story as of that read: July NPS landed at 70, down 16 points from July 2025, and YTD sits at 81.1 — below both the 86 target and the 83 baseline. Re-authenticate in Qualtrics to refresh.</p>
+</section>
 
-  <!-- WIG 4 -->
-  <div class="card">
-    <div class="chead">
-      <h2>WIG 4 &middot; Fireplace Install Gross Profit %</h2>
-      <span class="pill p-n">&#9898; NOT STARTED</span>
-    </div>
-    <div class="base">Target: <b>beat budget GP%</b> &middot; Window <b>Aug&ndash;Dec 2026</b> &middot; Source: Power BI P&amp;L 1.2B &middot; CBD Fireplace Install (Act vs Bud)</div>
-    <div class="note" style="border-top:none;margin-top:0;padding-top:0">Nothing to report yet &mdash; this is a seasonal goal. The first official month (August) posts <b>~Sep 11</b>, once the month closes and is finalized. As of Aug 18, August is still in progress.</div>
-  </div>
+<section class="card">
+<div class="chead">
+<h2>WIG 4 · Fireplace Install Gross Profit %</h2>
+<span class="pill p-n">⚪ NOT STARTED</span>
+</div>
+<div class="base">Target: <b>beat budget GP%</b> · Window <b>Aug–Dec 2026</b> · Source: Power BI P&amp;L 1.2B · CBD Fireplace Install (Act vs Bud)</div>
+<p class="note">Nothing to report yet — this is a seasonal goal. The first official month (August) posts ~Sep 11, once the month closes and is finalized. As of Aug 19, August is still in progress.</p>
+</section>
 
-  <footer>
-    <b>Notes:</b> Last Month = July 2026, MTD = August 1&ndash;18 2026, YTD = Jan 1&ndash;Aug 18 2026, all local time. WIG 1 &ldquo;vs Goal&rdquo; is % of the daily TGL budget (Daily Goals col J) summed per period; WIG 2 &amp; 3 are points vs the flat 2026 target. &ldquo;vs Last Yr&rdquo; compares the same dates in 2025. This run: WIG 1 fully live from source; WIG 2 MTD and YTD live, July carried from the Aug 17 live read (closed month, slicer would not reopen); WIG 3 stale (Qualtrics login required) &mdash; values held from Aug 10 read (8 days stale); WIG 4 out of season. No numbers fabricated.
-  </footer>
+<footer>
+Notes: Last Month = July 2026, MTD = August 1–19 2026, YTD = Jan 1–Aug 19 2026, all local time. WIG 1 "vs Goal" is % of the daily TGL budget (Daily Goals col J) summed per period; WIG 2 &amp; 3 are points vs the flat 2026 target. "vs Last Yr" compares the same dates in 2025. This run: WIG 1 fully live from source; WIG 2 YTD live, July and MTD carried from the prior live reads (Scope slicer would not switch after repeated attempts); WIG 3 stale (Qualtrics login required) — values held from Aug 10 read (9 days stale); WIG 4 out of season. No numbers fabricated.
+</footer>
 
 </div>
 </body>
