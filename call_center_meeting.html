@@ -70,14 +70,15 @@ fetch('service_tech_meeting.html',{cache:'no-store'}).then(function(r){return r.
 function pct(a,g){return g?Math.round(a/g*100):null;}
 function goalPill(a,g){var p=pct(a,g);if(p==null)return '<span class="pill n">no goal</span>';var c=p>=100?'g':p>=95?'a':'r';return '<span class="pill '+c+'">'+p+'% of goal</span>';}
 function yoyPill(a,ly){if(ly==null||ly===0)return '<span class="pill n">—</span>';var d=(a-ly)/ly*100,c=d>=0?'up':'down';return '<span class="pill '+c+'">'+(d>=0?'▲':'▼')+' '+Math.abs(d).toFixed(0)+'% YoY</span>';}
-function bcard(lab,o){return '<div class="mcard"><div class="ml">'+lab+'</div><div class="mv">'+Math.round(o.actual).toLocaleString()+'</div><div class="mc">'+goalPill(o.actual,o.goal)+yoyPill(o.actual,o.lastYear)+'</div></div>';}
+function bcard(lab,o){if(!o)return '';return '<div class="mcard"><div class="ml">'+lab+'</div><div class="mv">'+Math.round(o.actual).toLocaleString()+'</div><div class="mc">'+goalPill(o.actual,o.goal)+yoyPill(o.actual,o.lastYear)+'</div></div>';}
 fetch('booked_jobs_dashboard.html',{cache:'no-store'}).then(function(r){return r.text();}).then(function(t){
  var D=JSON.parse(extractObj(t,'const DATA'));
- bkAsOf=D.dataAsOf;document.getElementById('bk_asof').textContent='· as of '+D.dataAsOf;setSub();
- var y=D.yesterday;document.getElementById('bk_yest').innerHTML='<b>Yesterday</b> ('+y.weekday+' '+y.date.slice(5)+'): <b style="font-size:16px">'+y.actual+'</b> booked &nbsp; '+goalPill(y.actual,y.goal)+' '+yoyPill(y.actual,y.lastYear)+' &nbsp;<span class="dim">(last year '+y.lastYear+' on '+y.lastYearDate.slice(5)+')</span>';
- var P=D.periods;document.getElementById('bk_periods').innerHTML=['WTD','MTD','QTD','YTD'].map(function(k){return bcard(k,P[k]);}).join('');
- document.getElementById('bk_rolling').innerHTML=D.rolling.map(function(o){return bcard('Last '+o.N+' days',o);}).join('');
- var mk=Object.keys(D.monthly).sort().slice(-12);var mx=Math.max.apply(null,mk.map(function(k){return D.monthly[k];}));
+ bkAsOf=D.dataAsOf||D.dataAsOfStr;document.getElementById('bk_asof').textContent='\u00b7 as of '+bkAsOf;setSub();
+ var y=D.yesterday;if(y){document.getElementById('bk_yest').innerHTML='<b>Yesterday</b> ('+y.weekday+' '+y.date.slice(5)+'): <b style="font-size:16px">'+y.actual+'</b> booked &nbsp; '+goalPill(y.actual,y.goal)+' '+yoyPill(y.actual,y.lastYear)+' &nbsp;<span class="dim">(last year '+y.lastYear+' on '+(y.lastYearDate||'').slice(5)+')</span>';}
+ var P=D.periods||D;document.getElementById('bk_periods').innerHTML=['WTD','MTD','QTD','YTD'].filter(function(k){return P[k];}).map(function(k){return bcard(k,P[k]);}).join('');
+ var roll=[];if(Array.isArray(D.rolling)){roll=D.rolling.map(function(o){return ['Last '+o.N+' days',o];});}else if(D.rolling&&typeof D.rolling==='object'){roll=Object.keys(D.rolling).map(function(k){return ['Last '+k.replace(/\D/g,'')+' days',D.rolling[k]];});}
+ document.getElementById('bk_rolling').innerHTML=roll.map(function(x){return bcard(x[0],x[1]);}).join('');
+ var mk=Object.keys(D.monthly||{}).sort().slice(-12);var mx=Math.max.apply(null,mk.map(function(k){return D.monthly[k];}));
  document.getElementById('bk_monthly').innerHTML=mk.map(function(k){var v=D.monthly[k];var w=Math.max(2,v/mx*170);var col=k.slice(0,4)==='2026'?'var(--accent)':'var(--blue)';var lbl=new Date(k+'-01').toLocaleDateString(undefined,{month:'short',year:'2-digit'});return '<tr><td style="width:74px">'+lbl+'</td><td style="text-align:right;width:52px">'+v+'</td><td><span class="bar" style="width:'+w+'px;background:'+col+'"></span></td></tr>';}).join('');
-}).catch(function(){document.getElementById('bk_yest').innerHTML='<div class="notes">Could not load the Booked Jobs dashboard.</div>';});
+}).catch(function(e){document.getElementById('bk_yest').innerHTML='<div class="notes">Could not load the Booked Jobs dashboard.'+(e&&e.message?' ('+e.message+')':'')+'</div>';});
 </script></body></html>
