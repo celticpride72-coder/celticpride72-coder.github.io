@@ -151,7 +151,7 @@
   function pick(id){
     const t=TMAP[id]; if(!t)return; currentId=id;
     document.querySelectorAll(".item").forEach(b=>b.classList.toggle("active",b.dataset.id===id));
-    frame.src=t.file;
+    frame.src=t.file+(t.file.includes("?")?"&":"?")+"v="+Date.now();
     const g=groupOf(id);
     document.getElementById("crumb").innerHTML=(g?`<span class="g">${g.name} · </span>`:"")+t.label;
     try{localStorage.setItem("cbd_tab",id);}catch(e){}
