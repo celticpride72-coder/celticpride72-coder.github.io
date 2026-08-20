@@ -84,7 +84,8 @@
     {id:"techscore", label:"Tech Scorecard", ico:"🧰", file:"tech_scorecard.html"},
     {id:"salesrep", label:"Sales Reps", ico:"💵", file:"sales_scorecard.html"},
     {id:"callbacks", label:"Callbacks", ico:"🔁", file:"callbacks_dashboard.html"},
-    {id:"timetoinstall", label:"Time to Install", ico:"⏳", file:"time_to_install.html"}
+    {id:"timetoinstall", label:"Time to Install", ico:"⏳", file:"time_to_install.html"},
+    {id:"instnoproj", label:"Install Jobs No Project", ico:"🚩", file:"install_jobs_no_project.html"}
   ];
   const TMAP={}; TABS.forEach(t=>TMAP[t.id]=t);
   const GROUPS=[
@@ -94,7 +95,7 @@
     {name:"Gross Profit", ico:"💵", ids:["grossprofit","gpfin","gprecon","gpproj"]},
     {name:"Overview",     ico:"⚡", ids:["flash","lastmonth"]},
     {name:"Service",      ico:"🛠️", ids:["service","callbacks"]},
-    {name:"Install",      ico:"🧱", ids:["schedinstalls","adherence","timetoinstall"]},
+    {name:"Install",      ico:"🧱", ids:["schedinstalls","adherence","timetoinstall","instnoproj"]},
     {name:"People",       ico:"👤", ids:["techscore","salesrep"]},
     {name:"Meetings",     ico:"🗓️", ids:["svcmeeting","ccmeeting"]}
   ];
@@ -116,7 +117,7 @@
     adherence:`.kpi .val{font-size:30px!important}`, flash:`.tile .val{font-size:36px!important}`,
     revsales:`.kpi .val{font-size:26px!important}`, gpfin:`.kpi .val{font-size:26px!important}`, gprecon:`.kpi .val{font-size:25px!important}`, gpproj:`.kpi .val{font-size:27px!important}`,
     techscore:`.kpi .val{font-size:26px!important}`, salesrep:`.kpi .val{font-size:26px!important}`,
-    callbacks:`.kpi .val{font-size:30px!important}`, timetoinstall:`.kpi .val{font-size:26px!important}`
+    callbacks:`.kpi .val{font-size:30px!important}`, timetoinstall:`.kpi .val{font-size:26px!important}`, instnoproj:`.kpi .val{font-size:30px!important}`
   };
   let currentId=null;
   const frame=document.getElementById("frame");

@@ -1,0 +1,77 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Jobs — No Project #</title>
+<style>
+ :root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--hvac:#4c8dff;--fire:#ff7a59;--elec:#f5c451;--plmb:#a371f7}
+ *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ .wrap{max-width:1320px;margin:0 auto;padding:22px 22px 70px}h1{margin:0;font-size:26px}
+ .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+ .sub{color:var(--dim);font-size:14px;margin-top:4px}
+ .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+ .kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}
+ .kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}.kpi .val{font-size:30px;font-weight:750;margin-top:5px}.kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+ .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:14px 16px;margin-top:14px}.panel h3{margin:0 0 12px;font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.3px}
+ .bar-row{display:grid;grid-template-columns:200px 1fr 120px;align-items:center;gap:10px;margin:8px 0;font-size:14px}.bar-row .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .track{height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;overflow:hidden}.fill{height:100%;border-radius:8px}.bar-row .amt{text-align:right;color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums}
+ .controls{display:flex;gap:10px;align-items:center;margin:16px 0 6px;flex-wrap:wrap}
+ .controls input,.controls select{background:var(--panel);border:1px solid var(--edge);color:var(--ink);border-radius:9px;padding:9px 12px;font-size:14px}.controls input{min-width:240px}
+ .count{margin-left:auto;color:var(--dim);font-size:13px}
+ .twrap{overflow-x:auto;border:1px solid var(--edge);border-radius:12px}
+ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--edge);white-space:nowrap}
+ th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none;position:sticky;top:0;background:var(--bg)}th:hover{color:var(--ink)}
+ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}tr:hover td{background:var(--panel2)}
+ .empty{background:var(--panel);border:1px dashed var(--edge);border-radius:12px;padding:28px;text-align:center;color:var(--dim)}
+ .note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
+</style></head><body><div class="wrap">
+ <h1><span class="dot"></span>Install Jobs — No Project #</h1>
+ <div class="sub" id="sub"></div>
+ <div class="kpis" id="kpis"></div>
+ <div class="panel"><h3>By business unit</h3><div id="byBU"></div></div>
+ <div class="controls"><input id="q" placeholder="Search job #, customer, BU…"><select id="fBU"><option value="">All business units</option></select><span class="count" id="cnt"></span></div>
+ <div id="tblwrap"></div>
+ <div class="note" id="note"></div>
+</div>
+<script>
+const DATA=/*DATA_START*/{"jobs":[],"asOf":"—","hasValue":false}/*DATA_END*/;
+const money=v=>(v||v===0)?"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}):"—";
+const trade=bu=>{const b=(bu||"").toUpperCase();return b.startsWith("HVAC")?"HVAC":b.startsWith("FIRE")?"Fireplace":b.startsWith("ELEC")?"Electrical":(b.startsWith("PLMB")||b.startsWith("PLUMB"))?"Plumbing":"Other";};
+const TVAR={HVAC:"var(--hvac)",Fireplace:"var(--fire)",Electrical:"var(--elec)",Plumbing:"var(--plmb)",Other:"var(--dim)"};
+const J=DATA.jobs||[]; const hasVal=DATA.hasValue&&J.some(j=>j.total!=null);
+function fmtDate(s){if(!s)return"—";const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});}
+document.getElementById("sub").innerHTML="Booked jobs created in "+(new Date().getFullYear())+" &nbsp;·&nbsp; Business Unit contains “Install” &nbsp;·&nbsp; Project # blank &nbsp;·&nbsp; source: Booking PBI 4DX &nbsp;·&nbsp; as of "+DATA.asOf;
+if(!J.length){
+  const refreshed=DATA.asOf&&DATA.asOf!=="—";
+  document.getElementById("kpis").innerHTML=refreshed?'<div class="kpi"><div class="k">Install jobs · no project</div><div class="val" style="color:var(--good)">0</div><div class="foot">nothing missing a Project #</div></div>':"";
+  document.getElementById("tblwrap").innerHTML=refreshed
+    ?'<div class="empty">✅ No install jobs created this year are missing a Project # right now.</div>'
+    :'<div class="empty">No jobs loaded yet. This list populates from Booking PBI 4DX on the next scheduled refresh — or click <b>Run now</b> on the "install-jobs-no-project-refresh" task to fill it immediately.</div>';
+  document.getElementById("byBU").innerHTML='<div style="color:var(--muted);font-size:13px">—</div>';
+}else{
+ const total=J.reduce((a,j)=>a+(j.total||0),0);
+ const bus=[...new Set(J.map(j=>j.bu))].sort();
+ const kp=[{k:"Install jobs · no project",v:J.length,f:"missing a Project #"}];
+ if(hasVal)kp.push({k:"Total booked value",v:money(total),f:"across these jobs"});
+ kp.push({k:"Business units",v:bus.length,f:"install BUs affected"});
+ const dates=J.map(j=>j.created).filter(Boolean).sort();
+ kp.push({k:"Created range",v:dates.length?fmtDate(dates[0]).replace(/, \d+$/,""):"—",f:dates.length?"→ "+fmtDate(dates[dates.length-1]).replace(/, \d+$/,""):""});
+ document.getElementById("kpis").innerHTML=kp.map(c=>`<div class="kpi"><div class="k">${c.k}</div><div class="val">${c.v}</div><div class="foot">${c.f}</div></div>`).join("");
+ // by BU
+ const g={};J.forEach(j=>{const b=j.bu||"—";(g[b]=g[b]||{n:0,v:0});g[b].n++;g[b].v+=j.total||0;});
+ const ents=Object.entries(g).sort((a,b)=>b[1].n-a[1].n);const mx=Math.max(...ents.map(e=>e[1].n),1);
+ document.getElementById("byBU").innerHTML=ents.map(([bu,o])=>`<div class="bar-row"><div class="nm" title="${bu}">${bu}</div><div class="track"><div class="fill" style="width:${Math.max(3,o.n/mx*100)}%;background:${TVAR[trade(bu)]}"></div></div><div class="amt">${o.n} job${o.n>1?"s":""}${hasVal?" · "+money(o.v):""}</div></div>`).join("");
+ // filters + table
+ const fBU=document.getElementById("fBU");bus.forEach(b=>fBU.add(new Option(b,b)));
+ const q=document.getElementById("q");
+ const COLS=[{h:"Created",f:j=>fmtDate(j.created),s:j=>j.created||""},{h:"Job #",f:j=>j.job||"—",s:j=>j.job||""},{h:"Customer",f:j=>j.customer||"—",s:j=>j.customer||""},{h:"Business Unit",f:j=>j.bu||"—",s:j=>j.bu||""}];
+ if(hasVal)COLS.push({h:"Value",r:1,f:j=>money(j.total),s:j=>j.total||0});
+ let sortI=0,dir=-1;
+ function passes(j){if(fBU.value&&j.bu!==fBU.value)return false;const s=q.value.trim().toLowerCase();if(s){const h=[j.job,j.customer,j.bu].join(" ").toLowerCase();if(!h.includes(s))return false;}return true;}
+ function render(){const rows=J.filter(passes);
+  document.getElementById("cnt").textContent=rows.length+" of "+J.length+" jobs";
+  const s=[...rows].sort((a,b)=>{const va=COLS[sortI].s(a),vb=COLS[sortI].s(b);return va<vb?-dir:va>vb?dir:0;});
+  document.getElementById("tblwrap").innerHTML='<div class="twrap"><table><thead><tr>'+COLS.map((c,i)=>`<th class="${c.r?'r':''}" data-i="${i}">${c.h}${sortI===i?(dir>0?" ▲":" ▼"):""}</th>`).join("")+'</tr></thead><tbody>'+s.map(j=>"<tr>"+COLS.map(c=>`<td class="${c.r?'r':''}">${c.f(j)}</td>`).join("")+"</tr>").join("")+'</tbody></table></div>';
+  document.querySelectorAll("th").forEach(th=>th.onclick=()=>{const i=+th.dataset.i;if(i===sortI)dir*=-1;else{sortI=i;dir=(COLS[i].h==="Created")?-1:1;}render();});
+ }
+ fBU.onchange=render;q.oninput=render;render();
+}
+document.getElementById("note").innerHTML="<b>Criteria:</b> jobs from Booking PBI 4DX whose <b>Created Date</b> is in the current calendar year, whose <b>Business Unit</b> contains “Install”, and whose <b>Project #</b> is blank. Use this to catch install jobs booked without a project assigned. Refreshes automatically each weekday from the Booking workbook.";
+</script></body></html>
