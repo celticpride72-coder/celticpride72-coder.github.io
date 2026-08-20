@@ -15,9 +15,35 @@ def striptags(x):
     return re.sub(r'<[^>]*>','',x).strip()
 
 # ---- REVENUE rolling windows ----
+# Revenue dashboard is now server-rendered static HTML (no `const DATA` blob).
+# Parse the "Rolling windows" cards directly.
 rv=open(f'{SRC}/revenue_dashboard.html',encoding='utf-8').read()
-DATA=json.loads(balanced(rv,rv.find('const DATA')))
-tr=DATA['trailing']
+def _money(x):
+    x=x.replace('&nbsp;',' ').strip()
+    m=re.search(r'\$([\d,]+(?:\.\d+)?)',x)
+    return float(m.group(1).replace(',','')) if m else None
+def parse_rolling(html):
+    i=html.find('<h2>Rolling windows</h2>')
+    if i<0: raise SystemExit("revenue_dashboard.html: 'Rolling windows' section not found")
+    j=html.find('<h2>',i+10); block=html[i:j if j>0 else len(html)]
+    out={}
+    for card in re.findall(r'<div class="card">(.*?)</div></div></div>',block,re.S):
+        lab=re.search(r'<div class="klabel">(.*?)</div>',card)
+        val=re.search(r'<div class="kval">(.*?)</div>',card)
+        if not(lab and val): continue
+        key={'Last 30 days':'d30','Last 60 days':'d60','Last 90 days':'d90',
+             'Last 180 days':'d180','Last 365 days':'d365'}.get(lab.group(1).strip())
+        if not key: continue
+        rec={'actual':_money(val.group(1)),'goal':None,'ly':None}
+        for cl,cv,ct in re.findall(r'<span class="cl">(.*?)</span><span class="cv[^"]*">(.*?)</span><span class="ct">(.*?)</span>',card,re.S):
+            if 'Goal' in cl: rec['goal']=_money(ct)
+            elif 'Last yr' in cl: rec['ly']=_money(ct)
+        out[key]=rec
+    return out
+tr=parse_rolling(rv)
+for _k in ('d30','d60','d90','d365'):
+    if _k not in tr or tr[_k]['actual'] is None:
+        raise SystemExit(f"revenue_dashboard.html: could not parse rolling window {_k}")
 def rollcard(k,lab):
     o=tr[k];a=o['actual'];g=o.get('goal');ly=o.get('ly')
     gp=(a/g*100) if g else None; yoy=((a-ly)/ly*100) if ly else None
@@ -30,15 +56,15 @@ rev_html=''.join(rollcard(k,l) for k,l in [('d30','Last 30 days'),('d60','Last 6
 
 # ---- 4DX WIG 1-3 ----
 fx=open(f'{SRC}/4dx_dashboard_2026.html',encoding='utf-8').read()
-segs=re.split(r'<!-- WIG \d+ -->',fx)
+segs=re.split(r'<section class="card">',fx)
 wig_html=''
-CMAP={'g':'g','a':'a','r':'r','p-g':'g','p-a':'a','p-r':'r','p-n':'n'}
+CMAP={'g':'g','a':'a','r':'r','n':'n','p-g':'g','p-a':'a','p-r':'r','p-n':'n'}
 for b in segs[1:4]:
     title=re.search(r'<h2>(.*?)</h2>',b).group(1)
     pill=re.search(r'<span class="pill (p-\w)">(.*?)</span>',b)
     pcls=CMAP.get(pill.group(1),'n'); ptxt=pill.group(2)
     base=striptags(re.search(r'<div class="base">(.*?)</div>',b,re.S).group(1))
-    rows=re.findall(r'<td class="k">(.*?)</td>\s*<td class="v">(.*?)</td>\s*<td class="([gar])">(.*?)</td>\s*<td class="([gar])">(.*?)</td>',b,re.S)
+    rows=re.findall(r'<td class="k">(.*?)</td>\s*<td class="v">(.*?)</td>\s*<td class="v ([garn])">(.*?)</td>\s*<td class="v ([garn])">(.*?)</td>',b,re.S)
     rh=''
     for per,act,gc,gtxt,yc,ytxt in rows:
         rh+=f'<tr><td class="k">{striptags(per)}</td><td>{striptags(act)}</td><td class="{CMAP[gc]}">{striptags(gtxt)}</td><td class="{CMAP[yc]}">{striptags(ytxt)}</td></tr>'
