@@ -161,46 +161,7 @@
 </footer>
 
 <script>
-const DATA = {
-  todayStr: "2026-08-19",
-  yesterdayStr: "2026-08-18",
-  dataAsOfStr: "2026-08-18",
-  yesterday: {"date":"2026-08-18","weekday":"Tuesday","actual":40,"goal":41.78095238095238,"lastYear":30,"lastYearDate":"2025-08-19","lastYearWeekday":"Tuesday","pctGoal":95.73740597219057,"pctYoY":33.33333333333333},
-  spark: [
-    {"date":"2026-08-05","weekday":"Wednesday","count":46,"goal":41.78095238095238},
-    {"date":"2026-08-06","weekday":"Thursday","count":36,"goal":41.78095238095238},
-    {"date":"2026-08-07","weekday":"Friday","count":48,"goal":41.78095238095238},
-    {"date":"2026-08-08","weekday":"Saturday","count":1,"goal":null},
-    {"date":"2026-08-09","weekday":"Sunday","count":1,"goal":null},
-    {"date":"2026-08-10","weekday":"Monday","count":46,"goal":41.78095238095238},
-    {"date":"2026-08-11","weekday":"Tuesday","count":37,"goal":41.78095238095238},
-    {"date":"2026-08-12","weekday":"Wednesday","count":34,"goal":41.78095238095238},
-    {"date":"2026-08-13","weekday":"Thursday","count":35,"goal":41.78095238095238},
-    {"date":"2026-08-14","weekday":"Friday","count":15,"goal":41.78095238095238},
-    {"date":"2026-08-15","weekday":"Saturday","count":8,"goal":null},
-    {"date":"2026-08-16","weekday":"Sunday","count":4,"goal":null},
-    {"date":"2026-08-17","weekday":"Monday","count":32,"goal":41.78095238095238},
-    {"date":"2026-08-18","weekday":"Tuesday","count":40,"goal":41.78095238095238}
-  ],
-  WTD: {"actual":72,"goal":83.56190476190476,"lastYear":89,"pctGoal":86.16366537497152,"pctYoY":-19.101123595505616},
-  MTD: {"actual":495,"goal":501.37142857142857,"lastYear":492,"pctGoal":98.72919990882151,"pctYoY":0.6097560975609756},
-  QTD: {"actual":1389,"goal":1399.1014285714282,"lastYear":1377,"pctGoal":99.27800598547438,"pctYoY":0.8714596949891068},
-  YTD: {"actual":6585,"goal":6377.421428571432,"lastYear":6131,"pctGoal":103.25489813953013,"pctYoY":7.40499102919589},
-  rolling: {
-    r30:{"actual":862,"goal":909.4305194805195,"lastYear":918,"pctGoal":94.78459118486451,"pctYoY":-6.1002178649237475},
-    r60:{"actual":1686,"goal":1684.7427922077918,"lastYear":1742,"pctGoal":100.07462312930038,"pctYoY":-3.214695752009185},
-    r90:{"actual":2620,"goal":2545.6064285714297,"lastYear":2442,"pctGoal":102.92243021519707,"pctYoY":7.28910728910729},
-    r180:{"actual":4968,"goal":4849.761428571427,"lastYear":4686,"pctGoal":102.43802861584064,"pctYoY":6.017925736235595}
-  },
-  monthly: {"2025-01":918,"2025-02":792,"2025-03":702,"2025-04":720,"2025-05":775,"2025-06":847,"2025-07":885,"2025-08":820,"2025-09":996,"2025-10":1386,"2025-11":1079,"2025-12":1088,"2026-01":1157,"2026-02":675,"2026-03":769,"2026-04":880,"2026-05":820,"2026-06":895,"2026-07":894,"2026-08":495},
-  monthlyGoal: {"2026-01":945.5399999999995,"2026-02":831.6000000000001,"2026-03":737.1,"2026-04":737.1,"2026-05":829.2499999999998,"2026-06":897.7299999999996,"2026-07":897.7299999999996,"2026-08":877.4},
-  weekDaily: [
-    {"date":"2026-08-17","weekday":"Monday","count":32,"goal":41.78095238095238},
-    {"date":"2026-08-18","weekday":"Tuesday","count":40,"goal":41.78095238095238},
-    {"date":"2026-08-19","weekday":"Wednesday","count":0,"goal":41.78095238095238}
-  ],
-  currentMonth: "2026-08"
-};
+const DATA = {"todayStr": "2026-08-20", "yesterdayStr": "2026-08-19", "dataAsOfStr": "2026-08-19", "yesterday": {"date": "2026-08-19", "weekday": "Wednesday", "actual": 38, "goal": 41.78095238095238, "lastYear": 29, "lastYearDate": "2025-08-20", "lastYearWeekday": "Wednesday", "pctGoal": 90.95053567358104, "pctYoY": 31.03448275862069}, "spark": [{"date": "2026-08-06", "weekday": "Thursday", "count": 36, "goal": 41.78095238095238}, {"date": "2026-08-07", "weekday": "Friday", "count": 48, "goal": 41.78095238095238}, {"date": "2026-08-08", "weekday": "Saturday", "count": 1, "goal": null}, {"date": "2026-08-09", "weekday": "Sunday", "count": 1, "goal": null}, {"date": "2026-08-10", "weekday": "Monday", "count": 46, "goal": 41.78095238095238}, {"date": "2026-08-11", "weekday": "Tuesday", "count": 37, "goal": 41.78095238095238}, {"date": "2026-08-12", "weekday": "Wednesday", "count": 34, "goal": 41.78095238095238}, {"date": "2026-08-13", "weekday": "Thursday", "count": 35, "goal": 41.78095238095238}, {"date": "2026-08-14", "weekday": "Friday", "count": 15, "goal": 41.78095238095238}, {"date": "2026-08-15", "weekday": "Saturday", "count": 8, "goal": null}, {"date": "2026-08-16", "weekday": "Sunday", "count": 4, "goal": null}, {"date": "2026-08-17", "weekday": "Monday", "count": 32, "goal": 41.78095238095238}, {"date": "2026-08-18", "weekday": "Tuesday", "count": 40, "goal": 41.78095238095238}, {"date": "2026-08-19", "weekday": "Wednesday", "count": 38, "goal": 41.78095238095238}], "WTD": {"actual": 110, "goal": 125.34285714285713, "lastYear": 118, "pctGoal": 87.75928880784136, "pctYoY": -6.779661016949152}, "MTD": {"actual": 533, "goal": 543.1523809523809, "lastYear": 522, "pctGoal": 98.13084112149534, "pctYoY": 2.10727969348659}, "QTD": {"actual": 1427, "goal": 1440.8823809523806, "lastYear": 1407, "pctGoal": 99.0365361436924, "pctYoY": 1.4214641080312722}, "YTD": {"actual": 6623, "goal": 6419.202380952384, "lastYear": 6161, "pctGoal": 103.17481217997336, "pctYoY": 7.4987826651517615}, "rolling": {"r30": {"actual": 852, "goal": 910.4055627705628, "lastYear": 901, "pctGoal": 93.58466543275263, "pctYoY": -5.438401775804662}, "r60": {"actual": 1721, "goal": 1726.5237445887442, "lastYear": 1753, "pctGoal": 99.6800655301697, "pctYoY": -1.825442099258414}, "r90": {"actual": 2620, "goal": 2545.924880952382, "lastYear": 2452, "pctGoal": 102.90955635030001, "pctYoY": 6.851549755301795}, "r180": {"actual": 4972, "goal": 4849.962380952379, "lastYear": 4688, "pctGoal": 102.51625908536752, "pctYoY": 6.0580204778157}}, "monthly": {"2025-01": 918, "2025-02": 792, "2025-03": 702, "2025-04": 720, "2025-05": 775, "2025-06": 847, "2025-07": 885, "2025-08": 820, "2025-09": 996, "2025-10": 1386, "2025-11": 1079, "2025-12": 1088, "2026-01": 1157, "2026-02": 675, "2026-03": 769, "2026-04": 880, "2026-05": 820, "2026-06": 895, "2026-07": 894, "2026-08": 533}, "monthlyGoal": {"2026-01": 945.5399999999995, "2026-02": 831.6000000000001, "2026-03": 737.1, "2026-04": 737.1, "2026-05": 829.2499999999998, "2026-06": 897.7299999999996, "2026-07": 897.7299999999996, "2026-08": 877.4}, "weekDaily": [{"date": "2026-08-17", "weekday": "Monday", "count": 32, "goal": 41.78095238095238}, {"date": "2026-08-18", "weekday": "Tuesday", "count": 40, "goal": 41.78095238095238}, {"date": "2026-08-19", "weekday": "Wednesday", "count": 38, "goal": 41.78095238095238}, {"date": "2026-08-20", "weekday": "Thursday", "count": 0, "goal": 41.78095238095238}], "currentMonth": "2026-08"};
 
 const COLOR = { orange:"#f97316", orangeDark:"#c2540a", green:"#16a34a", amber:"#f59e0b", red:"#dc2626", gray:"#94a3b8" };
 
