@@ -1,6 +1,6 @@
 {
  "tracking_since": "2026-08-13",
- "last_updated": "2026-08-20",
+ "last_updated": "2026-08-21",
  "jobs": [
   {
    "job": "148933911",
@@ -9,15 +9,15 @@
    "com": false,
    "customer": "SHELDAHL, RITA",
    "value": 13733.0,
-   "tech": "Chris B",
+   "tech": "Todd S",
    "scheduled_date": "2026-07-17",
    "captured_on": "2026-08-13",
    "completed_date": null,
    "days_to_complete": null,
    "on_time": null,
    "status": "open",
-   "reschedules": 0,
-   "current_scheduled_date": "2026-07-17",
+   "reschedules": 1,
+   "current_scheduled_date": "2026-08-25",
    "last_seen": "2026-08-14"
   },
   {
@@ -356,10 +356,10 @@
    "tech": "Dale C",
    "scheduled_date": "2026-08-19",
    "captured_on": "2026-08-17",
-   "completed_date": null,
-   "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "completed_date": "2026-08-19",
+   "days_to_complete": 0,
+   "on_time": true,
+   "status": "completed",
    "reschedules": 0,
    "current_scheduled_date": "2026-08-19"
   },
@@ -373,10 +373,10 @@
    "tech": "Dale C",
    "scheduled_date": "2026-08-20",
    "captured_on": "2026-08-17",
-   "completed_date": null,
-   "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "completed_date": "2026-08-19",
+   "days_to_complete": -1,
+   "on_time": true,
+   "status": "completed",
    "reschedules": 0,
    "current_scheduled_date": "2026-08-20"
   },
@@ -526,10 +526,10 @@
    "tech": "Chris B",
    "scheduled_date": "2026-08-20",
    "captured_on": "2026-08-20",
-   "completed_date": null,
-   "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "completed_date": "2026-08-19",
+   "days_to_complete": -1,
+   "on_time": true,
+   "status": "completed",
    "reschedules": 0,
    "current_scheduled_date": "2026-08-20"
   },
@@ -543,10 +543,10 @@
    "tech": "Garrett G",
    "scheduled_date": "2026-08-20",
    "captured_on": "2026-08-20",
-   "completed_date": null,
-   "days_to_complete": null,
-   "on_time": null,
-   "status": "open",
+   "completed_date": "2026-08-19",
+   "days_to_complete": -1,
+   "on_time": true,
+   "status": "completed",
    "reschedules": 0,
    "current_scheduled_date": "2026-08-20"
   },
@@ -617,6 +617,23 @@
    "status": "open",
    "reschedules": 0,
    "current_scheduled_date": "2026-10-12"
+  },
+  {
+   "job": "159639362",
+   "bu": "FIRE-Install-Com-CBD",
+   "trade": "Fireplace",
+   "com": true,
+   "customer": "WAUSAU HOMES OF NEW RICH",
+   "value": 8595.42,
+   "tech": "Garrett G",
+   "scheduled_date": "2026-08-28",
+   "captured_on": "2026-08-21",
+   "completed_date": null,
+   "days_to_complete": null,
+   "on_time": null,
+   "status": "open",
+   "reschedules": 0,
+   "current_scheduled_date": "2026-08-28"
   }
  ]
 }
