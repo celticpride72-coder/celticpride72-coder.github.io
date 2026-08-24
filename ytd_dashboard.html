@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YTD Dashboard — through July 2026</title>
+<style>
+  :root{
+    --bg:#0f1720; --panel:#161f2b; --panel2:#1c2735; --line:#26303f;
+    --txt:#e8eef5; --muted:#93a2b5; --dim:#6b7a8d;
+    --rev:#3b9dff; --sales:#35c48f; --tgl:#a879ff;
+    --up:#2ecc71; --down:#ff6b6b; --amber:#f5b23d; --goal:#c58bff; --budget:#f5b23d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.4;padding:28px 26px 48px;}
+  .wrap{max-width:1160px;margin:0 auto}
+  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:22px}
+  h1{font-size:23px;margin:0;font-weight:650;letter-spacing:.2px}
+  .sub{color:var(--muted);font-size:13px;margin-top:5px}
+  .stamp{text-align:right;font-size:12px;color:var(--dim);line-height:1.7}
+  .stamp b{color:var(--muted);font-weight:600}
+  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);
+    color:var(--muted);border-radius:999px;padding:2px 10px;font-size:11px;margin-left:6px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.cards4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1000px){.cards4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:820px){.cards{grid-template-columns:1fr}}
+  .mcard{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);
+    border-radius:16px;padding:18px;position:relative;overflow:hidden}
+  .mcard .accentbar{position:absolute;left:0;top:0;bottom:0;width:5px}
+  .mcard .lbl{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;font-weight:700}
+  .mcard .msub{font-size:11px;color:var(--dim);margin-top:2px;min-height:26px}
+  .mcard .big{font-size:31px;font-weight:750;margin:8px 0 2px;letter-spacing:.3px}
+  .mcard .bigsub{font-size:11.5px;color:var(--dim);margin-bottom:13px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+  .stat .t{font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .stat .v{font-size:15px;font-weight:700;margin-top:3px}
+  .stat .s{font-size:10px;color:var(--dim);margin-top:1px}
+  .up{color:var(--up)} .down{color:var(--down)} .amber{color:var(--amber)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 15px;margin-bottom:20px}
+  .panel h2{font-size:14px;margin:0 0 2px;font-weight:600}
+  .panel .cap{font-size:12px;color:var(--dim);margin-bottom:16px}
+  .att{display:flex;flex-direction:column;gap:15px}
+  .arow{display:grid;grid-template-columns:74px 1fr;gap:14px;align-items:center}
+  .arow .k{font-size:12px;font-weight:700;color:var(--muted)}
+  .track{position:relative;height:24px;background:var(--panel2);border:1px solid var(--line);border-radius:7px}
+  .fill{position:absolute;left:0;top:0;bottom:0;border-radius:6px 0 0 6px}
+  .mark{position:absolute;top:-4px;bottom:-4px;width:2px}
+  .mark.g{background:var(--goal)} .mark.b{background:var(--budget)}
+  .mark .cap2{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:9px;white-space:nowrap}
+  .arow .meta{font-size:11px;color:var(--dim);margin-top:5px;grid-column:2}
+  .arow .meta b{font-weight:600}
+  .chart{display:flex;align-items:flex-end;gap:3px;height:200px;padding-top:8px}
+  .day{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+  .bars{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:1px}
+  .b{width:30%;border-radius:2px 2px 0 0;min-height:1px}
+  .b.r{background:var(--rev)} .b.s{background:var(--sales)} .b.t{background:var(--tgl)}
+  .day .dl{font-size:8.5px;color:var(--dim);margin-top:5px}
+  .day .tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+    background:#0a1119;border:1px solid var(--line);border-radius:7px;padding:5px 8px;font-size:11px;
+    white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s;z-index:5}
+  .day:hover .tip{opacity:1}
+  .legend{display:flex;gap:16px;font-size:11.5px;color:var(--muted);margin-top:14px;flex-wrap:wrap;align-items:center}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  footer{color:var(--dim);font-size:11.5px;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+  footer code{color:var(--muted);background:var(--panel2);padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Year to Date <span class="pill">through July 2026</span></h1>
+      <div class="sub">Comfort by Design — YTD results through the last full calendar month</div>
+    </div>
+    <div class="stamp" id="stamp"></div>
+  </header>
+
+  <div class="cards" id="cards"></div>
+
+  <h2 style="margin:6px 2px 12px;font-size:16px">Additional metrics — YTD through July 2026</h2>
+  <div class="cards cards4" id="cards2"></div>
+
+  <div class="panel">
+    <h2>Attainment — YTD through July 2026</h2>
+    <div class="cap">Full-month actual vs plan · fill = actual, markers = goal &amp; budget</div>
+    <div class="att" id="att"></div>
+    <div class="legend" style="margin-top:18px">
+      <span><i class="sw" style="background:var(--rev)"></i>Revenue</span>
+      <span><i class="sw" style="background:var(--sales)"></i>Sales</span>
+      <span><i class="sw" style="background:var(--tgl)"></i>TGL</span>
+      <span><i class="sw" style="background:var(--goal)"></i>Goal</span>
+      <span><i class="sw" style="background:var(--budget)"></i>Budget</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Monthly through July</h2>
+    <div class="cap">Revenue (completed income), Sales (sold estimates) &amp; TGL (tech-generated lead sales) by month · same scale</div>
+    <div class="chart" id="chart"></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--rev)"></i>Revenue</span>
+      <span><i class="sw" style="background:var(--sales)"></i>Sales</span>
+      <span><i class="sw" style="background:var(--tgl)"></i>TGL</span>
+      <span style="color:var(--dim)">weekends/holidays typically $0</span>
+    </div>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+const DATA={
+ pace:58.33,
+ metrics:{
+  revenue:{label:"Revenue",sub:"Completed income · by completion date",cls:"rev",actual:6678571,goal:6700075,budget:6209696,lastYear:5962034,annualGoal:7675075},
+  sales:{label:"Sales",sub:"Sold estimates · 4 sales business units",cls:"sales",actual:5190780,goal:5702161,budget:5249774,lastYear:4376724,annualGoal:6542161},
+  tgl:{label:"TGL",sub:"Tech-generated lead sales · service leads",cls:"tgl",actual:2181785,goal:1948866,budget:null,lastYear:1618380,annualGoal:2222120}
+ },
+ monthly:{labels:["Jan","Feb","Mar","Apr","May","Jun","Jul"],
+   rev:[993719,980229,851588,766576,767888,1198542,1120029],
+   sales:[858925,632359,446246,493484,873503,933727,952536],
+   tgl:[409646,241056,166856,140263,412892,427193,383878]},
+ extra:[
+  {label:"Booked Jobs",sub:"Count of jobs by Created Date · Booking PBI 4DX",bigsub:"YTD through July 2026",color:"#f59e0b",fmt:"num",actual:6090,goal:5876,lastYear:5639,annualGoal:6753},
+  {label:"Service Revenue",sub:"Completed income · 8 service business units",bigsub:"YTD through July 2026",color:"#4c8dff",fmt:"money",actual:1082073,goal:1058000,lastYear:978111,annualGoal:1193000},
+  {label:"Service Value Created",sub:"Service revenue + TGL sales generated",bigsub:"YTD through July 2026",color:"#2bd4a7",fmt:"money",actual:3263858,lastYear:2595291},
+  {label:"Service Avg Ticket",sub:"Service revenue ÷ jobs with revenue",bigsub:"YTD through July 2026",color:"#4c8dff",fmt:"money",actual:335,lastYear:348},
+  {label:"Service TGL %",sub:"Turnover estimates ÷ service visits",bigsub:"YTD through July 2026",color:"#a879ff",fmt:"pct",actual:9.08,lastYear:7.33},
+  {label:"Install Revenue",sub:"Completed income · HVAC + Fireplace install",bigsub:"YTD through July 2026",color:"#4c8dff",fmt:"money",actual:5087510,goal:5249774,lastYear:4551195,annualGoal:6037908},
+  {label:"Electrical Revenue",sub:"Completed income · Electrical business units",bigsub:"YTD through July 2026",color:"#f5b23d",fmt:"money",actual:343457,budget:352346,lastYear:335674,annualGoal:404212},
+  {label:"Plumbing Revenue",sub:"Completed income · Plumbing business units",bigsub:"YTD through July 2026",color:"#ff6b6b",fmt:"money",actual:63054,lastYear:0}
+ ]
+};
+const order=["revenue","sales","tgl"];
+const usd0=v=>"$"+Math.round(v).toLocaleString();
+const attClass=p=>p>=100?"up":p>=95?"amber":"down";
+const signClass=x=>x>=0?"up":"down";
+const paceClass=ap=>ap>=DATA.pace?"up":"amber";
+const arrow=x=>x>=0?"▲":"▼";
+const accent=c=>c==="rev"?"var(--rev)":c==="sales"?"var(--sales)":"var(--tgl)";
+function stat(t,cls,v,s){return `<div class="stat"><div class="t">${t}</div><div class="v ${cls}">${v}</div><div class="s">${s}</div></div>`;}
+function xNum(m,v){return m.fmt==="num"?v.toLocaleString():m.fmt==="pct"?v.toFixed(1)+"%":usd0(v);}
+function xVal(m){return m.fmt==="pct"?m.actual.toFixed(1)+"%":m.fmt==="num"?m.actual.toLocaleString():usd0(m.actual);}
+
+document.getElementById("stamp").innerHTML=`<b>Year to date</b> · Jan 1 – Jul 31, 2026<br>vs same window in 2025 · goals to date`;
+
+document.getElementById("cards").innerHTML=order.map(k=>{const m=DATA.metrics[k];const c=accent(m.cls);
+ const gp=m.actual/m.goal*100, bp=m.budget?m.actual/m.budget*100:null, yoy=(m.actual-m.lastYear)/m.lastYear*100, ap=m.actual/m.annualGoal*100;
+ const budgetTile=bp!==null?stat("vs Budget (YTD)",attClass(bp),bp.toFixed(1)+"%",usd0(m.budget)):stat("vs Budget","","—","no YTD budget");
+ return `<div class="mcard"><div class="accentbar" style="background:${c}"></div>
+  <div class="lbl" style="color:${c}">${m.label}</div><div class="msub">${m.sub}</div>
+  <div class="big">${usd0(m.actual)}</div><div class="bigsub">YTD through July 2026</div>
+  <div class="grid2">
+   ${stat("vs Goal (YTD)",attClass(gp),gp.toFixed(1)+"%",usd0(m.goal))}
+   ${budgetTile}
+   ${stat("vs Last Year",signClass(yoy),arrow(yoy)+" "+Math.abs(yoy).toFixed(1)+"%","YTD '25 · "+usd0(m.lastYear))}
+   ${stat("% of Annual Goal",paceClass(ap),ap.toFixed(1)+"%","annual "+usd0(m.annualGoal))}
+  </div></div>`;}).join("");
+
+document.getElementById("att").innerHTML=order.map(k=>{const m=DATA.metrics[k];const c=accent(m.cls);
+ const scale=Math.max(m.actual,m.goal,m.budget||0)*1.06;const gp=m.actual/m.goal*100;
+ const budgetMark=m.budget?`<div class="mark b" style="left:${m.budget/scale*100}%"><span class="cap2" style="color:var(--budget)">Bgt</span></div>`:"";
+ return `<div><div class="arow"><div class="k">${m.label}</div><div class="track"><div class="fill" style="width:${m.actual/scale*100}%;background:${c}"></div>${budgetMark}<div class="mark g" style="left:${m.goal/scale*100}%"><span class="cap2" style="color:var(--goal)">Goal</span></div></div></div>
+  <div class="arow"><div></div><div class="meta">Actual <b style="color:var(--txt)">${usd0(m.actual)}</b> · <span class="${attClass(gp)}">${gp.toFixed(1)}% of YTD goal</span> (${usd0(m.goal)})${m.budget?` · ${usd0(m.budget)} budget`:``}</div></div></div>`;}).join("");
+
+const M=DATA.monthly;const max=Math.max(...M.rev,...M.sales,...M.tgl);
+document.getElementById("chart").innerHTML=M.labels.map((lb,i)=>`<div class="day">
+  <div class="tip"><b>${lb} 2026</b><br><span style="color:var(--rev)">Rev ${usd0(M.rev[i])}</span><br><span style="color:var(--sales)">Sales ${usd0(M.sales[i])}</span><br><span style="color:var(--tgl)">TGL ${usd0(M.tgl[i])}</span></div>
+  <div class="bars"><div class="b r" style="height:${Math.max(1,M.rev[i]/max*100)}%"></div><div class="b s" style="height:${Math.max(1,M.sales[i]/max*100)}%"></div><div class="b t" style="height:${Math.max(1,M.tgl[i]/max*100)}%"></div></div>
+  <div class="dl">${lb}</div></div>`).join("");
+
+function xTiles(m){let t="";
+ if(m.goal!=null){const gp=m.actual/m.goal*100;t+=stat("vs Goal (YTD)",attClass(gp),gp.toFixed(1)+"%",xNum(m,m.goal));}
+ if(m.budget!=null){const bp=m.actual/m.budget*100;t+=stat("vs Budget (YTD)",attClass(bp),bp.toFixed(1)+"%",xNum(m,m.budget));}
+ if(m.fmt==="pct"){const d=m.actual-m.lastYear;t+=stat("vs Last Year",signClass(d),arrow(d)+" "+Math.abs(d).toFixed(1)+" pts","YTD '25 · "+m.lastYear.toFixed(1)+"%");}
+ else{if(m.lastYear){const ly=(m.actual-m.lastYear)/m.lastYear*100;t+=stat("vs Last Year",signClass(ly),arrow(ly)+" "+Math.abs(ly).toFixed(1)+"%","YTD '25 · "+xNum(m,m.lastYear));}else{t+=stat("vs Last Year","","—","no '25 activity");}}
+ if(m.annualGoal!=null){const ap=m.actual/m.annualGoal*100;t+=stat("% of Annual Goal",paceClass(ap),ap.toFixed(1)+"%","annual "+xNum(m,m.annualGoal));}
+ return t;}
+document.getElementById("cards2").innerHTML=DATA.extra.map(m=>`<div class="mcard"><div class="accentbar" style="background:${m.color}"></div><div class="lbl" style="color:${m.color}">${m.label}</div><div class="msub">${m.sub}</div><div class="big">${xVal(m)}</div><div class="bigsub">${m.bigsub}</div><div class="grid2">${xTiles(m)}</div></div>`).join("");
+
+document.getElementById("footer").innerHTML=
+ `Sources: <code>PBI Completed YTD 4dx.xlsx</code> (Income / Jobs Total Revenue by completion date) · <code>Sales4dx.xlsx</code> (sold estimates by Sold On) · <code>Booking PBI 4DX.xlsx</code> (count by Created Date) · <code>CBD 2026 Revenue Budget.xlsx</code> → Daily Goals. `+
+ `Window = Jan 1 – Jul 31, 2026 (year to date through the last full calendar month). <b>vs Goal / vs Budget</b> use goals summed over the same YTD days; <b>vs Last Year</b> = the identical Jan 1 – Jul 31 window in 2025; <b>% of Annual Goal</b> = YTD actual ÷ the full-year 2026 target (green once past ${DATA.pace}% — July is 58% of the year). Service metrics use Jobs Total Revenue over the 8 service business units; Service Value Created = service revenue + service-lead TGL sales.`;
+</script>
+</body>
+</html>
