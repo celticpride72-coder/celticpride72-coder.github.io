@@ -67,10 +67,13 @@ function render(){
  var avgTicketXT=jrevXT?revXT/jrevXT:0, avgJobXT=jobsXT?revXT/jobsXT:0;
  var avgTicketXTLY=sly.nRev_xt?sly.rev_xt/sly.nRev_xt:0, avgJobXTLY=sly.n_xt?sly.rev_xt/sly.n_xt:0;
  var lp=TGLP[cur],lpLY=TGLP[LY[cur]];var tglPct=jobs?lp.numer/jobs*100:0, tglPctLY=sly.n?lpLY.numer/sly.n*100:0;
+ var valTot=rev+t.sales, valTotLY=sly.rev+tly.sales;
+ var valPerJob=jobs?valTot/jobs:0, valPerJobLY=sly.n?valTotLY/sly.n:0;
  document.getElementById('kpis').innerHTML=
   kpi('Service Revenue',money(rev),[gTag(goal?rev/goal*100:0),yTag(yoy(rev,sly.rev))])+
   kpi('TGL Sales',money(t.sales),[yTag(yoy(t.sales,tly.sales)),'<span class="tag n">'+t.count+' sold est</span>'])+
   kpi('TGL %',tglPct.toFixed(1)+'%',[yTag(tglPct-tglPctLY),'<span class="tag n">'+lp.numer+' of '+jobs+' service visits</span>'])+
+  kpi('Service Value / Job <span class="muted">(rev + TGL &divide; jobs)</span>',money(valPerJob),[yTag(yoy(valPerJob,valPerJobLY)),'<span class="tag n">'+money(valTot)+' &divide; '+jobs+' jobs</span>'])+
   kpi('Avg Ticket <span class="muted">(all svc &middot; rev jobs)</span>',money(avgTicket),[yTag(yoy(avgTicket,avgTicketLY))])+
   kpi('Avg Ticket <span class="muted">(excl. TGL &middot; rev jobs)</span>',money(avgTicketXT),[yTag(yoy(avgTicketXT,avgTicketXTLY)),'<span class="tag n">excl '+(jobs-jobsXT)+' TGL jobs</span>'])+
   kpi('Avg Job Revenue <span class="muted">(all svc &middot; all jobs)</span>',money(avgJob),[yTag(yoy(avgJob,avgJobLY))])+
