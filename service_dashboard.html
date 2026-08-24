@@ -25,6 +25,7 @@ tr.tot td{font-weight:750;background:#12161d}
 .card{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:4px 0 8px}
 .card h3{font-size:13px;margin:10px 12px 6px;font-weight:700}
 .bar{height:16px;background:var(--accent);border-radius:3px;display:inline-block;vertical-align:middle;opacity:.85}
+.bar.g2{background:#2bd4a7}
 .bt{width:100%;border:0}.bt td,.bt th{border-bottom:1px solid var(--edge);font-size:12px;padding:6px 12px}
 .muted{color:var(--dim)}.pending{color:var(--amber);font-size:12px;padding:10px 12px}
 footer{margin-top:18px;color:var(--dim);font-size:11.5px;line-height:1.6}
@@ -41,6 +42,9 @@ footer{margin-top:18px;color:var(--dim);font-size:11.5px;line-height:1.6}
  <div class="card"><h3>TGL % by Tech <span class="muted">(turnovers &rarr; sales &divide; service visits)</span></h3><table class="bt" id="v_tglp"></table></div>
  <div class="card"><h3>Avg Ticket by Tech <span class="muted">(rev &divide; jobs w/ rev)</span></h3><table class="bt" id="v_avg"></table></div>
 </div>
+<h2>Value Creation by Tech <span class="muted" id="valper"></span></h2>
+<div style="margin:2px 2px 10px;color:var(--dim);font-size:12px"><span style="display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:2px;margin-right:5px;vertical-align:middle"></span>Service Revenue<span style="display:inline-block;width:10px;height:10px;background:#2bd4a7;border-radius:2px;margin:0 5px 0 16px;vertical-align:middle"></span>TGL Sales &middot; total value each tech generated in the selected period (service revenue produced + sold estimates from their turnovers)</div>
+<div class="card"><table class="bt" id="v_value"></table></div>
 <footer id="foot"></footer>
 </div>
 <script>
@@ -94,6 +98,8 @@ function render(){
  var tp={};var lpt=TGLP[cur].byTech;Object.keys(s.byTech).forEach(function(tk){var visits=s.byTech[tk].n;var leads=lpt[tk]||0;if(visits>=3&&leads>0)tp[tk]=leads/visits*100;});
  techBars('v_tglp',tp,function(x){return x.toFixed(1)+'%';},true);
  var av={};Object.keys(s.byTech).forEach(function(tk){var x=s.byTech[tk];if(x.nRev>=3)av[tk]=x.rev/x.nRev;});techBars('v_avg',av,money,true);
+ valueTable();
+ document.getElementById('valper').textContent='\u2014 '+PLAB[cur];
 }
 function mapObj(o,f){var r={};Object.keys(o).forEach(function(k){r[k]=f(o[k]);});return r;}
 function techBars(id,obj,fmt,desc){
@@ -105,6 +111,15 @@ function techBars(id,obj,fmt,desc){
  document.getElementById(id).innerHTML=html||'<tr><td class="muted" style="padding:10px 12px">No data this period.</td></tr>';
 }
 function esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+ function valueTable(){var s=SVC[cur],t=TGL[cur];var sT=s.byTech||{},tT=t.byTech||{};
+  var keys={};Object.keys(sT).forEach(function(k){keys[k]=1;});Object.keys(tT).forEach(function(k){keys[k]=1;});
+  var rows=Object.keys(keys).map(function(k){var sv=(sT[k]&&sT[k].rev)||0,tg=(tT[k]&&tT[k].sales)||0;return {tech:k,sv:sv,tg:tg,tot:sv+tg};}).filter(function(r){return r.tot>0;});
+  rows.sort(function(a,b){return b.tot-a.tot;});var max=rows.length?rows[0].tot:1;var TS=0,TT=0;rows.forEach(function(r){TS+=r.sv;TT+=r.tg;});
+  var head='<thead><tr><th>Technician</th><th style="text-align:right">Service Revenue</th><th style="text-align:right">TGL Sales</th><th style="text-align:right">Total Value</th><th>Split</th></tr></thead>';
+  var body=rows.map(function(r){var wsv=r.sv/max*150,wtg=r.tg/max*150;var bar='<span class="bar" style="width:'+Math.max(0,wsv)+'px"></span><span class="bar g2" style="width:'+Math.max(0,wtg)+'px"></span>';
+    return '<tr><td style="width:26%">'+esc(r.tech)+'</td><td style="text-align:right">'+money(r.sv)+'</td><td style="text-align:right">'+money(r.tg)+'</td><td style="text-align:right;font-weight:750">'+money(r.tot)+'</td><td>'+bar+'</td></tr>';}).join('');
+  var totrow='<tr class="tot"><td>TOTAL</td><td style="text-align:right">'+money(TS)+'</td><td style="text-align:right">'+money(TT)+'</td><td style="text-align:right">'+money(TS+TT)+'</td><td></td></tr>';
+  document.getElementById("v_value").innerHTML=head+"<tbody>"+(body||'<tr><td class="muted" style="padding:10px 12px">No data this period.</td></tr>')+totrow+"</tbody>";}
 [].forEach.call(document.querySelectorAll('#seg button'),function(b){b.onclick=function(){cur=b.dataset.p;[].forEach.call(document.querySelectorAll('#seg button'),function(x){x.classList.remove('active');});b.classList.add('active');render();};});
 document.getElementById('sub').innerHTML='Fireplace &amp; HVAC service, maintenance &amp; scheduled-service units &middot; MTD / Last Month / YTD with prior-year (2025) comparison &middot; data as of '+(D.asOf||"—")+'';
 document.getElementById('foot').innerHTML='<b>Service dept</b> = FIRE-Service, FIRE-Scheduled Service, Fireplace-Service-Residential, Fireplace-Maintenance, HVAC-Service, HVAC-Service-Residential, HVAC-Scheduled Service, HVAC-Maintenance (2026 &amp; 2025 naming). <b>Revenue / tickets / jobs</b> from the completed-jobs workbook (Assigned/Primary tech). <b>Avg Ticket</b> = revenue &divide; jobs with revenue; <b>Avg Job Revenue</b> = revenue &divide; all completed jobs. The <b>(excl. TGL)</b> versions repeat both averages after removing service visits whose job generated a tech-generated lead &mdash; a TGL usually means the customer is heading toward a replacement rather than a repair, so excluding them isolates pure repair economics. <b>Service Goal</b> from Daily Goals (Service Goal). <b>TGL</b> = sold estimates whose lead was generated from a service BU (Sales4dx, by Sold On); <b>TGL %</b> (completed sheet) = <em>Sales</em> jobs whose Job Type contains &ldquo;Estimate&rdquo;, whose Lead Generated From Source = Service/Maintenance, and whose Lead Generated From Source Business Unit is an HVAC or Fireplace unit, &divide; completed service-dept jobs (service visits); dated by Completion Date. In the By Business Unit table each TGL is credited to the service unit the lead came from, so the rows sum to the total. <b>TGL Sales $</b> from Sales4dx (sold estimates from service leads). TGL-by-tech credited to the generating (source) technician. Prior-year uses the same calendar window in 2025.';
