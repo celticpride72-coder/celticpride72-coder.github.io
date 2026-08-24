@@ -24,6 +24,8 @@
   .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);
     color:var(--muted);border-radius:999px;padding:2px 10px;font-size:11px;margin-left:6px}
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.cards4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1000px){.cards4{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:820px){.cards{grid-template-columns:1fr}}
   .mcard{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);
     border-radius:16px;padding:18px;position:relative;overflow:hidden}
@@ -79,6 +81,9 @@
   </header>
 
   <div class="cards" id="cards"></div>
+
+  <h2 style="margin:6px 2px 12px;font-size:16px">Additional metrics — July 2026</h2>
+  <div class="cards cards4" id="cards2"></div>
 
   <div class="panel">
     <h2>Attainment — July 2026</h2>
@@ -136,6 +141,16 @@ document.getElementById("stamp").innerHTML =
   `<div><b>Data through</b> Aug 1–2, 2026</div>`+
   `<div>Revenue · Sales · TGL</div>`;
 
+DATA.extra=[
+ {label:"Booked Jobs",sub:"Count of jobs by Created Date · Booking PBI 4DX",bigsub:"jobs booked in July 2026",color:"#f59e0b",fmt:"num",actual:894,goal:898,lastYear:885,priorMonth:895},
+ {label:"Service Revenue",sub:"Completed income · 8 service business units",bigsub:"completed in July 2026",color:"#4c8dff",fmt:"money",actual:116867,goal:150000,lastYear:131474,priorMonth:155025},
+ {label:"Service Value Created",sub:"Service revenue + TGL sales generated",bigsub:"value created in July 2026",color:"#2bd4a7",fmt:"money",actual:500746,lastYear:390604,priorMonth:582218},
+ {label:"Service Avg Ticket",sub:"Service revenue ÷ jobs with revenue",bigsub:"avg ticket, July 2026",color:"#4c8dff",fmt:"money",actual:346,lastYear:366,priorMonth:311},
+ {label:"Service TGL %",sub:"Turnover estimates ÷ service visits",bigsub:"of service visits, July 2026",color:"#a371f7",fmt:"pct",actual:12.84,lastYear:8.55,priorMonth:12.54},
+ {label:"Install Revenue",sub:"Completed income · HVAC + Fireplace install",bigsub:"completed in July 2026",color:"#4c8dff",fmt:"money",actual:925618,goal:879002,lastYear:871195,priorMonth:933220},
+ {label:"Electrical Revenue",sub:"Completed income · Electrical business units",bigsub:"completed in July 2026",color:"#f5c451",fmt:"money",actual:13928,budget:23269,lastYear:27407,priorMonth:61021},
+ {label:"Plumbing Revenue",sub:"Completed income · Plumbing business units",bigsub:"completed in July 2026",color:"#f8736a",fmt:"money",actual:36661,lastYear:0,priorMonth:25824}
+];
 const order = ["revenue","sales","tgl"];
 document.getElementById("cards").innerHTML = order.map(key=>{
   const m=DATA.metrics[key];
@@ -161,6 +176,26 @@ document.getElementById("cards").innerHTML = order.map(key=>{
     </div>
   </div>`;
 }).join("");
+
+function xVal(m){return m.fmt==="pct"?m.actual.toFixed(1)+"%":m.fmt==="num"?m.actual.toLocaleString():usd0(m.actual);}
+function xNum(m,v){return m.fmt==="num"?v.toLocaleString():m.fmt==="pct"?v.toFixed(1)+"%":usd0(v);}
+function xStat(t,cls,v,s){return `<div class="stat"><div class="t">${t}</div><div class="v ${cls}">${v}</div><div class="s">${s}</div></div>`;}
+function xTiles(m){let t="";
+  if(m.goal!=null){const gp=m.actual/m.goal*100;t+=xStat("vs Goal",attClass(gp),gp.toFixed(1)+"%",xNum(m,m.goal));}
+  if(m.budget!=null){const bp=m.actual/m.budget*100;t+=xStat("vs Budget",attClass(bp),bp.toFixed(1)+"%",xNum(m,m.budget));}
+  if(m.fmt==="pct"){const d=m.actual-m.lastYear;t+=xStat("vs Last Year",signClass(d),arrow(d)+" "+Math.abs(d).toFixed(1)+" pts","Jul '25 · "+m.lastYear.toFixed(1)+"%");}
+  else{if(m.lastYear){const ly=(m.actual-m.lastYear)/m.lastYear*100;t+=xStat("vs Last Year",signClass(ly),arrow(ly)+" "+Math.abs(ly).toFixed(1)+"%","Jul '25 · "+xNum(m,m.lastYear));}else{t+=xStat("vs Last Year","","—","no Jul '25 activity");}}
+  if(m.fmt==="pct"){const d=m.actual-m.priorMonth;t+=xStat("vs Prior Month",signClass(d),arrow(d)+" "+Math.abs(d).toFixed(1)+" pts","Jun '26 · "+m.priorMonth.toFixed(1)+"%");}
+  else{if(m.priorMonth){const mm=(m.actual-m.priorMonth)/m.priorMonth*100;t+=xStat("vs Prior Month",signClass(mm),arrow(mm)+" "+Math.abs(mm).toFixed(1)+"%","Jun '26 · "+xNum(m,m.priorMonth));}else{t+=xStat("vs Prior Month","","—","—");}}
+  return t;}
+document.getElementById("cards2").innerHTML = DATA.extra.map(m=>`<div class="mcard">
+    <div class="accentbar" style="background:${m.color}"></div>
+    <div class="lbl" style="color:${m.color}">${m.label}</div>
+    <div class="msub">${m.sub}</div>
+    <div class="big">${xVal(m)}</div>
+    <div class="bigsub">${m.bigsub}</div>
+    <div class="grid2">${xTiles(m)}</div>
+  </div>`).join("");
 
 document.getElementById("att").innerHTML = order.map(key=>{
   const m=DATA.metrics[key];
