@@ -1,0 +1,198 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Meeting</title>
+<style>
+ :root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a}
+ *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ .wrap{max-width:1280px;margin:0 auto;padding:22px 22px 72px}
+ h1{margin:0;font-size:27px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:9px;vertical-align:middle}
+ .sub{color:var(--dim);font-size:13.5px;margin-top:4px}
+ /* toggle */
+ .toprow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:18px 0 6px}
+ .seg{display:inline-flex;background:var(--panel);border:1px solid var(--edge);border-radius:11px;padding:4px}
+ .seg button{background:transparent;border:0;color:var(--dim);font:600 14px inherit;padding:9px 18px;border-radius:8px;cursor:pointer}
+ .seg button.on{background:var(--accent);color:#fff}
+ .prange{color:var(--muted);font-size:13px}
+ /* company strip */
+ .company{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:14px;padding:16px 18px;margin-top:12px}
+ .company .ttl{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+ .cgrid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;gap:14px;margin-top:8px;align-items:end}
+ .cbig .n{font-size:38px;font-weight:780;line-height:1}.cbig .l{font-size:12px;color:var(--dim);margin-top:4px}
+ .cstat .l{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+ .cstat .v{font-size:22px;font-weight:730;margin-top:3px}.cstat .t{font-size:12.5px;color:var(--dim);margin-top:2px}
+ /* section cards */
+ .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+ .card{background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:16px 18px}
+ .card h3{margin:0 0 2px;font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.4px}
+ .card .src{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+ .card .big{font-size:34px;font-weight:770;line-height:1}
+ .stiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:14px}
+ .stiles.two{grid-template-columns:1fr 1fr}
+ .tile{background:var(--panel2);border:1px solid var(--edge);border-radius:10px;padding:10px 12px}
+ .tile .l{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+ .tile .v{font-size:19px;font-weight:730;margin-top:3px}.tile .t{font-size:12px;color:var(--dim);margin-top:2px}
+ .bar{margin-top:14px}.track{height:14px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;position:relative;overflow:visible}
+ .fill{height:100%;border-radius:8px}.gmark{position:absolute;top:-3px;width:2px;height:20px;background:var(--ink)}
+ .g{color:var(--good)}.y{color:var(--warn)}.r{color:var(--bad)}
+ .bg{background:var(--good)}.by{background:var(--warn)}.br{background:var(--bad)}
+ /* focus & ops */
+ .sechead{margin:26px 0 10px;font-size:14px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;border-top:1px solid var(--edge);padding-top:18px}
+ .focus{background:linear-gradient(160deg,#17202b,#141a22);border:1px solid var(--edge);border-radius:14px;padding:16px 18px}
+ .focus .fh{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+ .focus .fm{font-size:18px;font-weight:740}.focus .fsub{color:var(--muted);font-size:12.5px}
+ .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+ .fitem{background:var(--panel);border:1px solid var(--edge);border-radius:10px;padding:12px 14px}
+ .fitem .fn{font-weight:720;font-size:15px}.fitem .fd{color:var(--dim);font-size:12.5px;margin-top:3px}
+ .chip{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:3px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+ .chip.focus-chip{background:rgba(76,141,255,.16);color:#8fb6ff;border:1px solid rgba(76,141,255,.4)}
+ .chip.tbd{background:var(--panel2);color:var(--muted);border:1px solid var(--edge)}
+ .ph{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:14px}
+ .phcard{background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:16px 18px;min-height:150px}
+ .phcard h4{margin:0;font-size:15px;font-weight:730}
+ .phcard .st{font-size:11px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:.4px}
+ .phcard .willshow{color:var(--dim);font-size:13px;margin-top:8px;line-height:1.5}
+ .phcard .need{color:var(--muted);font-size:12px;margin-top:10px;border-top:1px dashed var(--edge);padding-top:9px}
+ .note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.6}
+ @media(max-width:900px){.cgrid,.cards,.ph,.frow{grid-template-columns:1fr 1fr}.cbig{grid-column:1/-1}}
+ @media(max-width:620px){.cgrid,.cards,.ph,.frow,.stiles,.stiles.two{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+ <h1><span class="dot"></span>Install Meeting</h1>
+ <div class="sub" id="sub">Company revenue, install revenue &amp; sales — actual vs goal, budget and last year</div>
+
+ <div class="toprow">
+   <div class="seg" id="seg">
+     <button data-p="MTD">MTD</button>
+     <button data-p="LM">Last Month</button>
+     <button data-p="YTD">YTD</button>
+   </div>
+   <span class="prange" id="prange"></span>
+ </div>
+
+ <!-- COMPANY STRIP -->
+ <div class="company">
+   <div class="ttl">Company · all business units</div>
+   <div class="cgrid" id="cgrid"></div>
+ </div>
+
+ <!-- INSTALL + SALES -->
+ <div class="cards" id="cards"></div>
+
+ <!-- FOCUS & OPERATIONS -->
+ <div class="sechead">Focus &amp; operations</div>
+ <!--FOCUS_START-->
+ <div class="focus" id="focusband">
+   <div class="fh">
+     <div class="fm">This month's focus <span id="fmonth" style="color:var(--muted);font-weight:600"></span></div>
+     <div class="fsub">Updated each month · owner &amp; measure to be filled in</div>
+   </div>
+   <div class="frow">
+     <div class="fitem"><div class="fn">First Time Complete <span class="chip focus-chip">This month</span></div><div class="fd">Owner: <b style="color:var(--dim)">TBD</b> &nbsp;·&nbsp; Measure: <b style="color:var(--dim)">TBD</b></div></div>
+     <div class="fitem"><div class="fn">Install Checklist <span class="chip focus-chip">This month</span></div><div class="fd">Owner: <b style="color:var(--dim)">TBD</b> &nbsp;·&nbsp; Measure: <b style="color:var(--dim)">TBD</b></div></div>
+   </div>
+ </div>
+ <!--FOCUS_END-->
+
+ <div class="ph">
+   <div class="phcard">
+     <h4>NPS Score <span class="chip tbd">Placeholder</span></h4>
+     <div class="st">Not yet wired</div>
+     <div class="willshow">Will show current NPS, trend vs prior months, and response count.</div>
+     <div class="need">Needs source: <b>NPS Use.xlsx</b> or <b>NPS Tech.xlsx</b> — confirm which.</div>
+   </div>
+   <div class="phcard">
+     <h4>First Time Complete <span class="chip focus-chip">This month's focus</span></h4>
+     <div class="st">Not yet wired</div>
+     <div class="willshow">Will show % of install jobs completed on the first trip, by business unit and by crew, with return-trip count.</div>
+     <div class="need">Needs: definition of a return trip, and where completion is recorded.</div>
+   </div>
+   <div class="phcard">
+     <h4>Install Checklist <span class="chip focus-chip">This month's focus</span></h4>
+     <div class="st">Not yet wired</div>
+     <div class="willshow">Will show checklist-completion rate per install job and the misses by item.</div>
+     <div class="need">Needs source: ServiceTitan forms or a separate tracker — confirm where it lives.</div>
+   </div>
+ </div>
+
+ <div class="note" id="note"></div>
+</div>
+
+<script>
+const DATA=/*DATA_START*/{"asOf":"2026-08-23","periods":{
+ "MTD":{"label":"MTD","range":"Aug 1 – 23, 2026",
+   "company":{"actual":613166,"goal":696429,"budget":651901,"ly":674480},
+   "install":{"actual":482892,"goal":562953,"ly":539885},
+   "sales":{"actual":769268,"goal":600000,"ly":520338}},
+ "LM":{"label":"Last Month","range":"July 2026",
+   "company":{"actual":1120029,"goal":1092226,"budget":1050217,"ly":1039138},
+   "install":{"actual":925618,"goal":879002,"ly":871195},
+   "sales":{"actual":952536,"goal":901259,"ly":729569}},
+ "YTD":{"label":"YTD","range":"Jan 1 – Aug 23, 2026",
+   "company":{"actual":7291737,"goal":7396504,"budget":6861596,"ly":6636514},
+   "install":{"actual":5570402,"goal":5812727,"ly":5091080},
+   "sales":{"actual":5960048,"goal":6302161,"ly":4897062}}
+}}/*DATA_END*/;
+const STAMP="/*STAMP_START*/actuals through Aug 23, 2026/*STAMP_END*/";
+
+const usd=v=>"$"+Math.round(v).toLocaleString();
+const usdK=v=>{const a=Math.abs(v);if(a>=1e6)return "$"+(v/1e6).toFixed(2)+"M";if(a>=1e3)return "$"+Math.round(v/1e3)+"K";return "$"+Math.round(v);};
+const signd=v=>(v>=0?"+":"−")+usdK(Math.abs(v));
+const pct=(a,b)=>b?a/b*100:null;
+const attClass=p=>p==null?"":p>=100?"g":p>=95?"y":"r";
+const yoyClass=v=>v>=0?"g":"r";
+
+let cur="MTD";
+function render(){
+ const P=DATA.periods[cur];
+ document.getElementById("prange").textContent=P.range;
+ // company strip
+ const c=P.company;
+ const gGap=c.actual-c.goal, gP=pct(c.actual,c.goal);
+ const bGap=c.actual-c.budget, bP=pct(c.actual,c.budget);
+ const lyY=(c.actual-c.ly)/c.ly*100;
+ const share=c.actual? P.install.actual/c.actual*100 : null;
+ document.getElementById("cgrid").innerHTML=
+  `<div class="cbig"><div class="n">${usdK(c.actual)}</div><div class="l">Company revenue · ${P.label}</div></div>`+
+  tile("vs Goal", (gP!=null?gP.toFixed(0)+"%":"—"), signd(gGap)+" · goal "+usdK(c.goal), attClass(gP))+
+  tile("vs Budget",(bP!=null?bP.toFixed(0)+"%":"—"), signd(bGap)+" · budget "+usdK(c.budget), attClass(bP))+
+  tile("vs Last Yr",(lyY>=0?"▲":"▼")+" "+Math.abs(lyY).toFixed(1)+"%", "LY "+usdK(c.ly), yoyClass(lyY))+
+  tile("Install share",(share!=null?share.toFixed(1)+"%":"—"),"of company revenue","");
+ // install + sales cards
+ document.getElementById("cards").innerHTML=
+   streamCard("Install revenue","Completed income · HVAC + Fireplace install BUs",P.install,true)+
+   streamCard("Sales","Sold estimates · HVAC + Fireplace sales BUs",P.sales,false);
+ // seg active
+ [...document.querySelectorAll('#seg button')].forEach(b=>b.classList.toggle('on',b.dataset.p===cur));
+}
+function tile(l,v,t,cls){return `<div class="cstat"><div class="l">${l}</div><div class="v ${cls}">${v}</div><div class="t">${t}</div></div>`;}
+function streamCard(title,src,s,withBar){
+ const gGap=s.actual-s.goal, gP=pct(s.actual,s.goal);
+ const lyY=(s.actual-s.ly)/s.ly*100;
+ let bar="";
+ if(withBar){
+   const w=Math.max(3,Math.min(100,gP)); const gpos=100; // goal at 100%
+   const over=gP>100; const fillW=over?100:w;
+   bar=`<div class="bar"><div class="track"><div class="fill ${'b'+attClass(gP)}" style="width:${fillW}%"></div><div class="gmark" style="left:100%" title="Goal ${usd(s.goal)}"></div></div>
+        <div class="t" style="font-size:12px;color:var(--dim);margin-top:6px">${gP.toFixed(0)}% of goal &nbsp;·&nbsp; goal ${usdK(s.goal)}</div></div>`;
+ }
+ return `<div class="card"><h3>${title}</h3><div class="src">${src}</div>
+   <div class="big">${usdK(s.actual)}</div>
+   <div class="stiles two">
+     ${tileB("vs Goal",(gP!=null?gP.toFixed(0)+"%":"—"),signd(gGap),attClass(gP))}
+     ${tileB("vs Last Yr",(lyY>=0?"▲":"▼")+" "+Math.abs(lyY).toFixed(1)+"%","LY "+usdK(s.ly),yoyClass(lyY))}
+   </div>${bar}</div>`;
+}
+function tileB(l,v,t,cls){return `<div class="tile"><div class="l">${l}</div><div class="v ${cls}">${v}</div><div class="t">${t}</div></div>`;}
+
+document.getElementById("seg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;cur=b.dataset.p;render();});
+// focus band month label + as-of note
+(function(){
+ const d=new Date(DATA.asOf+"T00:00:00");
+ const mo=d.toLocaleDateString(undefined,{month:"long",year:"numeric"});
+ document.getElementById("fmonth").textContent="· "+mo;
+ document.getElementById("note").innerHTML=
+  "<b>Sources:</b> PBI Completed YTD 4dx.xlsx (Income by Completion Date), Sales4dx.xlsx (Estimates Subtotal by Sold On), CBD 2026 Revenue Budget.xlsx (Daily Goals). "+
+  "Company = all business units. Install = completed income for business units whose name contains “Install” and starts with HVAC or Fireplace (resi + commercial); no separate install budget line. "+
+  "Sales = HVAC + Fireplace sold estimates across all sales BU names. Each period's goal, budget and last-year are summed over the same days as the actuals ("+STAMP+"). "+
+  "MTD and YTD run through Aug 23; Last Month = full July 2026.";
+})();
+render();
+</script></body></html>
