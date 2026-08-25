@@ -116,21 +116,8 @@
 </div>
 
 <script>
-const DATA=/*DATA_START*/{"asOf":"2026-08-23","periods":{
- "MTD":{"label":"MTD","range":"Aug 1 – 23, 2026",
-   "company":{"actual":613166,"goal":696429,"budget":651901,"ly":674480},
-   "install":{"actual":482892,"goal":562953,"ly":539885},
-   "sales":{"actual":769268,"goal":600000,"ly":520338}},
- "LM":{"label":"Last Month","range":"July 2026",
-   "company":{"actual":1120029,"goal":1092226,"budget":1050217,"ly":1039138},
-   "install":{"actual":925618,"goal":879002,"ly":871195},
-   "sales":{"actual":952536,"goal":901259,"ly":729569}},
- "YTD":{"label":"YTD","range":"Jan 1 – Aug 23, 2026",
-   "company":{"actual":7291737,"goal":7396504,"budget":6861596,"ly":6636514},
-   "install":{"actual":5570402,"goal":5812727,"ly":5091080},
-   "sales":{"actual":5960048,"goal":6302161,"ly":4897062}}
-}}/*DATA_END*/;
-const STAMP="/*STAMP_START*/actuals through Aug 23, 2026/*STAMP_END*/";
+const DATA=/*DATA_START*/{"asOf":"2026-08-24","periods":{"MTD":{"label":"MTD","range":"Aug 1 – 24, 2026","company":{"actual":645030,"goal":742857,"budget":695361,"ly":674480},"install":{"actual":510980,"goal":600483,"ly":539885},"sales":{"actual":790488,"goal":640000,"ly":520338}},"LM":{"label":"Last Month","range":"July 2026","company":{"actual":1120029,"goal":1092226,"budget":1050217,"ly":1039138},"install":{"actual":925618,"goal":879002,"ly":871195},"sales":{"actual":952536,"goal":901259,"ly":729569}},"YTD":{"label":"YTD","range":"Jan 1 – Aug 24, 2026","company":{"actual":7323601,"goal":7442932,"budget":6905057,"ly":6636514},"install":{"actual":5598490,"goal":5850258,"ly":5091080},"sales":{"actual":5981268,"goal":6342161,"ly":4897062}}}}/*DATA_END*/;
+const STAMP="/*STAMP_START*/actuals through Aug 24, 2026/*STAMP_END*/";
 
 const usd=v=>"$"+Math.round(v).toLocaleString();
 const usdK=v=>{const a=Math.abs(v);if(a>=1e6)return "$"+(v/1e6).toFixed(2)+"M";if(a>=1e3)return "$"+Math.round(v/1e3)+"K";return "$"+Math.round(v);};
