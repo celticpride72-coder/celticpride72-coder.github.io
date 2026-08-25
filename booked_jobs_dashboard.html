@@ -1,530 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Booked Jobs Dashboard — Comfort By Design</title>
-<script>
-// Resilient Chart.js loader: tries multiple CDNs in order. A single CDN outage or a
-// retired version can no longer take down the page.
-window.__chartSources = [
-  "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js",
-  "https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js",
-  "https://unpkg.com/chart.js@4/dist/chart.umd.min.js"
-];
-window.loadChartJs = function(){
-  return new Promise(function(resolve, reject){
-    var i = 0;
-    (function next(){
-      if (typeof window.Chart !== 'undefined') return resolve();
-      if (i >= window.__chartSources.length) return reject(new Error('Chart.js unavailable from all sources'));
-      var s = document.createElement('script');
-      s.src = window.__chartSources[i++];
-      s.onload = function(){ (typeof window.Chart !== 'undefined') ? resolve() : next(); };
-      s.onerror = next;
-      document.head.appendChild(s);
-    })();
-  });
-};
-</script>
 <style>
-  :root{
-    --orange:#f97316;
-    --orange-dark:#c2540a;
-    --green:#16a34a;
-    --amber:#f59e0b;
-    --red:#dc2626;
-    --gray:#94a3b8;
-    --bg:#0f1115;
-    --panel:#181b22;
-    --panel-2:#1f232c;
-    --border:#2a2f3a;
-    --text:#e8eaed;
-    --text-dim:#9aa1ac;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    padding:28px;
-  }
-  h1{font-size:22px;margin:0 0 4px 0;}
-  .subtitle{color:var(--text-dim);font-size:13px;margin-bottom:24px;}
-  .subtitle b{color:var(--orange);}
-  .panel{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:20px;
-    margin-bottom:20px;
-  }
-  .panel h2{
-    font-size:13px;
-    text-transform:uppercase;
-    letter-spacing:.06em;
-    color:var(--text-dim);
-    margin:0 0 16px 0;
-  }
-  /* HERO */
-  .hero{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:center;}
-  @media (max-width:900px){.hero{grid-template-columns:1fr;}}
-  .hero-weekday{font-size:15px;color:var(--orange);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
-  .hero-number{font-size:78px;font-weight:800;line-height:1;margin:6px 0;}
-  .hero-date{color:var(--text-dim);font-size:14px;margin-bottom:14px;}
-  .chips{display:flex;gap:10px;flex-wrap:wrap;}
-  .chip{
-    padding:7px 12px;
-    border-radius:999px;
-    font-size:13px;
-    font-weight:600;
-    border:1px solid var(--border);
-    background:var(--panel-2);
-  }
-  .chip.green{color:var(--green);border-color:rgba(22,163,74,.4);background:rgba(22,163,74,.1);}
-  .chip.amber{color:var(--amber);border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.1);}
-  .chip.red{color:var(--red);border-color:rgba(220,38,38,.4);background:rgba(220,38,38,.1);}
-  .chip.gray{color:var(--gray);}
-  .spark-wrap{position:relative;height:200px;}
-  /* KPI CARDS */
-  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-  @media (max-width:800px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
-  .kpi-card{
-    background:var(--panel-2);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:16px;
-  }
-  .kpi-label{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
-  .kpi-value{font-size:32px;font-weight:800;margin-bottom:10px;}
-  .kpi-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-top:4px;}
-  .kpi-row span.val{font-weight:700;}
-  .g-green{color:var(--green);} .g-amber{color:var(--amber);} .g-red{color:var(--red);} .g-gray{color:var(--gray);}
-  /* ROLLING */
-  .rolling-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-  @media (max-width:800px){.rolling-grid{grid-template-columns:repeat(2,1fr);}}
-  .roll-card{background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
-  .roll-title{font-size:12px;color:var(--text-dim);margin-bottom:6px;}
-  .roll-value{font-size:24px;font-weight:800;margin-bottom:6px;}
-  .roll-sub{font-size:12px;}
-  /* ATTAINMENT BARS */
-  .attain-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
-  .attain-label{width:60px;font-size:13px;color:var(--text-dim);font-weight:600;}
-  .attain-track{flex:1;height:22px;background:var(--panel-2);border-radius:6px;position:relative;overflow:visible;border:1px solid var(--border);}
-  .attain-fill{height:100%;border-radius:6px;}
-  .attain-marker{position:absolute;top:-4px;bottom:-4px;width:2px;background:#fff;opacity:.85;}
-  .attain-pct{width:130px;font-size:13px;font-weight:700;text-align:right;}
-  /* WEEK STRIP */
-  .week-strip{display:flex;gap:10px;}
-  .week-day{flex:1;background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px 8px;text-align:center;}
-  .week-day .wd-name{font-size:11px;color:var(--text-dim);text-transform:uppercase;margin-bottom:6px;}
-  .week-day .wd-count{font-size:22px;font-weight:800;}
-  .week-day .wd-goal{font-size:11px;color:var(--text-dim);margin-top:4px;}
-  canvas{max-width:100%;}
-  /* CHART FALLBACK */
-  .chart-fallback{
-    display:none;
-    color:var(--amber);
-    font-size:12.5px;
-    background:rgba(245,158,11,.08);
-    border:1px solid rgba(245,158,11,.35);
-    border-radius:8px;
-    padding:10px 12px;
-  }
-  .month-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:12px;display:none;}
-  .month-table th{text-align:left;color:var(--text-dim);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--border);}
-  .month-table td{padding:6px 8px;border-bottom:1px solid var(--border);}
-  footer{color:var(--text-dim);font-size:11.5px;line-height:1.7;border-top:1px solid var(--border);padding-top:14px;margin-top:8px;}
-  footer b{color:var(--text);}
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#262d3a;
+  --txt:#e6edf3; --mut:#8b949e; --dim:#6e7681;
+  --accent:#ff8a3d; --accent2:#ffb27a;
+  --green:#3fb950; --amber:#d29922; --red:#f85149;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;padding:26px 22px 50px}
+.wrap{max-width:1240px;margin:0 auto}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  border-bottom:2px solid var(--accent);padding-bottom:14px;margin-bottom:22px}
+header.top h1{margin:0;font-size:25px;letter-spacing:.4px;font-weight:650}
+header.top h1 span{color:var(--accent)}
+.sub{color:var(--mut);font-size:12.5px;margin-top:5px}
+.asof{text-align:right;font-size:12px;color:var(--mut);line-height:1.7}
+.asof b{color:var(--txt)}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:20px}
+.panel h2{margin:0 0 4px;font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);font-weight:650}
+.panel .note{font-size:11.5px;color:var(--dim);margin:0 0 14px}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:minmax(300px,400px) 1fr;gap:26px;align-items:center;
+  background:linear-gradient(135deg,#1a2130 0%,#161b22 55%);border:1px solid #33405a;
+  border-left:5px solid var(--accent);border-radius:14px;padding:22px 24px;margin-bottom:22px}
+.hero-l .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero-l .dow{font-size:27px;font-weight:600;margin-top:4px;letter-spacing:.3px}
+.hero-l .big{font-size:80px;line-height:.95;font-weight:750;margin:6px 0 2px;letter-spacing:-2px}
+.hero-l .full{font-size:13px;color:var(--mut);margin-bottom:14px}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 13px;min-width:132px}
+.chip .k{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim)}
+.chip .v{font-size:19px;font-weight:700;margin-top:2px}
+.chip .s{font-size:11px;color:var(--mut);margin-top:1px}
+.hero-r{min-width:0}
+.hero-r .cap{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--accent);
+  border-radius:11px;padding:15px 16px}
+.kpi .lbl{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--mut);font-weight:600}
+.kpi .rng{font-size:10.5px;color:var(--dim);margin-top:2px}
+.kpi .num{font-size:38px;font-weight:730;margin:8px 0 10px;letter-spacing:-1px}
+.kpi .row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-top:1px solid var(--line)}
+.kpi .row span:first-child{color:var(--mut)}
+.kpi .row b{font-weight:700}
+
+/* ROLLING */
+.roll{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.rc{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.rc .lbl{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--mut);font-weight:600}
+.rc .num{font-size:30px;font-weight:720;margin:6px 0 8px}
+.rc .row{display:flex;justify-content:space-between;font-size:11.5px;padding:2px 0}
+.rc .row span:first-child{color:var(--dim)}
+
+.g{color:var(--green)} .a{color:var(--amber)} .r{color:var(--red)} .n{color:var(--dim)}
+
+/* week strip */
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}
+.wd{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:11px 8px;text-align:center}
+.wd.future{opacity:.35}
+.wd.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.wd .d{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut)}
+.wd .dt{font-size:10px;color:var(--dim)}
+.wd .c{font-size:25px;font-weight:720;margin:5px 0 2px}
+.wd .gl{font-size:10px;color:var(--dim)}
+
+footer{margin-top:26px;padding-top:15px;border-top:1px solid var(--line);
+  font-size:11.5px;color:var(--dim);line-height:1.85}
+footer b{color:var(--mut)}
+svg{display:block;width:100%;height:auto;overflow:visible}
+@media(max-width:960px){.kpis,.roll{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}.wk{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
-
-<h1>Booked Jobs Dashboard</h1>
-<div class="subtitle">Comfort By Design &middot; Data as of <b id="dataAsOfLabel"></b> &middot; Generated <b id="generatedLabel"></b></div>
-
-<!-- YESTERDAY HERO -->
-<div class="panel">
-  <div class="hero">
+<div class="wrap">
+  <header class="top">
     <div>
-      <div class="hero-weekday" id="yWeekday"></div>
-      <div class="hero-number" id="yNumber"></div>
-      <div class="hero-date" id="yDate"></div>
+      <h1>BOOKED <span>JOBS</span> DASHBOARD</h1>
+      <div class="sub">Count of booked jobs vs. Booked Jobs Goal and same period last year &nbsp;·&nbsp; Comfort By Design</div>
+    </div>
+    <div class="asof" id="asof"></div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-l">
+      <div class="tag">Yesterday</div>
+      <div class="dow" id="y-dow"></div>
+      <div class="big" id="y-big"></div>
+      <div class="full" id="y-full"></div>
       <div class="chips">
-        <div class="chip" id="yGoalChip"></div>
-        <div class="chip" id="yYoyChip"></div>
+        <div class="chip"><div class="k">vs Goal</div><div class="v" id="y-gp"></div><div class="s" id="y-gs"></div></div>
+        <div class="chip"><div class="k">vs Last Year</div><div class="v" id="y-yp"></div><div class="s" id="y-ys"></div></div>
       </div>
     </div>
-    <div>
-      <div class="spark-wrap"><canvas id="sparkChart"></canvas></div>
-      <div class="chart-fallback" id="sparkFallback"></div>
+    <div class="hero-r">
+      <div class="cap">Last 14 days &nbsp;·&nbsp; jobs booked per day</div>
+      <div id="spark"></div>
     </div>
   </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="panel">
+    <h2>Rolling Windows</h2>
+    <p class="note">Anchored at the last Created Date in the bookings file. Last-year window is shifted 364 days so weekdays align.</p>
+    <div class="roll" id="roll"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Attainment to Date</h2>
+    <p class="note">Bar fill = actual booked jobs. Marker = Booked Jobs Goal for the same elapsed period.</p>
+    <div id="attain"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Monthly Trend</h2>
+    <p class="note">Booked jobs by month. Dashed tick = 2026 Booked Jobs Goal for that month. Current month is hatched (partial).</p>
+    <div id="monthly"></div>
+  </div>
+
+  <div class="panel">
+    <h2>This Week <span style="color:var(--dim);font-weight:400;letter-spacing:0;text-transform:none">(Monday start)</span></h2>
+    <p class="note">Daily booked-job counts for the current week.</p>
+    <div class="wk" id="week"></div>
+  </div>
+
+  <footer id="foot"></footer>
 </div>
-
-<!-- KPI CARDS -->
-<div class="kpi-grid" id="kpiGrid"></div>
-
-<div style="height:20px;"></div>
-
-<!-- ROLLING WINDOWS -->
-<div class="panel">
-  <h2>Rolling Windows (ending yesterday)</h2>
-  <div class="rolling-grid" id="rollingGrid"></div>
-</div>
-
-<!-- ATTAINMENT TO DATE -->
-<div class="panel">
-  <h2>Attainment to Date</h2>
-  <div id="attainWrap"></div>
-</div>
-
-<!-- MONTHLY TREND -->
-<div class="panel">
-  <h2>Monthly Booked Jobs</h2>
-  <canvas id="monthlyChart" height="90"></canvas>
-  <div class="chart-fallback" id="monthlyFallback"></div>
-  <table class="month-table" id="monthTable"></table>
-</div>
-
-<!-- WEEK STRIP -->
-<div class="panel">
-  <h2>This Week (Monday start)</h2>
-  <div class="week-strip" id="weekStrip"></div>
-</div>
-
-<footer>
-  <b>Source:</b> Booking PBI 4DX.xlsx (Sheet1) — count of rows by <b>Created Date</b>. Goal source: CBD 2026 Revenue Budget.xlsx → Daily Goals → <b>Booked Jobs Goal</b>.<br>
-  <b>Yesterday</b> = the prior calendar day. Last-year comparisons use a 364-day shift so the weekday always matches.<br>
-  <b>Goal coverage:</b> the Booked Jobs Goal column is populated on business days only (Jan 2 – Aug 31, 2026). Weekends, holidays, and unbudgeted months show no goal marker rather than a zero.
-</footer>
 
 <script>
-const DATA = {"todayStr": "2026-08-24", "yesterdayStr": "2026-08-23", "dataAsOfStr": "2026-08-23", "yesterdayLagsData": false, "yesterday": {"date": "2026-08-23", "weekday": "Sunday", "actual": 2, "goal": null, "lastYear": 1, "lastYearDate": "2025-08-24", "lastYearWeekday": "Sunday", "pctGoal": null, "pctYoY": 100}, "spark": [{"date": "2026-08-10", "weekday": "Monday", "count": 46, "goal": 41.78095238095238}, {"date": "2026-08-11", "weekday": "Tuesday", "count": 37, "goal": 41.78095238095238}, {"date": "2026-08-12", "weekday": "Wednesday", "count": 34, "goal": 41.78095238095238}, {"date": "2026-08-13", "weekday": "Thursday", "count": 35, "goal": 41.78095238095238}, {"date": "2026-08-14", "weekday": "Friday", "count": 15, "goal": 41.78095238095238}, {"date": "2026-08-15", "weekday": "Saturday", "count": 8, "goal": null}, {"date": "2026-08-16", "weekday": "Sunday", "count": 4, "goal": null}, {"date": "2026-08-17", "weekday": "Monday", "count": 32, "goal": 41.78095238095238}, {"date": "2026-08-18", "weekday": "Tuesday", "count": 40, "goal": 41.78095238095238}, {"date": "2026-08-19", "weekday": "Wednesday", "count": 38, "goal": 41.78095238095238}, {"date": "2026-08-20", "weekday": "Thursday", "count": 19, "goal": 41.78095238095238}, {"date": "2026-08-21", "weekday": "Friday", "count": 37, "goal": 41.78095238095238}, {"date": "2026-08-22", "weekday": "Saturday", "count": 2, "goal": null}, {"date": "2026-08-23", "weekday": "Sunday", "count": 2, "goal": null}], "WTD": {"actual": 0, "goal": 0, "lastYear": 0, "pctGoal": null, "pctYoY": 0}, "MTD": {"actual": 593, "goal": 626.7142857142857, "lastYear": 644, "pctGoal": 94.62046956918168, "pctYoY": -7.919254658385093}, "QTD": {"actual": 1487, "goal": 1524.4442857142853, "lastYear": 1529, "pctGoal": 97.54374193500023, "pctYoY": -2.746893394375409}, "YTD": {"actual": 6683, "goal": 6502.764285714288, "lastYear": 6283, "pctGoal": 102.7716784180793, "pctYoY": 6.3663854846410945}, "rolling": {"r30": {"actual": 789, "goal": 830.7438311688312, "lastYear": 857, "pctGoal": 94.97512595307522, "pctYoY": -7.934655775962661}, "r60": {"actual": 1658, "goal": 1687.6679220779215, "lastYear": 1642, "pctGoal": 98.24207584384294, "pctYoY": 0.9744214372716199}, "r90": {"actual": 2648, "goal": 2588.0242857142866, "lastYear": 2520, "pctGoal": 102.31743243743017, "pctYoY": 5.079365079365079}, "r180": {"actual": 4937, "goal": 4850.364285714283, "lastYear": 4715, "pctGoal": 101.78616922734822, "pctYoY": 4.7083775185577945}}, "monthly": {"2025-01": 918, "2025-02": 792, "2025-03": 702, "2025-04": 720, "2025-05": 775, "2025-06": 847, "2025-07": 885, "2025-08": 820, "2025-09": 996, "2025-10": 1386, "2025-11": 1079, "2025-12": 1088, "2026-01": 1157, "2026-02": 675, "2026-03": 769, "2026-04": 880, "2026-05": 820, "2026-06": 895, "2026-07": 894, "2026-08": 593}, "monthlyGoal": {"2026-01": 945.5399999999995, "2026-02": 831.6000000000001, "2026-03": 737.1, "2026-04": 737.1, "2026-05": 829.2499999999998, "2026-06": 897.7299999999996, "2026-07": 897.7299999999996, "2026-08": 877.4}, "weekDaily": [{"date": "2026-08-24", "weekday": "Monday", "count": 0, "goal": 41.78095238095238}], "currentMonth": "2026-08"};
+const DATA = {
+  today: "2026-08-25",
+  dataAsOf: "2026-08-24",
+  dataFrom: "2025-01-01",
+  totalRows: 17726,
+  goalRange: ["2026-01-02","2026-08-31"],
+  yesterday: {date:"2026-08-24", dow:1, actual:35, goal:41.78095238095238, lastYear:49, lyDate:"2025-08-25", awaiting:false},
+  spark: [
+    {date:"2026-08-11",count:37,goal:41.78095238095238,dow:2},
+    {date:"2026-08-12",count:34,goal:41.78095238095238,dow:3},
+    {date:"2026-08-13",count:35,goal:41.78095238095238,dow:4},
+    {date:"2026-08-14",count:15,goal:41.78095238095238,dow:5},
+    {date:"2026-08-15",count:8,goal:null,dow:6},
+    {date:"2026-08-16",count:4,goal:null,dow:0},
+    {date:"2026-08-17",count:32,goal:41.78095238095238,dow:1},
+    {date:"2026-08-18",count:40,goal:41.78095238095238,dow:2},
+    {date:"2026-08-19",count:38,goal:41.78095238095238,dow:3},
+    {date:"2026-08-20",count:19,goal:41.78095238095238,dow:4},
+    {date:"2026-08-21",count:37,goal:41.78095238095238,dow:5},
+    {date:"2026-08-22",count:2,goal:null,dow:6},
+    {date:"2026-08-23",count:2,goal:null,dow:0},
+    {date:"2026-08-24",count:35,goal:41.78095238095238,dow:1}
+  ],
+  periods: {
+    WTD:{actual:35, goal:41.78095238095238, lastYear:49, start:"2026-08-24"},
+    MTD:{actual:628, goal:668.495238095238, lastYear:645, start:"2026-08-01"},
+    QTD:{actual:1522, goal:1566.2252380952377, lastYear:1530, start:"2026-07-01"},
+    YTD:{actual:6718, goal:6544.54523809524, lastYear:6284, start:"2026-01-01"}
+  },
+  rolling: {
+    R30:{actual:815, goal:872.5247835497836, lastYear:901, start:"2026-07-26"},
+    R60:{actual:1664, goal:1688.6429653679647, lastYear:1658, start:"2026-06-26"},
+    R90:{actual:2605, goal:2588.342738095239, lastYear:2530, start:"2026-05-27"},
+    R180:{actual:4944, goal:4850.565238095235, lastYear:4744, start:"2026-02-26"}
+  },
+  monthly: {"2025-01":918,"2025-02":792,"2025-03":702,"2025-04":720,"2025-05":775,"2025-06":847,"2025-07":885,"2025-08":820,"2025-09":996,"2025-10":1386,"2025-11":1079,"2025-12":1088,"2026-01":1157,"2026-02":675,"2026-03":769,"2026-04":880,"2026-05":820,"2026-06":895,"2026-07":894,"2026-08":628},
+  monthlyGoal: {"2026-01":945.54,"2026-02":831.6,"2026-03":737.1,"2026-04":737.1,"2026-05":829.25,"2026-06":897.73,"2026-07":897.73,"2026-08":877.4},
+  weekDaily: [
+    {date:"2026-08-24",count:35,goal:41.78095238095238,dow:1},
+    {date:"2026-08-25",count:0,goal:41.78095238095238,dow:2}
+  ]
+};
 
-const COLOR = { orange:"#f97316", orangeDark:"#c2540a", green:"#16a34a", amber:"#f59e0b", red:"#dc2626", gray:"#94a3b8" };
+const DOW=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DOW3=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const pd = s => { const p=s.split('-').map(Number); return new Date(p[0],p[1]-1,p[2]); };
+const nf = n => Math.round(n).toLocaleString('en-US');
+const fullDate = s => { const d=pd(s); return DOW[d.getDay()]+', '+MON[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear(); };
+const shortDate = s => { const d=pd(s); return MON[d.getMonth()]+' '+d.getDate(); };
+const attCls = p => p==null?'n':(p>=100?'g':(p>=95?'a':'r'));
+const yoyCls = p => p==null?'n':(p>=0?'g':'r');
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const pct = (a,b) => (b==null||b===0)?null:(a/b*100);
+const yoy = (a,b) => (b==null||b===0)?null:((a-b)/b*100);
+const fmtP = v => v==null?'—':(v>=0?'':'')+v.toFixed(1)+'%';
+const fmtSigned = v => v==null?'—':(v>=0?'+':'')+v.toFixed(1)+'%';
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
-function attainClass(pct){
-  if (pct === null || pct === undefined) return "gray";
-  if (pct >= 100) return "green";
-  if (pct >= 95) return "amber";
-  return "red";
-}
-function attainColor(pct){
-  const c = attainClass(pct);
-  return c==="green"?COLOR.green:c==="amber"?COLOR.amber:c==="red"?COLOR.red:COLOR.gray;
-}
-function yoyClass(pct){
-  if (pct === null || pct === undefined) return "gray";
-  return pct >= 0 ? "green" : "red";
-}
-function fmtPct(pct){ return pct===null||pct===undefined ? "—" : (pct>=0?"+":"") + pct.toFixed(1) + "%"; }
-function fmtNum(n){ return Math.round(n).toLocaleString(); }
-function fmtDate(s){
-  const [y,m,d] = s.split('-').map(Number);
-  const dt = new Date(y,m-1,d);
-  return dt.toLocaleDateString('en-US', {weekday:undefined, year:'numeric', month:'long', day:'numeric'});
-}
+/* ---------- header ---------- */
+document.getElementById('asof').innerHTML =
+  'Report date <b>'+fullDate(DATA.today)+'</b><br>'+
+  'Bookings data through <b>'+fullDate(DATA.dataAsOf)+'</b><br>'+
+  nf(DATA.totalRows)+' booked jobs since '+shortDate(DATA.dataFrom)+', '+pd(DATA.dataFrom).getFullYear();
 
-const periods = [ ["WTD","WTD"], ["MTD","MTD"], ["QTD","QTD"], ["YTD","YTD"] ];
+/* ---------- hero ---------- */
+(function(){
+  const y=DATA.yesterday;
+  const gp=pct(y.actual,y.goal), yp=yoy(y.actual,y.lastYear);
+  document.getElementById('y-dow').textContent = DOW[y.dow];
+  const big=document.getElementById('y-big');
+  big.textContent = y.awaiting ? '—' : nf(y.actual);
+  big.className='big '+(y.awaiting?'n':attCls(gp));
+  document.getElementById('y-full').innerHTML = fullDate(y.date) +
+    (y.awaiting ? ' &nbsp;·&nbsp; <span style="color:var(--amber)">awaiting data refresh</span>' : ' &nbsp;·&nbsp; jobs booked');
+  const gpEl=document.getElementById('y-gp');
+  if(y.goal==null){ gpEl.textContent='—'; gpEl.className='v n'; document.getElementById('y-gs').textContent='no goal set / non-business day'; }
+  else { gpEl.textContent=fmtP(gp); gpEl.className='v '+attCls(gp); document.getElementById('y-gs').textContent='goal '+gp0(y.goal); }
+  const ypEl=document.getElementById('y-yp');
+  ypEl.textContent=fmtSigned(yp); ypEl.className='v '+yoyCls(yp);
+  document.getElementById('y-ys').textContent='LY '+nf(y.lastYear)+' ('+shortDate(y.lyDate)+')';
+})();
+function gp0(v){ return v.toFixed(1); }
 
-/* ------------------------------------------------------------------
-   PASS 1 — all text/DOM sections. No dependency on Chart.js, so these
-   always render even if the charting library fails to load.
-   ------------------------------------------------------------------ */
-function renderStaticSections(){
-  // Header labels
-  document.getElementById('dataAsOfLabel').textContent = fmtDate(DATA.dataAsOfStr);
-  document.getElementById('generatedLabel').textContent = fmtDate(DATA.todayStr);
-
-  // HERO
-  const y = DATA.yesterday;
-  document.getElementById('yWeekday').textContent = y.weekday;
-  const yNumEl = document.getElementById('yNumber');
-  yNumEl.textContent = fmtNum(y.actual);
-  yNumEl.style.color = attainColor(y.pctGoal);
-  document.getElementById('yDate').textContent = fmtDate(y.date);
-
-  const yGoalChip = document.getElementById('yGoalChip');
-  if (y.goal === null || y.goal === undefined){
-    yGoalChip.textContent = "No goal set / non-business day";
-    yGoalChip.classList.add('gray');
-  } else {
-    yGoalChip.textContent = fmtPct(y.pctGoal) + " of goal (" + y.goal.toFixed(1) + ")";
-    yGoalChip.classList.add(attainClass(y.pctGoal));
+/* ---------- sparkline ---------- */
+(function(){
+  const S=DATA.spark, W=660,H=190, L=8,R=8,T=22,B=34;
+  const iw=W-L-R, ih=H-T-B, n=S.length, step=iw/n, bw=Math.min(30,step*0.62);
+  const goals=S.map(d=>d.goal).filter(v=>v!=null);
+  const avgGoal = goals.length? goals.reduce((a,b)=>a+b,0)/goals.length : null;
+  const mx = Math.max(...S.map(d=>d.count), avgGoal||0, 1)*1.18;
+  const acc=cssVar('--accent'), line=cssVar('--line'), mut=cssVar('--mut'), dim=cssVar('--dim');
+  let s='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
+  s+='<line x1="'+L+'" y1="'+(T+ih)+'" x2="'+(W-R)+'" y2="'+(T+ih)+'" stroke="'+line+'" stroke-width="1"/>';
+  S.forEach((d,i)=>{
+    const wknd = d.dow===0||d.dow===6;
+    const last = i===n-1;
+    const x=L+i*step+(step-bw)/2;
+    const h=Math.max(2,(d.count/mx)*ih), yv=T+ih-h;
+    s+='<rect x="'+x.toFixed(1)+'" y="'+yv.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+(last?acc:(wknd?'#2b3240':'#495a75'))+'"/>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(yv-5).toFixed(1)+'" text-anchor="middle" font-size="10.5" font-weight="'+(last?700:500)+'" fill="'+(last?acc:(wknd?dim:mut))+'">'+d.count+'</text>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(T+ih+14).toFixed(1)+'" text-anchor="middle" font-size="9" fill="'+(wknd?dim:mut)+'">'+DOW3[d.dow][0]+'</text>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(T+ih+26).toFixed(1)+'" text-anchor="middle" font-size="8.5" fill="'+dim+'">'+pd(d.date).getDate()+'</text>';
+  });
+  if(avgGoal!=null){
+    const gy=T+ih-(avgGoal/mx)*ih;
+    s+='<line x1="'+L+'" y1="'+gy.toFixed(1)+'" x2="'+(W-R-42)+'" y2="'+gy.toFixed(1)+'" stroke="'+cssVar('--amber')+'" stroke-width="1.4" stroke-dasharray="5 4" opacity=".85"/>';
+    s+='<text x="'+(W-R)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="9.5" fill="'+cssVar('--amber')+'">goal '+avgGoal.toFixed(1)+'</text>';
   }
-  const yYoyChip = document.getElementById('yYoyChip');
-  yYoyChip.textContent = fmtPct(y.pctYoY) + " vs last yr (" + y.lastYear + ")";
-  yYoyChip.classList.add(yoyClass(y.pctYoY));
+  s+='</svg>';
+  document.getElementById('spark').innerHTML=s;
+})();
 
-  // KPI CARDS
-  const kpiGrid = document.getElementById('kpiGrid');
-  kpiGrid.innerHTML = '';
-  periods.forEach(([key,label])=>{
-    const p = DATA[key];
-    const goalCls = attainClass(p.pctGoal);
-    const yoyCls = yoyClass(p.pctYoY);
-    const card = document.createElement('div');
-    card.className = 'kpi-card';
-    card.innerHTML = `
-      <div class="kpi-label">${label}</div>
-      <div class="kpi-value">${fmtNum(p.actual)}</div>
-      <div class="kpi-row"><span>vs Goal (${fmtNum(p.goal)})</span><span class="val g-${goalCls}">${fmtPct(p.pctGoal)}</span></div>
-      <div class="kpi-row"><span>vs Last Yr (${fmtNum(p.lastYear)})</span><span class="val g-${yoyCls}">${fmtPct(p.pctYoY)}</span></div>
-    `;
-    kpiGrid.appendChild(card);
-  });
+/* ---------- KPI cards ---------- */
+(function(){
+  const order=[['WTD','Week to date'],['MTD','Month to date'],['QTD','Quarter to date'],['YTD','Year to date']];
+  document.getElementById('kpis').innerHTML = order.map(([k,label])=>{
+    const p=DATA.periods[k];
+    const gp=pct(p.actual,p.goal), yp=yoy(p.actual,p.lastYear);
+    return '<div class="kpi">'+
+      '<div class="lbl">'+k+'</div>'+
+      '<div class="rng">'+label+' · from '+shortDate(p.start)+'</div>'+
+      '<div class="num">'+nf(p.actual)+'</div>'+
+      '<div class="row"><span>vs Goal</span><b class="'+attCls(gp)+'">'+fmtP(gp)+'</b></div>'+
+      '<div class="row"><span>Goal</span><b class="n">'+nf(p.goal)+'</b></div>'+
+      '<div class="row"><span>vs Last yr</span><b class="'+yoyCls(yp)+'">'+fmtSigned(yp)+'</b></div>'+
+      '<div class="row"><span>Last yr</span><b class="n">'+nf(p.lastYear)+'</b></div>'+
+    '</div>';
+  }).join('');
+})();
 
-  // ROLLING
-  const rollLabels = [["r30","Last 30"],["r60","Last 60"],["r90","Last 90"],["r180","Last 180"]];
-  const rollingGrid = document.getElementById('rollingGrid');
-  rollingGrid.innerHTML = '';
-  rollLabels.forEach(([key,label])=>{
-    const r = DATA.rolling[key];
-    const goalCls = attainClass(r.pctGoal);
-    const yoyCls = yoyClass(r.pctYoY);
-    const card = document.createElement('div');
-    card.className = 'roll-card';
-    card.innerHTML = `
-      <div class="roll-title">${label} Days</div>
-      <div class="roll-value">${fmtNum(r.actual)}</div>
-      <div class="roll-sub g-${goalCls}">${fmtPct(r.pctGoal)} of goal</div>
-      <div class="roll-sub g-${yoyCls}">${fmtPct(r.pctYoY)} YoY</div>
-    `;
-    rollingGrid.appendChild(card);
-  });
+/* ---------- rolling ---------- */
+(function(){
+  const order=[['R30','Last 30'],['R60','Last 60'],['R90','Last 90'],['R180','Last 180']];
+  document.getElementById('roll').innerHTML = order.map(([k,label])=>{
+    const p=DATA.rolling[k];
+    const gp=pct(p.actual,p.goal), yp=yoy(p.actual,p.lastYear);
+    return '<div class="rc">'+
+      '<div class="lbl">'+label+' days</div>'+
+      '<div class="num">'+nf(p.actual)+'</div>'+
+      '<div class="row"><span>vs Goal</span><b class="'+attCls(gp)+'">'+fmtP(gp)+'</b></div>'+
+      '<div class="row"><span>Goal</span><b class="n">'+nf(p.goal)+'</b></div>'+
+      '<div class="row"><span>vs Last yr</span><b class="'+yoyCls(yp)+'">'+fmtSigned(yp)+'</b></div>'+
+      '<div class="row"><span>Last yr</span><b class="n">'+nf(p.lastYear)+'</b></div>'+
+      '<div class="row"><span>From</span><b class="n">'+shortDate(p.start)+'</b></div>'+
+    '</div>';
+  }).join('');
+})();
 
-  // ATTAINMENT TO DATE
-  const attainWrap = document.getElementById('attainWrap');
-  attainWrap.innerHTML = '';
-  periods.forEach(([key,label])=>{
-    const p = DATA[key];
-    const pct = Math.min(p.pctGoal ?? 0, 140);
-    const cls = attainClass(p.pctGoal);
-    const row = document.createElement('div');
-    row.className = 'attain-row';
-    row.innerHTML = `
-      <div class="attain-label">${label}</div>
-      <div class="attain-track">
-        <div class="attain-fill" style="width:${Math.min(pct,100)}%; background:${attainColor(p.pctGoal)};"></div>
-        <div class="attain-marker" style="left:100%;" title="Goal"></div>
-      </div>
-      <div class="attain-pct g-${cls}">${fmtNum(p.actual)} / ${fmtNum(p.goal)} (${fmtPct(p.pctGoal)})</div>
-    `;
-    attainWrap.appendChild(row);
-  });
-
-  // WEEK STRIP
-  const weekStrip = document.getElementById('weekStrip');
-  weekStrip.innerHTML = '';
-  DATA.weekDaily.forEach(d=>{
-    const isToday = d.date === DATA.todayStr;
-    const div = document.createElement('div');
-    div.className = 'week-day';
-    if (isToday) div.style.borderColor = COLOR.orange;
-    div.innerHTML = `
-      <div class="wd-name">${d.weekday}${isToday?' (today)':''}</div>
-      <div class="wd-count" style="color:${isToday?COLOR.gray:attainColor(d.goal? d.count/d.goal*100 : null)}">${d.count}</div>
-      <div class="wd-goal">${d.goal!==null ? 'Goal ' + d.goal.toFixed(0) : 'No goal'}</div>
-    `;
-    weekStrip.appendChild(div);
-  });
-}
-
-const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const monthKeys = Object.keys(DATA.monthly).sort();
-const monthLabels = monthKeys.map(k=>{
-  const [yy,mm] = k.split('-');
-  return monthNames[parseInt(mm,10)-1] + " '" + yy.slice(2);
-});
-
-/* ------------------------------------------------------------------
-   PASS 2 — charts. Each is isolated so one failing cannot blank the
-   other, and neither can affect the sections rendered in pass 1.
-   ------------------------------------------------------------------ */
-function drawSparkline(){
-  const sparkCtx = document.getElementById('sparkChart').getContext('2d');
-  const sparkLabels = DATA.spark.map(d => {
-    const [yy,mm,dd] = d.date.split('-');
-    return mm + "/" + dd;
-  });
-  const sparkColors = DATA.spark.map((d)=>{
-    const isWeekend = d.weekday === 'Saturday' || d.weekday === 'Sunday';
-    if (d.date === DATA.yesterdayStr) return COLOR.orange;
-    if (isWeekend) return "#3a3f4a";
-    return "#5b6472";
-  });
-  const goals = DATA.spark.map(d=>d.goal).filter(g=>g!==null);
-  const avgGoal = goals.length ? goals.reduce((a,b)=>a+b,0)/goals.length : null;
-
-  const datasets = [{
-    label:'Booked Jobs',
-    data: DATA.spark.map(d=>d.count),
-    backgroundColor: sparkColors,
-    borderRadius:4,
-    order:2
-  }];
-  if (avgGoal !== null){
-    datasets.push({
-      label:'Avg Daily Goal',
-      type:'line',
-      data: DATA.spark.map(()=>avgGoal),
-      borderColor: COLOR.amber,
-      borderDash:[6,4],
-      borderWidth:2,
-      pointRadius:0,
-      fill:false,
-      order:1
-    });
-  }
-
-  new Chart(sparkCtx, {
-    type:'bar',
-    data:{ labels: sparkLabels, datasets: datasets },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{label:(ctx)=> ctx.dataset.label + ': ' + ctx.formattedValue}}
-      },
-      scales:{
-        x:{ ticks:{ color:'#9aa1ac', font:{size:10} }, grid:{ display:false } },
-        y:{ ticks:{ color:'#9aa1ac', font:{size:10} }, grid:{ color:'#2a2f3a' }, beginAtZero:true }
-      }
-    },
-    plugins:[{
-      id:'valueLabels',
-      afterDatasetsDraw(chart){
-        const {ctx} = chart;
-        const meta = chart.getDatasetMeta(0);
-        ctx.save();
-        ctx.fillStyle = '#e8eaed';
-        ctx.font = '10px -apple-system,sans-serif';
-        ctx.textAlign = 'center';
-        meta.data.forEach((bar,i)=>{
-          ctx.fillText(DATA.spark[i].count, bar.x, bar.y - 6);
-        });
-        ctx.restore();
-      }
-    }]
-  });
-}
-
-function makeHatchPattern(color){
-  const c = document.createElement('canvas');
-  c.width = 10; c.height = 10;
-  const ctx = c.getContext('2d');
-  ctx.fillStyle = 'rgba(0,0,0,0)';
-  ctx.fillRect(0,0,10,10);
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(0,10); ctx.lineTo(10,0);
-  ctx.moveTo(-2,2); ctx.lineTo(2,-2);
-  ctx.moveTo(8,12); ctx.lineTo(12,8);
-  ctx.stroke();
-  return ctx.createPattern(c, 'repeat');
-}
-
-function drawMonthly(){
-  const monthColors = monthKeys.map(k=>{
-    const isCurrent = k === DATA.currentMonth;
-    const year = k.slice(0,4);
-    const base = year === '2025' ? '#5b6472' : COLOR.orange;
-    if (isCurrent) return makeHatchPattern(COLOR.orange);
-    return base;
-  });
-
-  const monthlyGoalData = monthKeys.map(k => DATA.monthlyGoal[k] !== undefined ? DATA.monthlyGoal[k] : null);
-
-  new Chart(document.getElementById('monthlyChart').getContext('2d'), {
-    type:'bar',
-    data:{
-      labels: monthLabels,
-      datasets:[
-        {
-          label:'Booked Jobs',
-          data: monthKeys.map(k=>DATA.monthly[k]),
-          backgroundColor: monthColors,
-          borderRadius:4,
-          order:2
-        },
-        {
-          label:'2026 Booked Jobs Goal',
-          type:'line',
-          data: monthlyGoalData,
-          borderColor: COLOR.amber,
-          borderDash:[6,4],
-          borderWidth:2,
-          pointBackgroundColor: COLOR.amber,
-          pointBorderColor: COLOR.amber,
-          pointRadius:3,
-          pointStyle:'rectRot',
-          fill:false,
-          spanGaps:false,
-          order:1
-        }
-      ]
-    },
-    options:{
-      responsive:true,
-      plugins:{
-        legend:{ display:true, labels:{ color:'#9aa1ac', font:{size:11} } },
-        tooltip:{ callbacks:{ label:(ctx)=> ctx.dataset.label + ': ' + fmtNum(ctx.raw) } }
-      },
-      scales:{
-        x:{ ticks:{ color:'#9aa1ac', font:{size:10} }, grid:{ display:false } },
-        y:{ ticks:{ color:'#9aa1ac', font:{size:10} }, grid:{ color:'#2a2f3a' }, beginAtZero:true }
-      }
+/* ---------- attainment ---------- */
+(function(){
+  const rows=[['WTD',DATA.periods.WTD],['MTD',DATA.periods.MTD],['QTD',DATA.periods.QTD],['YTD',DATA.periods.YTD]];
+  const W=1100, rowH=52, T=10, B=8, L=64, R=118;
+  const H=T+rows.length*rowH+B, iw=W-L-R;
+  const line=cssVar('--line'), mut=cssVar('--mut'), dim=cssVar('--dim');
+  let s='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
+  rows.forEach(([k,p],i)=>{
+    const y=T+i*rowH, bh=24, by=y+9;
+    const mx=Math.max(p.actual, p.goal||0)*1.1 || 1;
+    const aw=(p.actual/mx)*iw;
+    const gp=pct(p.actual,p.goal);
+    const col=gp==null?dim:(gp>=100?cssVar('--green'):(gp>=95?cssVar('--amber'):cssVar('--red')));
+    s+='<text x="'+(L-12)+'" y="'+(by+16)+'" text-anchor="end" font-size="12" font-weight="650" fill="'+mut+'">'+k+'</text>';
+    s+='<rect x="'+L+'" y="'+by+'" width="'+iw+'" height="'+bh+'" rx="5" fill="#1b2130"/>';
+    s+='<rect x="'+L+'" y="'+by+'" width="'+aw.toFixed(1)+'" height="'+bh+'" rx="5" fill="'+col+'" opacity=".82"/>';
+    s+='<text x="'+(L+10)+'" y="'+(by+16.5)+'" font-size="11.5" font-weight="700" fill="#0d1117">'+nf(p.actual)+'</text>';
+    if(p.goal!=null){
+      const gx=L+(p.goal/mx)*iw;
+      s+='<line x1="'+gx.toFixed(1)+'" y1="'+(by-5)+'" x2="'+gx.toFixed(1)+'" y2="'+(by+bh+5)+'" stroke="'+cssVar('--accent')+'" stroke-width="2.4"/>';
+      s+='<text x="'+gx.toFixed(1)+'" y="'+(by-9)+'" text-anchor="middle" font-size="9.5" fill="'+cssVar('--accent')+'">Goal '+nf(p.goal)+'</text>';
     }
+    s+='<text x="'+(W-8)+'" y="'+(by+17)+'" text-anchor="end" font-size="14" font-weight="750" fill="'+col+'">'+fmtP(gp)+'</text>';
   });
-}
+  s+='</svg>';
+  document.getElementById('attain').innerHTML=s;
+})();
 
-// If charts can't render, swap in readable text equivalents so no panel is ever empty.
-function showChartFallbacks(reason){
-  const msg = "Chart could not be drawn (" + reason + "). Figures below are unaffected.";
-
-  const sparkCanvas = document.getElementById('sparkChart');
-  if (sparkCanvas) sparkCanvas.style.display = 'none';
-  const sf = document.getElementById('sparkFallback');
-  sf.style.display = 'block';
-  sf.innerHTML = msg + "<br><b>Last 14 days:</b> " +
-    DATA.spark.map(d => (d.date===DATA.yesterdayStr ? "<b>"+d.count+"</b>" : d.count)).join(", ");
-
-  const monthCanvas = document.getElementById('monthlyChart');
-  if (monthCanvas) monthCanvas.style.display = 'none';
-  const mf = document.getElementById('monthlyFallback');
-  mf.style.display = 'block';
-  mf.textContent = msg;
-
-  const t = document.getElementById('monthTable');
-  t.style.display = 'table';
-  let rows = "<tr><th>Month</th><th>Jobs</th><th>Goal</th></tr>";
-  monthKeys.forEach((k,i)=>{
-    const g = DATA.monthlyGoal[k];
-    rows += `<tr><td>${monthLabels[i]}</td><td>${fmtNum(DATA.monthly[k])}</td><td>${g!==undefined?fmtNum(g):"—"}</td></tr>`;
+/* ---------- monthly ---------- */
+(function(){
+  const keys=Object.keys(DATA.monthly).sort();
+  const curMonth=DATA.today.slice(0,7);
+  const W=1100,H=300,L=46,R=14,T=26,B=46;
+  const iw=W-L-R, ih=H-T-B, n=keys.length, step=iw/n, bw=Math.min(46,step*0.7);
+  const vals=keys.map(k=>DATA.monthly[k]).concat(Object.values(DATA.monthlyGoal));
+  const mx=Math.max(...vals)*1.14;
+  const yearCol={'2025':'#3f5f8a','2026':cssVar('--accent')};
+  const line=cssVar('--line'), mut=cssVar('--mut'), dim=cssVar('--dim');
+  let s='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
+  s+='<defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">'+
+     '<rect width="6" height="6" fill="'+cssVar('--accent')+'" opacity=".28"/>'+
+     '<line x1="0" y1="0" x2="0" y2="6" stroke="'+cssVar('--accent')+'" stroke-width="3"/></pattern></defs>';
+  for(let t=0;t<=4;t++){
+    const v=mx*t/4, y=T+ih-(v/mx)*ih;
+    s+='<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="'+line+'" stroke-width="1" opacity=".7"/>';
+    s+='<text x="'+(L-8)+'" y="'+(y+3.5).toFixed(1)+'" text-anchor="end" font-size="9.5" fill="'+dim+'">'+nf(v)+'</text>';
+  }
+  keys.forEach((k,i)=>{
+    const yr=k.slice(0,4), mo=+k.slice(5,7)-1, v=DATA.monthly[k];
+    const x=L+i*step+(step-bw)/2, h=(v/mx)*ih, y=T+ih-h;
+    const cur = k===curMonth;
+    s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+(cur?'url(#hatch)':(yearCol[yr]||'#4a5568'))+'" stroke="'+(cur?cssVar('--accent'):'none')+'" stroke-width="'+(cur?1.2:0)+'"/>';
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(y-5).toFixed(1)+'" text-anchor="middle" font-size="9.5" font-weight="600" fill="'+(yr==='2026'?cssVar('--accent2'):mut)+'">'+v+'</text>';
+    const g=DATA.monthlyGoal[k];
+    if(g!=null){
+      const gy=T+ih-(g/mx)*ih;
+      s+='<line x1="'+(x-3).toFixed(1)+'" y1="'+gy.toFixed(1)+'" x2="'+(x+bw+3).toFixed(1)+'" y2="'+gy.toFixed(1)+'" stroke="'+cssVar('--amber')+'" stroke-width="2" stroke-dasharray="4 3"/>';
+    }
+    s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(T+ih+14).toFixed(1)+'" text-anchor="middle" font-size="9" fill="'+mut+'">'+MON[mo]+'</text>';
+    if(mo===0||i===0) s+='<text x="'+(x+bw/2).toFixed(1)+'" y="'+(T+ih+26).toFixed(1)+'" text-anchor="middle" font-size="9" font-weight="700" fill="'+(yearCol[yr]||dim)+'">'+yr+'</text>';
   });
-  t.innerHTML = rows;
-}
+  s+='<g font-size="9.5" fill="'+mut+'">'+
+     '<rect x="'+L+'" y="4" width="10" height="10" rx="2" fill="'+yearCol['2025']+'"/><text x="'+(L+15)+'" y="13">2025</text>'+
+     '<rect x="'+(L+52)+'" y="4" width="10" height="10" rx="2" fill="'+yearCol['2026']+'"/><text x="'+(L+67)+'" y="13">2026</text>'+
+     '<line x1="'+(L+112)+'" y1="9" x2="'+(L+134)+'" y2="9" stroke="'+cssVar('--amber')+'" stroke-width="2" stroke-dasharray="4 3"/><text x="'+(L+139)+'" y="13">2026 Booked Jobs Goal</text>'+
+     '<rect x="'+(L+268)+'" y="4" width="10" height="10" rx="2" fill="url(#hatch)" stroke="'+cssVar('--accent')+'" stroke-width="1"/><text x="'+(L+283)+'" y="13">current month (partial)</text>'+
+     '</g>';
+  s+='</svg>';
+  document.getElementById('monthly').innerHTML=s;
+})();
 
-// Render text sections immediately; charts are best-effort on top.
-try {
-  renderStaticSections();
-} catch (e) {
-  console.error('Static section render failed:', e);
-}
+/* ---------- week strip ---------- */
+(function(){
+  const map={}; DATA.weekDaily.forEach(d=>map[d.dow]=d);
+  const order=[1,2,3,4,5,6,0];
+  const todayDow=pd(DATA.today).getDay();
+  document.getElementById('week').innerHTML = order.map(dw=>{
+    const d=map[dw];
+    if(!d) return '<div class="wd future"><div class="d">'+DOW3[dw]+'</div><div class="dt">&nbsp;</div><div class="c">—</div><div class="gl">upcoming</div></div>';
+    const gp=pct(d.count,d.goal);
+    const isToday = d.date===DATA.today;
+    return '<div class="wd'+(isToday?' today':'')+'">'+
+      '<div class="d">'+DOW3[dw]+'</div>'+
+      '<div class="dt">'+shortDate(d.date)+'</div>'+
+      '<div class="c '+(d.goal==null?'n':attCls(gp))+'">'+nf(d.count)+'</div>'+
+      '<div class="gl">'+(d.goal==null?'no goal':'goal '+d.goal.toFixed(1))+'</div>'+
+    '</div>';
+  }).join('');
+})();
 
-window.loadChartJs().then(function(){
-  try { drawSparkline(); } catch(e){ console.error('Sparkline failed:', e); }
-  try { drawMonthly(); } catch(e){ console.error('Monthly chart failed:', e); }
-}).catch(function(err){
-  console.error('Chart.js failed to load:', err);
-  try { showChartFallbacks('charting library unavailable'); } catch(e){ console.error(e); }
-});
+/* ---------- footer ---------- */
+document.getElementById('foot').innerHTML =
+  '<b>Sources:</b> Booking PBI 4DX.xlsx (Sheet1) — booked jobs counted as one row per job, grouped by <b>Created Date</b>. '+
+  'Booked Jobs Goal from CBD 2026 Revenue Budget.xlsx → Daily Goals → “Booked Jobs Goal”. Both on SharePoint (comfortbydesign.com).<br>'+
+  '<b>Yesterday</b> = the prior calendar day ('+fullDate(DATA.yesterday.date)+'). Last-year comparison uses a <b>364-day shift</b> so the weekday matches ('+fullDate(DATA.yesterday.lyDate)+').<br>'+
+  '<b>Goal coverage:</b> the Booked Jobs Goal column is populated on business days only and currently runs '+shortDate(DATA.goalRange[0])+'–'+shortDate(DATA.goalRange[1])+', '+pd(DATA.goalRange[1]).getFullYear()+'. '+
+  'Weekends, holidays and unbudgeted months carry no goal and are omitted from goal markers rather than treated as zero. '+
+  'Period goals and last-year comparisons are anchored at the last Created Date in the bookings file ('+fullDate(DATA.dataAsOf)+'). Weeks start Monday.<br>'+
+  '<b>Color:</b> attainment ≥100% green, 95–99.9% amber, &lt;95% red. YoY ≥0% green, below 0% red. Counts are integers — no dollar amounts on this page.';
 </script>
 </body>
 </html>
