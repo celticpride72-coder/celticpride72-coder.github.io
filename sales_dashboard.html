@@ -138,9 +138,9 @@ document.getElementById('kpis').innerHTML = PERIODS.map(([k,label])=>{
     <div class="lbl">${label}</div><div class="rng">${rng}</div>
     <div class="val">${fmt(a)}</div>
     <div class="mets">
-      <div class="met"><span class="k">vs Goal</span><span class="v ${attCls(g)}">${show(g)}<span class="t">${D.goal[k]?fmtK(D.goal[k]):'—'}</span></span></div>
-      <div class="met"><span class="k">vs Budget</span><span class="v ${attCls(b)}">${show(b)}<span class="t">${D.budget[k]?fmtK(D.budget[k]):'—'}</span></span></div>
-      <div class="met"><span class="k">vs Last Yr</span><span class="v ${yoyCls(y)}">${showYoY(y)}<span class="t">${D.lastYear[k]?fmtK(D.lastYear[k]):'—'}</span></span></div>
+      <div class="met"><span class="k">vs Goal</span><span class="v ${attCls(g)}">${show(g)}<span class="t">${D.goal[k]?fmtK(D.goal[k]):''}</span></span></div>
+      <div class="met"><span class="k">vs Budget</span><span class="v ${attCls(b)}">${show(b)}<span class="t">${D.budget[k]?fmtK(D.budget[k]):''}</span></span></div>
+      <div class="met"><span class="k">vs Last Yr</span><span class="v ${yoyCls(y)}">${showYoY(y)}<span class="t">${D.lastYear[k]?fmtK(D.lastYear[k]):''}</span></span></div>
     </div></div>`;
 }).join('');
 
@@ -152,9 +152,9 @@ document.getElementById('rolls').innerHTML = ROLLS.map(([k,label])=>{
     <div class="lbl">${label}</div><div class="rng">${dstr(t.range[0])} – ${dstr(t.range[1])}</div>
     <div class="val">${fmt(t.actual)}</div>
     <div class="mets">
-      <div class="met"><span class="k">vs Goal</span><span class="v ${attCls(g)}">${show(g)}<span class="t">${t.goal?fmtK(t.goal):'—'}</span></span></div>
-      <div class="met"><span class="k">vs Budget</span><span class="v ${attCls(b)}">${show(b)}<span class="t">${t.budget?fmtK(t.budget):'—'}</span></span></div>
-      <div class="met"><span class="k">vs Last Yr</span><span class="v ${yoyCls(y)}">${showYoY(y)}<span class="t">${t.lastYear?fmtK(t.lastYear):'—'}</span></span></div>
+      <div class="met"><span class="k">vs Goal</span><span class="v ${attCls(g)}">${show(g)}<span class="t">${t.goal?fmtK(t.goal):''}</span></span></div>
+      <div class="met"><span class="k">vs Budget</span><span class="v ${attCls(b)}">${show(b)}<span class="t">${t.budget?fmtK(t.budget):''}</span></span></div>
+      <div class="met"><span class="k">vs Last Yr</span><span class="v ${yoyCls(y)}">${showYoY(y)}<span class="t">${t.lastYear?fmtK(t.lastYear):''}</span></span></div>
     </div></div>`;
 }).join('');
 
