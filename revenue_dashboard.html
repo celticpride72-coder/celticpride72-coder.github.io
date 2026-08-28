@@ -1,94 +1,166 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CBD Revenue Dashboard</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CBD Completed Revenue</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0e1116;color:#e7edf5;font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-.wrap{max-width:1400px;margin:0 auto;padding:24px 20px 48px}
-header{margin-bottom:20px}
-h1{margin:0 0 6px;font-size:26px;letter-spacing:-.02em}
-.stamp{color:#93a1b3;font-size:13px}
-.stamp b{color:#e7edf5}
-h2{font-size:15px;text-transform:uppercase;letter-spacing:.07em;color:#93a1b3;margin:32px 0 12px;font-weight:700}
-.panel{background:#161b22;border:1px solid #232a34;border-radius:12px;padding:20px}
-.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
-.card{background:#161b22;border:1px solid #232a34;border-radius:12px;padding:16px}
-.klabel{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#93a1b3}
-.kval{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px}
-.krange{font-size:11px;color:#7c8a9c;margin-bottom:12px}
-.cmps{border-top:1px solid #0e1116;padding-top:9px}
-.cmp{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;font-size:12px}
-.cl{color:#7c8a9c;flex:0 0 auto;margin-right:8px}
-.cv{font-weight:700;margin-right:auto}
-.ct{color:#7c8a9c;font-variant-numeric:tabular-nums}
-.g{color:#22c55e}.y{color:#f5c451}.r{color:#f8736a}.na{color:#7c8a9c}
-.barrow{display:grid;grid-template-columns:64px 1fr 210px;align-items:center;gap:14px;padding:9px 0}
-.blab{font-size:12px;font-weight:700;color:#93a1b3}
-.btrack{position:relative;height:22px;background:#0e1116;border-radius:6px;overflow:visible}
-.bfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px}
-.bfill.g{background:#22c55e}.bfill.y{background:#f59e0b}.bfill.r{background:#ef4444}.bfill.na{background:#7c8a9c}
-.bmark{position:absolute;top:-4px;bottom:-4px;width:2px}
-.bg{background:#e7edf5}
-.bb{background:#7c3aed}
-.bval{font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:#e7edf5;font-weight:600}
-.bpct{font-weight:700;margin-left:6px}
-.legend{font-size:11px;color:#93a1b3;margin-top:10px;display:flex;gap:16px;flex-wrap:wrap}
-.lk{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:5px}
-.chart{display:flex;align-items:flex-end;gap:3px;height:230px;padding-top:8px}
-.mcol{flex:1;display:flex;flex-direction:column;align-items:center;height:100%}
-.mbarwrap{position:relative;width:100%;flex:1;display:flex;align-items:flex-end}
-.mbar{width:100%;border-radius:3px 3px 0 0;min-height:2px}
-.mbar.hatch{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.55) 0 4px,transparent 4px 8px)}
-.gtick{position:absolute;left:5%;right:5%;height:0;border-top:2px dashed #e7edf5;z-index:2}
-.mlab{font-size:9px;color:#7c8a9c;margin-top:5px;white-space:nowrap}
-.yrow{display:flex;gap:3px;margin-top:2px}
-.ycell{flex:1;text-align:center;font-size:10px;font-weight:700;color:#93a1b3;border-top:1px solid #232a34;padding-top:4px}
-.week{display:flex;gap:10px;height:150px}
-.wcol{flex:1;display:flex;flex-direction:column;align-items:center}
-.wbarwrap{width:100%;flex:1;display:flex;align-items:flex-end}
-.wbar{width:100%;background:#1d4ed8;border-radius:4px 4px 0 0;min-height:2px}
-.wbar.dim{background:#232a34}
-.wday{font-size:11px;font-weight:700;color:#93a1b3;margin-top:6px}
-.wval{font-size:11px;color:#7c8a9c;font-variant-numeric:tabular-nums}
-.extra{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.dbox{background:#161b22;border:1px solid #232a34;border-radius:12px;padding:16px;overflow:hidden}
-.dbox h3{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:#93a1b3}
-.dt{width:100%;border-collapse:collapse;font-size:12px}
-.dt th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#7c8a9c;border-bottom:1px solid #232a34;padding:5px 4px;font-weight:700}
-.dt td{padding:5px 4px;border-bottom:1px solid #232a34}
-.num{text-align:right;font-variant-numeric:tabular-nums}
-.sub{color:#7c8a9c}
-footer{margin-top:32px;font-size:11px;color:#93a1b3;line-height:1.7;border-top:1px solid #232a34;padding-top:16px}
-footer b{color:#c3cedb}
-@media(max-width:1100px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.extra{grid-template-columns:1fr}.barrow{grid-template-columns:56px 1fr 150px}}
-</style>
-</head><body>
-<div class="wrap">
-<header>
-<h1>Comfort By Design &mdash; Completed Income Revenue Dashboard</h1>
-<div class="stamp">Data as of <b>2026-08-27</b> &middot; Refreshed <b>2026-08-28</b> &middot; Weeks start Monday &middot; Revenue = Income by Completion Date</div>
-</header>
+:root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--hvac:#4c8dff;--fire:#ff7a59;--elec:#f5c451;--plmb:#a371f7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1380px;margin:0 auto;padding:22px 22px 70px}
+h1{margin:0;font-size:26px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+.sub{color:var(--dim);font-size:14px;margin-top:4px}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin:18px 0 6px}
+.kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}
+.kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.kpi .val{font-size:27px;font-weight:750;margin-top:5px;font-variant-numeric:tabular-nums}
+.kpi .rng{font-size:11.5px;color:var(--muted);margin-top:2px}
+.kpi .cmp{font-size:12.5px;margin-top:7px;display:flex;justify-content:space-between;color:var(--dim)}
+.kpi .cmp b{font-variant-numeric:tabular-nums;font-weight:700}
+.g{color:var(--good)}.a{color:var(--warn)}.b{color:var(--bad)}
+.panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:16px 18px;margin-top:14px}
+.ph{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.att{margin:10px 0 14px}.att .lbl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);margin-bottom:4px}
+.track{position:relative;height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;overflow:visible}
+.fill{position:absolute;top:0;left:0;height:100%;border-radius:8px 0 0 8px;background:var(--accent)}
+.mk{position:absolute;top:-3px;width:2px;height:22px}
+.mk.goal{background:var(--warn)}.mk.bud{background:var(--accent2)}
+.legend{font-size:11.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 12px;vertical-align:middle}
+.chart{display:flex;align-items:flex-end;gap:4px;height:210px;padding-top:8px}
+.bar{flex:1;position:relative;border-radius:3px 3px 0 0;min-width:8px}
+.bar.y24{background:#31537e}.bar.y25{background:#3f6ea8}.bar.y26{background:var(--accent)}
+.bar.cur{background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 4px,#2b5aa8 4px,#2b5aa8 8px)}
+.bar .tick{position:absolute;left:-2px;right:-2px;height:0;border-top:2px dashed var(--warn)}
+.bar .bl{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:9px;color:var(--muted);white-space:nowrap}
+.bar:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#000c;border:1px solid var(--edge);color:var(--ink);font-size:11px;padding:3px 7px;border-radius:6px;white-space:nowrap;z-index:5}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.wd{background:var(--panel2);border:1px solid var(--edge);border-radius:10px;padding:10px 12px}
+.wd .d{font-size:11px;color:var(--muted);text-transform:uppercase}.wd .v{font-size:18px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+.wd.empty{opacity:.35}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--edge);font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.tblbar{display:inline-block;height:9px;border-radius:4px;background:var(--accent);vertical-align:middle}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.7}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:1fr}.week{grid-template-columns:repeat(4,1fr)}}
+</style></head><body><div class="wrap">
+<h1><span class="dot"></span>CBD Completed Revenue</h1>
+<div class="sub" id="sub"></div>
 
-<h2>Period to date</h2>
-<div class="cards"><div class="card"><div class="klabel">Yesterday</div><div class="kval">$22,927</div><div class="krange">Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv r">49.4%</span><span class="ct">$46,429</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv r">52.8%</span><span class="ct">$43,460</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv r">&#9660; 17.6%</span><span class="ct">$27,814</span></div></div></div><div class="card"><div class="klabel">WTD</div><div class="kval">$121,649</div><div class="krange">Aug 24 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv r">65.5%</span><span class="ct">$185,714</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv r">70.0%</span><span class="ct">$173,840</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv r">&#9660; 28.4%</span><span class="ct">$169,894</span></div></div></div><div class="card"><div class="klabel">MTD</div><div class="kval">$734,815</div><div class="krange">Aug 1 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv r">83.3%</span><span class="ct">$882,143</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv r">89.0%</span><span class="ct">$825,741</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv r">&#9660; 10.0%</span><span class="ct">$816,560</span></div></div></div><div class="card"><div class="klabel">QTD</div><div class="kval">$1,854,843</div><div class="krange">Jul 1 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv r">93.9%</span><span class="ct">$1,974,369</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv y">98.9%</span><span class="ct">$1,875,958</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv r">&#9660; 0.0%</span><span class="ct">$1,855,698</span></div></div></div><div class="card"><div class="klabel">YTD</div><div class="kval">$7,413,386</div><div class="krange">Jan 1 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv y">97.8%</span><span class="ct">$7,582,218</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv g">105.4%</span><span class="ct">$7,035,437</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv g">&#9650; 9.4%</span><span class="ct">$6,778,594</span></div></div></div></div>
+<div class="ph" style="margin-top:20px">Period to date</div>
+<div class="cards" id="kpiCards"></div>
 
-<h2>Rolling windows</h2>
-<div class="cards"><div class="card"><div class="klabel">Last 30 days</div><div class="kval">$922,646</div><div class="krange">Jul 29 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv r">89.5%</span><span class="ct">$1,031,083</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv y">95.2%</span><span class="ct">$968,952</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv r">&#9660; 5.2%</span><span class="ct">$973,146</span></div></div></div><div class="card"><div class="klabel">Last 60 days</div><div class="kval">$2,008,505</div><div class="krange">Jun 29 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv y">97.2%</span><span class="ct">$2,065,991</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv g">102.3%</span><span class="ct">$1,964,107</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv g">&#9650; 1.2%</span><span class="ct">$1,984,072</span></div></div></div><div class="card"><div class="klabel">Last 90 days</div><div class="kval">$3,065,928</div><div class="krange">May 30 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv g">102.8%</span><span class="ct">$2,982,218</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv g">107.8%</span><span class="ct">$2,845,344</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv g">&#9650; 9.5%</span><span class="ct">$2,798,734</span></div></div></div><div class="card"><div class="klabel">Last 180 days</div><div class="kval">$5,439,438</div><div class="krange">Mar 1 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv y">95.7%</span><span class="ct">$5,682,218</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv g">102.6%</span><span class="ct">$5,303,448</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv g">&#9650; 5.8%</span><span class="ct">$5,140,031</span></div></div></div><div class="card"><div class="klabel">Last 365 days</div><div class="kval">$11,916,654</div><div class="krange">Aug 28 &ndash; Aug 27</div><div class="cmps"><div class="cmp"><span class="cl">vs Goal</span><span class="cv na">&mdash;</span><span class="ct">&mdash;</span></div><div class="cmp"><span class="cl">vs Budget</span><span class="cv na">&mdash;</span><span class="ct">&mdash;</span></div><div class="cmp"><span class="cl">vs Last yr</span><span class="cv g">&#9650; 13.9%</span><span class="ct">$10,460,290</span></div></div></div></div>
+<div class="panel"><div class="ph">Rolling windows (anchored to last data day)</div><div class="cards" id="rollCards" style="margin:0"></div></div>
 
-<h2>Attainment to date</h2>
-<div class="panel"><div class="barrow"><div class="blab">Yesterday</div><div class="btrack"><div class="bfill r" style="width:49.38%"></div><div class="bmark bg" style="left:100.00%" title="Goal $46,429"></div><div class="bmark bb" style="left:93.61%" title="Budget $43,460"></div></div><div class="bval">$22,927 <span class="bpct r">49.4% of goal</span></div></div><div class="barrow"><div class="blab">WTD</div><div class="btrack"><div class="bfill r" style="width:65.50%"></div><div class="bmark bg" style="left:100.00%" title="Goal $185,714"></div><div class="bmark bb" style="left:93.61%" title="Budget $173,840"></div></div><div class="bval">$121,649 <span class="bpct r">65.5% of goal</span></div></div><div class="barrow"><div class="blab">MTD</div><div class="btrack"><div class="bfill r" style="width:83.30%"></div><div class="bmark bg" style="left:100.00%" title="Goal $882,143"></div><div class="bmark bb" style="left:93.61%" title="Budget $825,741"></div></div><div class="bval">$734,815 <span class="bpct r">83.3% of goal</span></div></div><div class="barrow"><div class="blab">QTD</div><div class="btrack"><div class="bfill r" style="width:93.95%"></div><div class="bmark bg" style="left:100.00%" title="Goal $1,974,369"></div><div class="bmark bb" style="left:95.02%" title="Budget $1,875,958"></div></div><div class="bval">$1,854,843 <span class="bpct r">93.9% of goal</span></div></div><div class="barrow"><div class="blab">YTD</div><div class="btrack"><div class="bfill y" style="width:97.77%"></div><div class="bmark bg" style="left:100.00%" title="Goal $7,582,218"></div><div class="bmark bb" style="left:92.79%" title="Budget $7,035,437"></div></div><div class="bval">$7,413,386 <span class="bpct y">97.8% of goal</span></div></div><div class="legend"><span><span class="lk" style="background:#22c55e"></span>&ge;100% of goal</span><span><span class="lk" style="background:#f59e0b"></span>95&ndash;99.9%</span><span><span class="lk" style="background:#ef4444"></span>&lt;95%</span><span><span class="lk" style="background:#e7edf5"></span>Goal</span><span><span class="lk" style="background:#7c3aed"></span>Budget</span></div></div>
+<div class="panel"><div class="ph">Attainment to date</div><div id="attain"></div>
+<div class="legend"><i style="background:var(--accent)"></i>Actual <i style="background:var(--warn)"></i>Goal <i style="background:var(--accent2)"></i>Budget</div></div>
 
-<h2>Monthly revenue trend</h2>
-<div class="panel"><div class="chart"><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:66.43%;background:#7c8a9c" title="2024-01 $889,063"></div></div><div class="mlab">Jan</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:62.91%;background:#7c8a9c" title="2024-02 $841,919"></div></div><div class="mlab">Feb</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:42.34%;background:#7c8a9c" title="2024-03 $566,694"></div></div><div class="mlab">Mar</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:53.26%;background:#7c8a9c" title="2024-04 $712,722"></div></div><div class="mlab">Apr</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:51.15%;background:#7c8a9c" title="2024-05 $684,578"></div></div><div class="mlab">May</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:61.68%;background:#7c8a9c" title="2024-06 $825,415"></div></div><div class="mlab">Jun</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:66.44%;background:#7c8a9c" title="2024-07 $889,213"></div></div><div class="mlab">Jul</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:53.95%;background:#7c8a9c" title="2024-08 $722,070"></div></div><div class="mlab">Aug</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:66.36%;background:#7c8a9c" title="2024-09 $888,029"></div></div><div class="mlab">Sep</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:78.51%;background:#7c8a9c" title="2024-10 $1,050,732"></div></div><div class="mlab">Oct</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:69.74%;background:#7c8a9c" title="2024-11 $933,383"></div></div><div class="mlab">Nov</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:53.07%;background:#7c8a9c" title="2024-12 $710,190"></div></div><div class="mlab">Dec</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:62.40%;background:#60a5fa" title="2025-01 $835,100"></div></div><div class="mlab">Jan</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:62.03%;background:#60a5fa" title="2025-02 $830,166"></div></div><div class="mlab">Feb</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:49.22%;background:#60a5fa" title="2025-03 $658,669"></div></div><div class="mlab">Mar</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:60.48%;background:#60a5fa" title="2025-04 $809,438"></div></div><div class="mlab">Apr</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:65.33%;background:#60a5fa" title="2025-05 $874,300"></div></div><div class="mlab">May</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:68.39%;background:#60a5fa" title="2025-06 $915,222"></div></div><div class="mlab">Jun</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:77.65%;background:#60a5fa" title="2025-07 $1,039,138"></div></div><div class="mlab">Jul</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:65.48%;background:#60a5fa" title="2025-08 $876,254"></div></div><div class="mlab">Aug</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:67.64%;background:#60a5fa" title="2025-09 $905,219"></div></div><div class="mlab">Sep</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:100.00%;background:#60a5fa" title="2025-10 $1,338,293"></div></div><div class="mlab">Oct</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:73.52%;background:#60a5fa" title="2025-11 $983,959"></div></div><div class="mlab">Nov</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:90.87%;background:#60a5fa" title="2025-12 $1,216,103"></div></div><div class="mlab">Dec</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:74.25%;background:#22c55e" title="2026-01 $993,719"></div><div class="gtick" style="bottom:70.99%" title="Goal $950,000"></div></div><div class="mlab">Jan</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:73.24%;background:#22c55e" title="2026-02 $980,229"></div><div class="gtick" style="bottom:70.99%" title="Goal $950,000"></div></div><div class="mlab">Feb</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:63.63%;background:#22c55e" title="2026-03 $851,588"></div><div class="gtick" style="bottom:57.91%" title="Goal $775,000"></div></div><div class="mlab">Mar</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:57.28%;background:#22c55e" title="2026-04 $766,576"></div><div class="gtick" style="bottom:70.99%" title="Goal $950,000"></div></div><div class="mlab">Apr</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:57.38%;background:#22c55e" title="2026-05 $767,888"></div><div class="gtick" style="bottom:72.85%" title="Goal $975,000"></div></div><div class="mlab">May</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:89.56%;background:#22c55e" title="2026-06 $1,198,542"></div><div class="gtick" style="bottom:75.31%" title="Goal $1,007,849"></div></div><div class="mlab">Jun</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar" style="height:83.69%;background:#22c55e" title="2026-07 $1,120,029"></div><div class="gtick" style="bottom:81.61%" title="Goal $1,092,226"></div></div><div class="mlab">Jul</div></div><div class="mcol"><div class="mbarwrap"><div class="mbar hatch" style="height:54.91%;background:#22c55e" title="2026-08 $734,815"></div><div class="gtick" style="bottom:72.85%" title="Goal $975,000"></div></div><div class="mlab">Aug</div></div></div><div class="yrow"><div class="ycell" style="flex:12">2024</div><div class="ycell" style="flex:12">2025</div><div class="ycell" style="flex:8">2026</div></div></div>
+<div class="panel"><div class="ph">Monthly revenue trend</div><div class="chart" id="chart"></div><div style="height:22px"></div>
+<div class="legend"><i style="background:#31537e"></i>2024 <i style="background:#3f6ea8"></i>2025 <i style="background:var(--accent)"></i>2026 <i style="background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 3px,#2b5aa8 3px,#2b5aa8 6px)"></i>Current month (partial) &nbsp;· dashed tick = 2026 monthly goal</div></div>
 
-<h2>This week, day by day</h2>
-<div class="panel"><div class="week"><div class="wcol"><div class="wbarwrap"><div class="wbar" style="height:92.54%"></div></div><div class="wday">Mon</div><div class="wval">$31,864</div></div><div class="wcol"><div class="wbarwrap"><div class="wbar" style="height:100.00%"></div></div><div class="wday">Tue</div><div class="wval">$34,433</div></div><div class="wcol"><div class="wbarwrap"><div class="wbar" style="height:94.17%"></div></div><div class="wday">Wed</div><div class="wval">$32,425</div></div><div class="wcol"><div class="wbarwrap"><div class="wbar" style="height:66.58%"></div></div><div class="wday">Thu</div><div class="wval">$22,927</div></div><div class="wcol"><div class="wbarwrap"><div class="wbar" style="height:0.00%"></div></div><div class="wday">Fri</div><div class="wval">$0</div></div><div class="wcol"><div class="wbarwrap"><div class="wbar dim" style="height:0.00%"></div></div><div class="wday">Sat</div><div class="wval">&mdash;</div></div><div class="wcol"><div class="wbarwrap"><div class="wbar dim" style="height:0.00%"></div></div><div class="wday">Sun</div><div class="wval">&mdash;</div></div></div></div>
+<div class="panel"><div class="ph">This week, day by day (Mon-start)</div><div class="week" id="week"></div></div>
 
-<h2>Additional data &mdash; YTD 2026</h2>
-<div class="extra"><div class="dbox"><h3>Business unit</h3><table class="dt"><tr><th>Business unit</th><th class="num">YTD 2026</th><th class="num">Share</th></tr><tr><td>HVAC-Install-CBD</td><td class="num">$3,488,718</td><td class="num sub">47.1%</td></tr><tr><td>FIRE-Install-CBD</td><td class="num">$1,281,024</td><td class="num sub">17.3%</td></tr><tr><td>FIRE-Install-Com-CBD</td><td class="num">$822,844</td><td class="num sub">11.1%</td></tr><tr><td>HVAC-Service-CBD</td><td class="num">$625,364</td><td class="num sub">8.4%</td></tr><tr><td>FIRE-Service-CBD</td><td class="num">$341,538</td><td class="num sub">4.6%</td></tr><tr><td>ELEC-Install-CBD</td><td class="num">$314,521</td><td class="num sub">4.2%</td></tr><tr><td>HVAC-Scheduled Service-CBD</td><td class="num">$155,611</td><td class="num sub">2.1%</td></tr><tr><td>Shop &amp; Parts-CBD</td><td class="num">$78,176</td><td class="num sub">1.1%</td></tr><tr><td>HVAC-Install-Com-CBD</td><td class="num">$67,253</td><td class="num sub">0.9%</td></tr><tr><td>PLMB-Install-CBD</td><td class="num">$66,423</td><td class="num sub">0.9%</td></tr><tr><td>ELEC-Service-CBD</td><td class="num">$61,769</td><td class="num sub">0.8%</td></tr><tr><td>FIRE-Scheduled Service-CBD</td><td class="num">$50,787</td><td class="num sub">0.7%</td></tr><tr><td>HVAC-Sales-CBD</td><td class="num">$21,612</td><td class="num sub">0.3%</td></tr><tr><td>PLMB-Service-CBD</td><td class="num">$18,335</td><td class="num sub">0.2%</td></tr><tr><td>FIRE-Retail-CBD</td><td class="num">$16,887</td><td class="num sub">0.2%</td></tr><tr><td>ELEC-Sales-CBD</td><td class="num">$2,424</td><td class="num sub">0.0%</td></tr><tr><td>Generator-Service-CBD</td><td class="num">$99</td><td class="num sub">0.0%</td></tr><tr><td>HVAC-Sales-Com-CBD</td><td class="num">$0</td><td class="num sub">0.0%</td></tr><tr><td>FIRE-Sales-CBD</td><td class="num">$0</td><td class="num sub">0.0%</td></tr><tr><td>FIRE-Sales-Com-CBD</td><td class="num">$0</td><td class="num sub">0.0%</td></tr><tr><td>PLMB-Sales-CBD</td><td class="num">$0</td><td class="num sub">0.0%</td></tr><tr><td>Generator-Scheduled Service-CBD</td><td class="num">$0</td><td class="num sub">0.0%</td></tr><tr><td>Generator-Sales-CBD</td><td class="num">$0</td><td class="num sub">0.0%</td></tr></table></div><div class="dbox"><h3>Job type (top 22)</h3><table class="dt"><tr><th>Job type</th><th class="num">YTD 2026</th><th class="num">Share</th></tr><tr><td>HVAC Install Replacement</td><td class="num">$3,454,021</td><td class="num sub">46.6%</td></tr><tr><td>FIRE Install</td><td class="num">$1,974,590</td><td class="num sub">26.6%</td></tr><tr><td>ELEC Install</td><td class="num">$314,521</td><td class="num sub">4.2%</td></tr><tr><td>HVAC Repair</td><td class="num">$249,051</td><td class="num sub">3.4%</td></tr><tr><td>FIRE Repair</td><td class="num">$236,095</td><td class="num sub">3.2%</td></tr><tr><td>HVAC Repair Aged</td><td class="num">$225,143</td><td class="num sub">3.0%</td></tr><tr><td>FIRE Com Install</td><td class="num">$159,697</td><td class="num sub">2.2%</td></tr><tr><td>FIRE Inspection</td><td class="num">$98,942</td><td class="num sub">1.3%</td></tr><tr><td>HVAC Membership Visit Aged</td><td class="num">$92,436</td><td class="num sub">1.2%</td></tr><tr><td>HVAC Membership Visit</td><td class="num">$74,336</td><td class="num sub">1.0%</td></tr><tr><td>Counter Sale</td><td class="num">$64,474</td><td class="num sub">0.9%</td></tr><tr><td>HVAC System Check</td><td class="num">$61,862</td><td class="num sub">0.8%</td></tr><tr><td>HVAC Com Install Replacement</td><td class="num">$61,613</td><td class="num sub">0.8%</td></tr><tr><td>ELEC Repair</td><td class="num">$58,275</td><td class="num sub">0.8%</td></tr><tr><td>FIRE Membership Visit</td><td class="num">$50,787</td><td class="num sub">0.7%</td></tr><tr><td>HVAC Duct Cleaning</td><td class="num">$47,791</td><td class="num sub">0.6%</td></tr><tr><td>PLMB Install</td><td class="num">$44,466</td><td class="num sub">0.6%</td></tr><tr><td>HVAC Install IAQ</td><td class="num">$40,337</td><td class="num sub">0.5%</td></tr><tr><td>HVAC System Check Aged</td><td class="num">$35,839</td><td class="num sub">0.5%</td></tr><tr><td>PLMB Install Water Heater</td><td class="num">$21,958</td><td class="num sub">0.3%</td></tr><tr><td>HVAC Estimate Replacement</td><td class="num">$21,612</td><td class="num sub">0.3%</td></tr><tr><td>PLMB Repair</td><td class="num">$16,823</td><td class="num sub">0.2%</td></tr></table></div><div class="dbox"><h3>Campaign (top 15)</h3><table class="dt"><tr><th>Campaign</th><th class="num">YTD 2026</th><th class="num">Share</th></tr><tr><td>Main Phone Number</td><td class="num">$1,879,629</td><td class="num sub">25.4%</td></tr><tr><td>Referral - Builder Generated Leads</td><td class="num">$1,011,490</td><td class="num sub">13.6%</td></tr><tr><td>Show Room Walk In</td><td class="num">$294,829</td><td class="num sub">4.0%</td></tr><tr><td>Comfort | Google | Search | Branded</td><td class="num">$260,141</td><td class="num sub">3.5%</td></tr><tr><td>GBP - Ellsworth</td><td class="num">$258,349</td><td class="num sub">3.5%</td></tr><tr><td>Outbound Call</td><td class="num">$255,829</td><td class="num sub">3.5%</td></tr><tr><td>GBP - Hudson</td><td class="num">$249,930</td><td class="num sub">3.4%</td></tr><tr><td>Scheduling Pro - Website</td><td class="num">$230,719</td><td class="num sub">3.1%</td></tr><tr><td>Walk In</td><td class="num">$210,267</td><td class="num sub">2.8%</td></tr><tr><td>GBP - Osceola</td><td class="num">$197,065</td><td class="num sub">2.7%</td></tr><tr><td>Website - Organic (CallRail)</td><td class="num">$196,628</td><td class="num sub">2.7%</td></tr><tr><td>Website - Other</td><td class="num">$193,758</td><td class="num sub">2.6%</td></tr><tr><td>GBP - Hastings</td><td class="num">$186,451</td><td class="num sub">2.5%</td></tr><tr><td>Outbound - Member Maintenance</td><td class="num">$148,224</td><td class="num sub">2.0%</td></tr><tr><td>X_#’s without Campaigns</td><td class="num">$134,314</td><td class="num sub">1.8%</td></tr></table></div></div>
-
-<footer>Sources: <b>PBI Completed YTD 4dx.xlsx</b> (Sheet1 &mdash; Income by Completion Date) and <b>CBD 2026 Revenue Budget.xlsx</b> (Daily Goals tab &mdash; Revenue Goal, Revenue Budget), both in Charles's OneDrive / SharePoint.<br><b>Alignment:</b> actuals lag roughly one day, so goal, budget, last-year and every rolling window are summed over the same days as the actuals, ending at the last populated actuals day (2026-08-27). &quot;Yesterday&quot; is that same day. The Last 365 days window has no 2025 daily goal or budget, so it shows the year-over-year comparison only. Today (2026-08-28) has no actuals posted yet, so WTD reflects only the days already populated.<br>2026 goal (full year published) <b>$7,675,075</b> &middot; 2026 budget (full year published) <b>$7,122,357</b> &middot; <b>25,878</b> job rows spanning 2024-01-01 to 2026-08-27 &middot; Weeks start Monday.<br>Generated 2026-08-28T13:15:59Z.</footer>
+<div class="ph" style="margin-top:24px">Additional data — 2026 YTD breakdowns</div>
+<div class="grid3">
+<div class="panel" style="margin:0"><div class="ph">By business unit</div><table id="tblBU"></table></div>
+<div class="panel" style="margin:0"><div class="ph">By job type</div><table id="tblJT"></table></div>
+<div class="panel" style="margin:0"><div class="ph">By campaign</div><table id="tblCamp"></table></div>
 </div>
-</body></html>
+
+<div class="note" id="note"></div>
+
+<script>
+const DATA=/*DATA_START*/{
+"kpi":{"yesterday":22926.7,"wtd":302887.69,"mtd":935782.42,"qtd":2055811.26,"ytd":7614353.67},
+"goal":{"yesterday":46428.57,"wtd":185714.29,"mtd":882142.86,"qtd":1974368.54,"ytd":7582217.98},
+"budget":{"yesterday":43460.05,"wtd":173840.19,"mtd":825740.9,"qtd":1875957.9,"ytd":7035436.68},
+"lastYear":{"yesterday":27814,"wtd":169894.16,"mtd":816560.1,"qtd":1855698.11,"ytd":6778593.85},
+"ranges":{"yesterday":["2026-08-27","2026-08-27"],"wtd":["2026-08-24","2026-08-27"],"mtd":["2026-08-01","2026-08-27"],"qtd":["2026-07-01","2026-08-27"],"ytd":["2026-01-01","2026-08-27"]},
+"trailing":{"d30":{"actual":1123613.65,"goal":1031082.72,"budget":968952.31,"lastYear":973146.29},"d60":{"actual":2209472.79,"goal":2065991.21,"budget":1964106.63,"lastYear":1984072.19},"d90":{"actual":3266895.65,"goal":2982217.98,"budget":2845343.9,"lastYear":2798734.45},"d180":{"actual":5640405.47,"goal":5682217.98,"budget":5303447.72,"lastYear":5140030.64},"d365":{"actual":12117621.73,"goal":null,"budget":null,"lastYear":10460290.18}},
+"monthly":{"2024-01":889062.7,"2024-02":841919.27,"2024-03":566694.48,"2024-04":712722.41,"2024-05":684577.6,"2024-06":825414.85,"2024-07":889213.47,"2024-08":722069.57,"2024-09":888029.38,"2024-10":1050732.16,"2024-11":933383.47,"2024-12":710189.55,"2025-01":835100.43,"2025-02":830166.28,"2025-03":658669.37,"2025-04":809437.81,"2025-05":874299.51,"2025-06":915222.34,"2025-07":1039138.01,"2025-08":876254.4,"2025-09":905218.78,"2025-10":1338293.44,"2025-11":983958.71,"2025-12":1216102.83,"2026-01":993718.99,"2026-02":980229.21,"2026-03":851587.89,"2026-04":766576.12,"2026-05":767888.04,"2026-06":1198542.16,"2026-07":1120028.84,"2026-08":935782.42},
+"monthlyGoal":{"2026-01":950000.1,"2026-02":950000,"2026-03":774999.94,"2026-04":950000.04,"2026-05":975000,"2026-06":1007849.48,"2026-07":1092225.64,"2026-08":974999.97},
+"weekDaily":[["2026-08-24",31864.42],["2026-08-25",216007.94],["2026-08-26",32088.63],["2026-08-27",22926.7],["2026-08-28",0]],
+"breakdowns":{
+"bu":[["HVAC-Install-CBD",3505852],["FIRE-Install-CBD",1280874],["FIRE-Install-Com-CBD",829082],["HVAC-Service-CBD",625408],["FIRE-Service-CBD",339913],["ELEC-Install-CBD",314212],["HVAC-Install-Com-CBD",244115],["HVAC-Scheduled Service-CBD",156031],["Shop & Parts-CBD",78176],["PLMB-Install-CBD",66423],["ELEC-Service-CBD",62430],["FIRE-Scheduled Service-CBD",52831],["HVAC-Sales-CBD",21612],["PLMB-Service-CBD",18335],["FIRE-Retail-CBD",16887]],
+"jt":[["HVAC Install Replacement",3471155],["FIRE Install",1975965],["ELEC Install",314212],["HVAC Repair",249423],["HVAC Com Install Replacement",238475],["FIRE Repair",236095],["HVAC Repair Aged",225361],["FIRE Com Install",164409],["FIRE Inspection",97317],["HVAC Membership Visit Aged",92606],["HVAC Membership Visit",74586],["Counter Sale",64474],["HVAC System Check",61316],["ELEC Repair",59323],["FIRE Membership Visit",52831]],
+"camp":[["Main Phone Number",2059833],["Referral - Builder Generated Leads",1013015],["Show Room Walk In",294829],["Outbound Call",272288],["Comfort | Google | Search | Branded",260418],["GBP - Ellsworth",258877],["GBP - Hudson",249742],["Scheduling Pro - Website",230719],["Walk In",210267],["GBP - Osceola",197065],["Website - Organic (CallRail)",196883],["Website - Other",193758],["GBP - Hastings",186451],["Outbound - Member Maintenance",148294],["X_#'s without Campaigns",133665]]},
+"meta":{"dataFrom":"2024-01-01","dataAsOf":"2026-08-27","goalAsOf":"2026-08-27","rows":25876,"incomeTotalAll":28610224.49,"annualGoal":7675075,"annualBudget":7122357,"generatedAt":"2026-08-28T13:45:00Z","weekStartConvention":"Monday"}
+}/*DATA_END*/;
+const STAMP=/*STAMP_START*/"Data through 2026-08-27 · refreshed 2026-08-28"/*STAMP_END*/;
+
+const $=id=>document.getElementById(id);
+const money=v=>v==null?"—":(Math.abs(v)>=1e6?"$"+(v/1e6).toFixed(2)+"M":"$"+Math.round(v).toLocaleString());
+const pct=(a,t)=>t?a/t*100:null;
+const pctCls=p=>p==null?"":(p>=100?"g":p>=95?"a":"b");
+const yoyCls=p=>p==null?"":(p>=0?"g":"b");
+const fp=p=>p==null?"—":p.toFixed(1)+"%";
+const yoy=(a,ly)=>ly?(a-ly)/ly*100:null;
+const fyoy=p=>p==null?"—":(p>=0?"▲ ":"▼ ")+Math.abs(p).toFixed(1)+"%";
+
+$("sub").textContent="Actual vs Goal, Budget & Last Year · Revenue = Income by Completion Date · "+STAMP+" · Weeks start Monday";
+
+const PLBL={yesterday:"Yesterday",wtd:"WTD",mtd:"MTD",qtd:"QTD",ytd:"YTD"};
+let h="";
+for(const p of["yesterday","wtd","mtd","qtd","ytd"]){
+  const a=DATA.kpi[p],g=pct(a,DATA.goal[p]),b=pct(a,DATA.budget[p]),y=yoy(a,DATA.lastYear[p]);
+  const[r1,r2]=DATA.ranges[p];
+  h+=`<div class="kpi"><div class="k">${PLBL[p]}</div><div class="val">${money(a)}</div>
+  <div class="rng">${r1===r2?r1:r1+" → "+r2}</div>
+  <div class="cmp"><span>Goal ${money(DATA.goal[p])}</span><b class="${pctCls(g)}">${fp(g)}</b></div>
+  <div class="cmp"><span>Budget ${money(DATA.budget[p])}</span><b class="${pctCls(b)}">${fp(b)}</b></div>
+  <div class="cmp"><span>Last yr ${money(DATA.lastYear[p])}</span><b class="${yoyCls(y)}">${fyoy(y)}</b></div></div>`;
+}
+$("kpiCards").innerHTML=h;
+
+h="";
+for(const N of[30,60,90,180,365]){
+  const t=DATA.trailing["d"+N];
+  const g=t.goal==null?null:pct(t.actual,t.goal),b=t.budget==null?null:pct(t.actual,t.budget),y=yoy(t.actual,t.lastYear);
+  h+=`<div class="kpi"><div class="k">Last ${N} days</div><div class="val">${money(t.actual)}</div>
+  <div class="cmp"><span>Goal ${t.goal==null?"—":money(t.goal)}</span><b class="${pctCls(g)}">${fp(g)}</b></div>
+  <div class="cmp"><span>Budget ${t.budget==null?"—":money(t.budget)}</span><b class="${pctCls(b)}">${fp(b)}</b></div>
+  <div class="cmp"><span>Last yr ${money(t.lastYear)}</span><b class="${yoyCls(y)}">${fyoy(y)}</b></div></div>`;
+}
+$("rollCards").innerHTML=h;
+
+h="";
+for(const p of["yesterday","wtd","mtd","qtd","ytd"]){
+  const a=DATA.kpi[p],g=DATA.goal[p],b=DATA.budget[p];
+  const mx=Math.max(a,g,b)*1.12||1;
+  h+=`<div class="att"><div class="lbl"><span>${PLBL[p]}</span><span>${money(a)} actual · ${money(g)} goal · ${money(b)} budget</span></div>
+  <div class="track"><div class="fill" style="width:${(a/mx*100).toFixed(1)}%"></div>
+  <div class="mk goal" style="left:${(g/mx*100).toFixed(1)}%"></div>
+  <div class="mk bud" style="left:${(b/mx*100).toFixed(1)}%"></div></div></div>`;
+}
+$("attain").innerHTML=h;
+
+const mk=Object.keys(DATA.monthly).sort();
+const mmax=Math.max(...Object.values(DATA.monthly));
+const cur=DATA.meta.dataAsOf.slice(0,7);
+h="";
+for(const m of mk){
+  const v=DATA.monthly[m],y=m.slice(0,4);
+  const cls=m===cur?"cur":"y"+y.slice(2);
+  const gl=DATA.monthlyGoal[m];
+  const hpx=Math.max(3,v/mmax*190);
+  const tick=gl?`<div class="tick" style="bottom:${(gl/mmax*190-hpx).toFixed(0)}px"></div>`:"";
+  h+=`<div class="bar ${cls}" style="height:${hpx.toFixed(0)}px" data-tip="${m}: ${money(v)}${gl?" · goal "+money(gl):""}">${tick}<div class="bl">${m.slice(2).replace("-","/")}</div></div>`;
+}
+$("chart").innerHTML=h;
+
+const DOW=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+h="";
+DATA.weekDaily.forEach(([d,v],i)=>{
+  const future=d>DATA.meta.dataAsOf;
+  h+=`<div class="wd${future?" empty":""}"><div class="d">${DOW[i]} · ${d.slice(5)}</div><div class="v">${future?"—":money(v)}</div></div>`;
+});
+$("week").innerHTML=h;
+
+function tbl(id,rows){
+  const mx=rows[0][1];
+  let t="<tr><th>Name</th><th>Revenue</th><th style='text-align:left'></th></tr>";
+  for(const[n,v]of rows) t+=`<tr><td>${n}</td><td>${money(v)}</td><td style="text-align:left;width:34%"><span class="tblbar" style="width:${(v/mx*100).toFixed(0)}%"></span></td></tr>`;
+  $(id).innerHTML=t;
+}
+tbl("tblBU",DATA.breakdowns.bu);tbl("tblJT",DATA.breakdowns.jt);tbl("tblCamp",DATA.breakdowns.camp);
+
+$("note").innerHTML=`Sources: <b>PBI Completed YTD 4dx.xlsx</b> (Sheet 1 — Income by Completion Date; ${DATA.meta.rows.toLocaleString()} rows, ${DATA.meta.dataFrom} → ${DATA.meta.dataAsOf}, all-time income ${money(DATA.meta.incomeTotalAll)}) and <b>CBD 2026 Revenue Budget.xlsx</b> (Daily Goals tab — Revenue Goal &amp; Revenue Budget). Goal, Budget and Last-Year comparisons are aligned to the actuals' last populated day (${DATA.meta.dataAsOf}); last-year weekly/rolling windows shift back 364 days to match weekdays. 2026 annual goal ${money(DATA.meta.annualGoal)} · annual budget ${money(DATA.meta.annualBudget)} (Daily Goals populated through Aug 2026). Rolling Last-365 has no goal/budget (2025 daily goals not in sheet). Breakdown tables show top 15 by 2026 YTD income. Weeks start Monday. Generated ${DATA.meta.generatedAt.slice(0,16).replace("T"," ")} UTC.`;
+</script></body></html>
