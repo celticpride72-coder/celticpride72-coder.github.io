@@ -1,166 +1,178 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CBD Completed Revenue</title>
 <style>
-:root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--hvac:#4c8dff;--fire:#ff7a59;--elec:#f5c451;--plmb:#a371f7}
+:root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--hvac:#4c8dff;--fire:#ff7a59;--elec:#f5c451;--plmb:#a371f7;}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 .wrap{max-width:1380px;margin:0 auto;padding:22px 22px 70px}
 h1{margin:0;font-size:26px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
 .sub{color:var(--dim);font-size:14px;margin-top:4px}
-.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin:18px 0 6px}
-.kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin:18px 0}
+.kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px;min-width:0}
 .kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
-.kpi .val{font-size:27px;font-weight:750;margin-top:5px;font-variant-numeric:tabular-nums}
-.kpi .rng{font-size:11.5px;color:var(--muted);margin-top:2px}
-.kpi .cmp{font-size:12.5px;margin-top:7px;display:flex;justify-content:space-between;color:var(--dim)}
-.kpi .cmp b{font-variant-numeric:tabular-nums;font-weight:700}
-.g{color:var(--good)}.a{color:var(--warn)}.b{color:var(--bad)}
+.kpi .val{font-size:27px;font-weight:750;margin-top:5px}
+.kpi .rng{font-size:11.5px;color:var(--muted);margin-top:3px}
+.kpi .cmp{font-size:12.5px;margin-top:7px;display:flex;justify-content:space-between;gap:6px}
+.kpi .cmp .lbl{color:var(--dim)}
+.g{color:var(--good)}.a{color:var(--warn)}.b{color:var(--bad)}.mut{color:var(--muted)}
 .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:16px 18px;margin-top:14px}
-.ph{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
-.att{margin:10px 0 14px}.att .lbl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);margin-bottom:4px}
-.track{position:relative;height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;overflow:visible}
-.fill{position:absolute;top:0;left:0;height:100%;border-radius:8px 0 0 8px;background:var(--accent)}
-.mk{position:absolute;top:-3px;width:2px;height:22px}
-.mk.goal{background:var(--warn)}.mk.bud{background:var(--accent2)}
-.legend{font-size:11.5px;color:var(--muted);margin-top:6px}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 12px;vertical-align:middle}
-.chart{display:flex;align-items:flex-end;gap:4px;height:210px;padding-top:8px}
-.bar{flex:1;position:relative;border-radius:3px 3px 0 0;min-width:8px}
-.bar.y24{background:#31537e}.bar.y25{background:#3f6ea8}.bar.y26{background:var(--accent)}
-.bar.cur{background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 4px,#2b5aa8 4px,#2b5aa8 8px)}
-.bar .tick{position:absolute;left:-2px;right:-2px;height:0;border-top:2px dashed var(--warn)}
-.bar .bl{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:9px;color:var(--muted);white-space:nowrap}
-.bar:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#000c;border:1px solid var(--edge);color:var(--ink);font-size:11px;padding:3px 7px;border-radius:6px;white-space:nowrap;z-index:5}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
-.wd{background:var(--panel2);border:1px solid var(--edge);border-radius:10px;padding:10px 12px}
-.wd .d{font-size:11px;color:var(--muted);text-transform:uppercase}.wd .v{font-size:18px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
-.wd.empty{opacity:.35}
+.ph{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:0 0 12px}
+.att{margin:13px 0}.att .lab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);margin-bottom:4px}
+.track{position:relative;height:16px;background:var(--panel2);border-radius:8px;overflow:visible}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--accent)}
+.mk{position:absolute;top:-3px;bottom:-3px;width:2px}
+.mk.goal{background:var(--accent2)}.mk.bud{background:var(--warn)}
+.legend{font-size:11.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 5px 0 12px;vertical-align:middle}
+.chart{display:flex;align-items:flex-end;gap:4px;height:220px;padding-top:8px}
+.bwrap{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0;height:100%;justify-content:flex-end;position:relative}
+.bar{width:100%;border-radius:3px 3px 0 0;position:relative;min-height:2px}
+.gtick{position:absolute;left:-2px;right:-2px;height:0;border-top:2px dashed rgba(231,237,245,.75);z-index:2}
+.blab{font-size:9.5px;color:var(--muted);margin-top:4px;white-space:nowrap;transform:rotate(-45deg);transform-origin:top center;height:34px}
+.hatch{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.18) 0 4px,transparent 4px 8px)!important;opacity:.9}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
-th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--edge);font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--edge)}
 th:first-child,td:first-child{text-align:left}
 th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
-.tblbar{display:inline-block;height:9px;border-radius:4px;background:var(--accent);vertical-align:middle}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
-.note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.7}
-@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.grid3{grid-template-columns:1fr}.week{grid-template-columns:repeat(4,1fr)}}
+tr:hover td{background:rgba(76,141,255,.05)}
+td,th{font-variant-numeric:tabular-nums}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.day{background:var(--panel2);border:1px solid var(--edge);border-radius:10px;padding:10px 12px;text-align:center}
+.day .d{font-size:11px;color:var(--muted);text-transform:uppercase}
+.day .v{font-size:16px;font-weight:700;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+.note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.65}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.week{grid-template-columns:repeat(4,1fr)}}
 </style></head><body><div class="wrap">
-<h1><span class="dot"></span>CBD Completed Revenue</h1>
+<h1><span class="dot"></span>Comfort by Design — Completed Revenue</h1>
 <div class="sub" id="sub"></div>
 
-<div class="ph" style="margin-top:20px">Period to date</div>
-<div class="cards" id="kpiCards"></div>
+<div class="cards" id="kpis"></div>
 
-<div class="panel"><div class="ph">Rolling windows (anchored to last data day)</div><div class="cards" id="rollCards" style="margin:0"></div></div>
+<div class="panel"><div class="ph">Rolling windows (anchored to last data day)</div><div class="cards" id="rolling" style="margin:0"></div></div>
 
-<div class="panel"><div class="ph">Attainment to date</div><div id="attain"></div>
-<div class="legend"><i style="background:var(--accent)"></i>Actual <i style="background:var(--warn)"></i>Goal <i style="background:var(--accent2)"></i>Budget</div></div>
+<div class="panel"><div class="ph">Attainment to date</div><div id="att"></div>
+<div class="legend">bar = actual<i style="background:var(--accent2)"></i>goal marker<i style="background:var(--warn)"></i>budget marker</div></div>
 
-<div class="panel"><div class="ph">Monthly revenue trend</div><div class="chart" id="chart"></div><div style="height:22px"></div>
-<div class="legend"><i style="background:#31537e"></i>2024 <i style="background:#3f6ea8"></i>2025 <i style="background:var(--accent)"></i>2026 <i style="background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 3px,#2b5aa8 3px,#2b5aa8 6px)"></i>Current month (partial) &nbsp;· dashed tick = 2026 monthly goal</div></div>
+<div class="panel"><div class="ph">Monthly revenue trend</div><div class="chart" id="chart"></div>
+<div class="legend"><i style="background:#7c8a9c;margin-left:0"></i>2024<i style="background:var(--accent)"></i>2025<i style="background:var(--accent2)"></i>2026<i style="background:repeating-linear-gradient(45deg,rgba(255,255,255,.4) 0 3px,transparent 3px 6px);border:1px solid var(--edge)"></i>current month (partial)&nbsp;&nbsp;· dashed tick = 2026 monthly goal</div></div>
 
-<div class="panel"><div class="ph">This week, day by day (Mon-start)</div><div class="week" id="week"></div></div>
+<div class="panel"><div class="ph" id="wkh">This week, day by day</div><div class="week" id="week"></div><div class="legend" id="wknote"></div></div>
 
-<div class="ph" style="margin-top:24px">Additional data — 2026 YTD breakdowns</div>
-<div class="grid3">
-<div class="panel" style="margin:0"><div class="ph">By business unit</div><table id="tblBU"></table></div>
-<div class="panel" style="margin:0"><div class="ph">By job type</div><table id="tblJT"></table></div>
-<div class="panel" style="margin:0"><div class="ph">By campaign</div><table id="tblCamp"></table></div>
+<div class="grid2">
+<div class="panel"><div class="ph">2026 YTD by business unit</div><table id="tbu"><thead><tr><th>Business unit</th><th>Revenue</th><th>Share</th></tr></thead><tbody></tbody></table></div>
+<div class="panel"><div class="ph">2026 YTD by job type (top 20)</div><table id="tjt"><thead><tr><th>Job type</th><th>Revenue</th><th>Share</th></tr></thead><tbody></tbody></table></div>
+<div class="panel"><div class="ph">2026 YTD by campaign (top 12)</div><table id="tcamp"><thead><tr><th>Campaign</th><th>Revenue</th><th>Share</th></tr></thead><tbody></tbody></table></div>
 </div>
 
 <div class="note" id="note"></div>
 
 <script>
 const DATA=/*DATA_START*/{
-"kpi":{"yesterday":22926.7,"wtd":302887.69,"mtd":935782.42,"qtd":2055811.26,"ytd":7614353.67},
-"goal":{"yesterday":46428.57,"wtd":185714.29,"mtd":882142.86,"qtd":1974368.54,"ytd":7582217.98},
-"budget":{"yesterday":43460.05,"wtd":173840.19,"mtd":825740.9,"qtd":1875957.9,"ytd":7035436.68},
-"lastYear":{"yesterday":27814,"wtd":169894.16,"mtd":816560.1,"qtd":1855698.11,"ytd":6778593.85},
-"ranges":{"yesterday":["2026-08-27","2026-08-27"],"wtd":["2026-08-24","2026-08-27"],"mtd":["2026-08-01","2026-08-27"],"qtd":["2026-07-01","2026-08-27"],"ytd":["2026-01-01","2026-08-27"]},
-"trailing":{"d30":{"actual":1123613.65,"goal":1031082.72,"budget":968952.31,"lastYear":973146.29},"d60":{"actual":2209472.79,"goal":2065991.21,"budget":1964106.63,"lastYear":1984072.19},"d90":{"actual":3266895.65,"goal":2982217.98,"budget":2845343.9,"lastYear":2798734.45},"d180":{"actual":5640405.47,"goal":5682217.98,"budget":5303447.72,"lastYear":5140030.64},"d365":{"actual":12117621.73,"goal":null,"budget":null,"lastYear":10460290.18}},
-"monthly":{"2024-01":889062.7,"2024-02":841919.27,"2024-03":566694.48,"2024-04":712722.41,"2024-05":684577.6,"2024-06":825414.85,"2024-07":889213.47,"2024-08":722069.57,"2024-09":888029.38,"2024-10":1050732.16,"2024-11":933383.47,"2024-12":710189.55,"2025-01":835100.43,"2025-02":830166.28,"2025-03":658669.37,"2025-04":809437.81,"2025-05":874299.51,"2025-06":915222.34,"2025-07":1039138.01,"2025-08":876254.4,"2025-09":905218.78,"2025-10":1338293.44,"2025-11":983958.71,"2025-12":1216102.83,"2026-01":993718.99,"2026-02":980229.21,"2026-03":851587.89,"2026-04":766576.12,"2026-05":767888.04,"2026-06":1198542.16,"2026-07":1120028.84,"2026-08":935782.42},
-"monthlyGoal":{"2026-01":950000.1,"2026-02":950000,"2026-03":774999.94,"2026-04":950000.04,"2026-05":975000,"2026-06":1007849.48,"2026-07":1092225.64,"2026-08":974999.97},
-"weekDaily":[["2026-08-24",31864.42],["2026-08-25",216007.94],["2026-08-26",32088.63],["2026-08-27",22926.7],["2026-08-28",0]],
+"kpi":{"yesterday":25470.98,"wtd":0,"mtd":961253.40,"qtd":2081282.24,"ytd":7639824.65},
+"goal":{"yesterday":46428.57,"wtd":0,"mtd":928571.43,"qtd":2020797.11,"ytd":7628646.55},
+"budget":{"yesterday":43460.05,"wtd":0,"mtd":869200.95,"qtd":1919417.95,"ytd":7078896.72},
+"lastYear":{"yesterday":31880.30,"wtd":0,"mtd":844374.10,"qtd":1883512.11,"ytd":6806407.85},
+"ranges":{"yesterday":["2026-08-28","2026-08-28"],"wtd":["2026-08-31","2026-08-31"],"mtd":["2026-08-01","2026-08-28"],"qtd":["2026-07-01","2026-08-28"],"ytd":["2026-01-01","2026-08-28"]},
+"trailing":{
+"d30":{"actual":1098174.20,"goal":1027864.67,"budget":964675.23,"lastYear":931607.92,"range":["2026-07-30","2026-08-28"]},
+"d60":{"actual":2163321.32,"goal":2066608.45,"budget":1963492.32,"lastYear":1915392.41,"range":["2026-06-30","2026-08-28"]},
+"d90":{"actual":3279824.40,"goal":3028646.55,"budget":2888803.95,"lastYear":2830614.75,"range":["2026-05-31","2026-08-28"]},
+"d180":{"actual":5665876.45,"goal":5728646.55,"budget":5346907.77,"lastYear":5171340.44,"range":["2026-03-02","2026-08-28"]},
+"d365":{"actual":12115278.71,"goal":null,"budget":null,"lastYear":10453755.31,"range":["2025-08-29","2026-08-28"]}},
+"monthly":{"2024-01":889063,"2024-02":841919,"2024-03":566694,"2024-04":712722,"2024-05":684578,"2024-06":825415,"2024-07":889213,"2024-08":722070,"2024-09":888029,"2024-10":1050732,"2024-11":933383,"2024-12":710190,"2025-01":835100,"2025-02":830166,"2025-03":658669,"2025-04":809438,"2025-05":874300,"2025-06":915222,"2025-07":1039138,"2025-08":876254,"2025-09":905219,"2025-10":1338293,"2025-11":983959,"2025-12":1216103,"2026-01":993719,"2026-02":980229,"2026-03":851588,"2026-04":766576,"2026-05":767888,"2026-06":1198542,"2026-07":1120029,"2026-08":961253},
+"monthlyGoal":{"2026-01":950000,"2026-02":950000,"2026-03":775000,"2026-04":950000,"2026-05":975000,"2026-06":1007849,"2026-07":1092226,"2026-08":975000},
+"weekDaily":[["2026-08-31",0]],
 "breakdowns":{
-"bu":[["HVAC-Install-CBD",3505852],["FIRE-Install-CBD",1280874],["FIRE-Install-Com-CBD",829082],["HVAC-Service-CBD",625408],["FIRE-Service-CBD",339913],["ELEC-Install-CBD",314212],["HVAC-Install-Com-CBD",244115],["HVAC-Scheduled Service-CBD",156031],["Shop & Parts-CBD",78176],["PLMB-Install-CBD",66423],["ELEC-Service-CBD",62430],["FIRE-Scheduled Service-CBD",52831],["HVAC-Sales-CBD",21612],["PLMB-Service-CBD",18335],["FIRE-Retail-CBD",16887]],
-"jt":[["HVAC Install Replacement",3471155],["FIRE Install",1975965],["ELEC Install",314212],["HVAC Repair",249423],["HVAC Com Install Replacement",238475],["FIRE Repair",236095],["HVAC Repair Aged",225361],["FIRE Com Install",164409],["FIRE Inspection",97317],["HVAC Membership Visit Aged",92606],["HVAC Membership Visit",74586],["Counter Sale",64474],["HVAC System Check",61316],["ELEC Repair",59323],["FIRE Membership Visit",52831]],
-"camp":[["Main Phone Number",2059833],["Referral - Builder Generated Leads",1013015],["Show Room Walk In",294829],["Outbound Call",272288],["Comfort | Google | Search | Branded",260418],["GBP - Ellsworth",258877],["GBP - Hudson",249742],["Scheduling Pro - Website",230719],["Walk In",210267],["GBP - Osceola",197065],["Website - Organic (CallRail)",196883],["Website - Other",193758],["GBP - Hastings",186451],["Outbound - Member Maintenance",148294],["X_#'s without Campaigns",133665]]},
-"meta":{"dataFrom":"2024-01-01","dataAsOf":"2026-08-27","goalAsOf":"2026-08-27","rows":25876,"incomeTotalAll":28610224.49,"annualGoal":7675075,"annualBudget":7122357,"generatedAt":"2026-08-28T13:45:00Z","weekStartConvention":"Monday"}
+"businessUnit":[["HVAC-Install-CBD",3514622],["FIRE-Install-CBD",1291129],["FIRE-Install-Com-CBD",829082],["HVAC-Service-CBD",626225],["FIRE-Service-CBD",340664],["ELEC-Install-CBD",318131],["HVAC-Install-Com-CBD",244115],["HVAC-Scheduled Service-CBD",156346],["Shop & Parts-CBD",78176],["PLMB-Install-CBD",66423],["ELEC-Service-CBD",62430],["FIRE-Scheduled Service-CBD",53198],["HVAC-Sales-CBD",21612],["PLMB-Service-CBD",18335],["FIRE-Retail-CBD",16887],["ELEC-Sales-CBD",1963],["Generator-Service-CBD",486]],
+"jobType":[["HVAC Install Replacement",3479925],["FIRE Install",1986219],["ELEC Install",318131],["HVAC Repair",249789],["HVAC Com Install Replacement",238475],["FIRE Repair",236531],["HVAC Repair Aged",225361],["FIRE Com Install",164409],["FIRE Inspection",97632],["HVAC Membership Visit Aged",92921],["HVAC Membership Visit",74586],["Counter Sale",64474],["HVAC System Check",61415],["ELEC Repair",59323],["FIRE Membership Visit",53198],["HVAC Duct Cleaning",47791],["PLMB Install",44466],["HVAC Install IAQ",40337],["HVAC System Check Aged",36191],["PLMB Install Water Heater",21958],["Other (15 types)",46692]],
+"campaign":[["Main Phone Number",2069779],["Referral - Builder Generated Leads",1013015],["Show Room Walk In",294829],["Outbound Call",272288],["GBP - Ellsworth",263050],["Comfort | Google | Search | Branded",260517],["GBP - Hudson",249742],["Scheduling Pro - Website",230818],["Walk In",210267],["GBP - Osceola",197065],["Website - Organic (CallRail)",196883],["GBP - Hastings",196706],["Other (75 campaigns)",2184867]]},
+"meta":{"dataFrom":"2024-01-01","dataAsOf":"2026-08-28","goalAsOf":"2026-08-28","rows":25903,"incomeTotalAll":28635695.47,"annualGoal":7675075.12,"annualBudget":7122356.77,"generatedAt":"2026-08-31T13:10:30Z","today":"2026-08-31","weekStartConvention":"Monday"}
 }/*DATA_END*/;
-const STAMP=/*STAMP_START*/"Data through 2026-08-27 · refreshed 2026-08-28"/*STAMP_END*/;
+const STAMP=/*STAMP_START*/"Data through Fri 2026-08-28 · refreshed Mon 2026-08-31"/*STAMP_END*/;
 
 const $=id=>document.getElementById(id);
-const money=v=>v==null?"—":(Math.abs(v)>=1e6?"$"+(v/1e6).toFixed(2)+"M":"$"+Math.round(v).toLocaleString());
-const pct=(a,t)=>t?a/t*100:null;
-const pctCls=p=>p==null?"":(p>=100?"g":p>=95?"a":"b");
-const yoyCls=p=>p==null?"":(p>=0?"g":"b");
-const fp=p=>p==null?"—":p.toFixed(1)+"%";
-const yoy=(a,ly)=>ly?(a-ly)/ly*100:null;
-const fyoy=p=>p==null?"—":(p>=0?"▲ ":"▼ ")+Math.abs(p).toFixed(1)+"%";
-
+const money=v=>v==null?"—":(Math.abs(v)>=1e6?"$"+(v/1e6).toFixed(2)+"M":"$"+Math.round(v).toLocaleString("en-US"));
+const pct=(a,t)=>(t==null||t===0)?null:a/t*100;
+const attCls=p=>p==null?"mut":(p>=100?"g":(p>=95?"a":"b"));
+const yoyCls=p=>p==null?"mut":(p>=0?"g":"b");
+const fmtd=s=>{const[y,m,d]=s.split("-");return m+"/"+d;};
+const M=DATA.meta;
 $("sub").textContent="Actual vs Goal, Budget & Last Year · Revenue = Income by Completion Date · "+STAMP+" · Weeks start Monday";
 
-const PLBL={yesterday:"Yesterday",wtd:"WTD",mtd:"MTD",qtd:"QTD",ytd:"YTD"};
-let h="";
-for(const p of["yesterday","wtd","mtd","qtd","ytd"]){
-  const a=DATA.kpi[p],g=pct(a,DATA.goal[p]),b=pct(a,DATA.budget[p]),y=yoy(a,DATA.lastYear[p]);
-  const[r1,r2]=DATA.ranges[p];
-  h+=`<div class="kpi"><div class="k">${PLBL[p]}</div><div class="val">${money(a)}</div>
-  <div class="rng">${r1===r2?r1:r1+" → "+r2}</div>
-  <div class="cmp"><span>Goal ${money(DATA.goal[p])}</span><b class="${pctCls(g)}">${fp(g)}</b></div>
-  <div class="cmp"><span>Budget ${money(DATA.budget[p])}</span><b class="${pctCls(b)}">${fp(b)}</b></div>
-  <div class="cmp"><span>Last yr ${money(DATA.lastYear[p])}</span><b class="${yoyCls(y)}">${fyoy(y)}</b></div></div>`;
+const P=[["yesterday","Yesterday"],["wtd","WTD"],["mtd","MTD"],["qtd","QTD"],["ytd","YTD"]];
+let kh="";
+for(const[k,lab]of P){
+  const a=DATA.kpi[k],g=DATA.goal[k],b=DATA.budget[k],ly=DATA.lastYear[k],r=DATA.ranges[k];
+  const pg=pct(a,g),pb=pct(a,b),py=(ly&&ly!==0)?(a-ly)/ly*100:null;
+  kh+='<div class="kpi"><div class="k">'+lab+'</div><div class="val">'+money(a)+'</div><div class="rng">'+fmtd(r[0])+(r[0]===r[1]?"":" – "+fmtd(r[1]))+'</div>'
+    +'<div class="cmp"><span class="lbl">Goal '+money(g)+'</span><span class="'+attCls(pg)+'">'+(pg==null?"—":pg.toFixed(1)+"%")+'</span></div>'
+    +'<div class="cmp"><span class="lbl">Budget '+money(b)+'</span><span class="'+attCls(pb)+'">'+(pb==null?"—":pb.toFixed(1)+"%")+'</span></div>'
+    +'<div class="cmp"><span class="lbl">Last yr '+money(ly)+'</span><span class="'+yoyCls(py)+'">'+(py==null?"—":(py>=0?"▲ ":"▼ ")+Math.abs(py).toFixed(1)+"%")+'</span></div></div>';
 }
-$("kpiCards").innerHTML=h;
+$("kpis").innerHTML=kh;
 
-h="";
-for(const N of[30,60,90,180,365]){
-  const t=DATA.trailing["d"+N];
-  const g=t.goal==null?null:pct(t.actual,t.goal),b=t.budget==null?null:pct(t.actual,t.budget),y=yoy(t.actual,t.lastYear);
-  h+=`<div class="kpi"><div class="k">Last ${N} days</div><div class="val">${money(t.actual)}</div>
-  <div class="cmp"><span>Goal ${t.goal==null?"—":money(t.goal)}</span><b class="${pctCls(g)}">${fp(g)}</b></div>
-  <div class="cmp"><span>Budget ${t.budget==null?"—":money(t.budget)}</span><b class="${pctCls(b)}">${fp(b)}</b></div>
-  <div class="cmp"><span>Last yr ${money(t.lastYear)}</span><b class="${yoyCls(y)}">${fyoy(y)}</b></div></div>`;
+const R=[["d30","Last 30 days"],["d60","Last 60 days"],["d90","Last 90 days"],["d180","Last 180 days"],["d365","Last 365 days"]];
+let rh="";
+for(const[k,lab]of R){
+  const t=DATA.trailing[k];const pg=pct(t.actual,t.goal),pb=pct(t.actual,t.budget),py=(t.lastYear&&t.lastYear!==0)?(t.actual-t.lastYear)/t.lastYear*100:null;
+  rh+='<div class="kpi"><div class="k">'+lab+'</div><div class="val">'+money(t.actual)+'</div><div class="rng">'+fmtd(t.range[0])+" – "+fmtd(t.range[1])+'</div>'
+    +'<div class="cmp"><span class="lbl">Goal '+(t.goal==null?"—":money(t.goal))+'</span><span class="'+attCls(pg)+'">'+(pg==null?"—":pg.toFixed(1)+"%")+'</span></div>'
+    +'<div class="cmp"><span class="lbl">Budget '+(t.budget==null?"—":money(t.budget))+'</span><span class="'+attCls(pb)+'">'+(pb==null?"—":pb.toFixed(1)+"%")+'</span></div>'
+    +'<div class="cmp"><span class="lbl">Last yr '+money(t.lastYear)+'</span><span class="'+yoyCls(py)+'">'+(py==null?"—":(py>=0?"▲ ":"▼ ")+Math.abs(py).toFixed(1)+"%")+'</span></div></div>';
 }
-$("rollCards").innerHTML=h;
+$("rolling").innerHTML=rh;
 
-h="";
-for(const p of["yesterday","wtd","mtd","qtd","ytd"]){
-  const a=DATA.kpi[p],g=DATA.goal[p],b=DATA.budget[p];
-  const mx=Math.max(a,g,b)*1.12||1;
-  h+=`<div class="att"><div class="lbl"><span>${PLBL[p]}</span><span>${money(a)} actual · ${money(g)} goal · ${money(b)} budget</span></div>
-  <div class="track"><div class="fill" style="width:${(a/mx*100).toFixed(1)}%"></div>
-  <div class="mk goal" style="left:${(g/mx*100).toFixed(1)}%"></div>
-  <div class="mk bud" style="left:${(b/mx*100).toFixed(1)}%"></div></div></div>`;
+let ah="";
+for(const[k,lab]of P){
+  const a=DATA.kpi[k],g=DATA.goal[k],b=DATA.budget[k];
+  const mx=Math.max(a,g||0,b||0)||1;
+  const pg=pct(a,g);
+  ah+='<div class="att"><div class="lab"><span>'+lab+'</span><span>'+money(a)+' actual · goal '+money(g)+' · budget '+money(b)+(pg!=null?' · <span class="'+attCls(pg)+'">'+pg.toFixed(1)+'% of goal</span>':'')+'</span></div>'
+    +'<div class="track"><div class="fill" style="width:'+(a/mx*100).toFixed(1)+'%"></div>'
+    +(g?'<div class="mk goal" style="left:'+(g/mx*100).toFixed(1)+'%"></div>':'')
+    +(b?'<div class="mk bud" style="left:'+(b/mx*100).toFixed(1)+'%"></div>':'')+'</div></div>';
 }
-$("attain").innerHTML=h;
+$("att").innerHTML=ah;
 
-const mk=Object.keys(DATA.monthly).sort();
-const mmax=Math.max(...Object.values(DATA.monthly));
-const cur=DATA.meta.dataAsOf.slice(0,7);
-h="";
-for(const m of mk){
-  const v=DATA.monthly[m],y=m.slice(0,4);
-  const cls=m===cur?"cur":"y"+y.slice(2);
-  const gl=DATA.monthlyGoal[m];
-  const hpx=Math.max(3,v/mmax*190);
-  const tick=gl?`<div class="tick" style="bottom:${(gl/mmax*190-hpx).toFixed(0)}px"></div>`:"";
-  h+=`<div class="bar ${cls}" style="height:${hpx.toFixed(0)}px" data-tip="${m}: ${money(v)}${gl?" · goal "+money(gl):""}">${tick}<div class="bl">${m.slice(2).replace("-","/")}</div></div>`;
+const months=Object.keys(DATA.monthly).sort();
+const maxM=Math.max(...Object.values(DATA.monthly));
+const curM=M.dataAsOf.slice(0,7);
+const yc={2024:"#7c8a9c",2025:"#4c8dff",2026:"#2bd4a7"};
+let ch="";
+for(const m of months){
+  const v=DATA.monthly[m],h=Math.max(2,v/maxM*100);
+  const y=m.slice(0,4);const g=DATA.monthlyGoal[m];
+  const hat=m===curM?" hatch":"";
+  let tick="";
+  if(g&&g>0){tick='<div class="gtick" style="bottom:'+(g/maxM*100).toFixed(1)+'%"></div>';}
+  ch+='<div class="bwrap" title="'+m+' '+money(v)+(g?" · goal "+money(g):"")+'">'+tick+'<div class="bar'+hat+'" style="height:'+h.toFixed(1)+'%;background:'+yc[y]+'"></div><div class="blab">'+m+'</div></div>';
 }
-$("chart").innerHTML=h;
+$("chart").innerHTML=ch;
 
-const DOW=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-h="";
-DATA.weekDaily.forEach(([d,v],i)=>{
-  const future=d>DATA.meta.dataAsOf;
-  h+=`<div class="wd${future?" empty":""}"><div class="d">${DOW[i]} · ${d.slice(5)}</div><div class="v">${future?"—":money(v)}</div></div>`;
-});
-$("week").innerHTML=h;
+const wd=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const wkMap={};for(const[d,v]of DATA.weekDaily)wkMap[d]=v;
+const ws=DATA.ranges.wtd[0].split("-").map(Number);
+let wh="";
+for(let i=0;i<7;i++){
+  const d=new Date(ws[0],ws[1]-1,ws[2]+i);
+  const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  const future=key>M.today;const has=key<=M.dataAsOf||wkMap[key]>0;
+  wh+='<div class="day"><div class="d">'+wd[i]+' '+fmtd(key)+'</div><div class="v'+(future?" mut":"")+'">'+(future?"—":(has||wkMap[key]!=null?money(wkMap[key]||0):"—"))+'</div></div>';
+}
+$("week").innerHTML=wh;
+$("wkh").textContent="This week, day by day (week of "+fmtd(DATA.ranges.wtd[0])+", Monday start)";
+$("wknote").textContent=M.dataAsOf<M.today?"Actuals lag ~1 business day — completed income for this week posts as jobs close (data through "+M.dataAsOf+").":"";
 
 function tbl(id,rows){
-  const mx=rows[0][1];
-  let t="<tr><th>Name</th><th>Revenue</th><th style='text-align:left'></th></tr>";
-  for(const[n,v]of rows) t+=`<tr><td>${n}</td><td>${money(v)}</td><td style="text-align:left;width:34%"><span class="tblbar" style="width:${(v/mx*100).toFixed(0)}%"></span></td></tr>`;
-  $(id).innerHTML=t;
+  const tot=rows.reduce((s,r)=>s+r[1],0);
+  let h="";
+  for(const[n,v]of rows)h+='<tr><td>'+n+'</td><td>'+money(v)+'</td><td class="mut">'+(v/tot*100).toFixed(1)+'%</td></tr>';
+  h+='<tr style="font-weight:700"><td>Total</td><td>'+money(tot)+'</td><td class="mut">100%</td></tr>';
+  document.querySelector("#"+id+" tbody").innerHTML=h;
 }
-tbl("tblBU",DATA.breakdowns.bu);tbl("tblJT",DATA.breakdowns.jt);tbl("tblCamp",DATA.breakdowns.camp);
+tbl("tbu",DATA.breakdowns.businessUnit);
+tbl("tjt",DATA.breakdowns.jobType);
+tbl("tcamp",DATA.breakdowns.campaign);
 
-$("note").innerHTML=`Sources: <b>PBI Completed YTD 4dx.xlsx</b> (Sheet 1 — Income by Completion Date; ${DATA.meta.rows.toLocaleString()} rows, ${DATA.meta.dataFrom} → ${DATA.meta.dataAsOf}, all-time income ${money(DATA.meta.incomeTotalAll)}) and <b>CBD 2026 Revenue Budget.xlsx</b> (Daily Goals tab — Revenue Goal &amp; Revenue Budget). Goal, Budget and Last-Year comparisons are aligned to the actuals' last populated day (${DATA.meta.dataAsOf}); last-year weekly/rolling windows shift back 364 days to match weekdays. 2026 annual goal ${money(DATA.meta.annualGoal)} · annual budget ${money(DATA.meta.annualBudget)} (Daily Goals populated through Aug 2026). Rolling Last-365 has no goal/budget (2025 daily goals not in sheet). Breakdown tables show top 15 by 2026 YTD income. Weeks start Monday. Generated ${DATA.meta.generatedAt.slice(0,16).replace("T"," ")} UTC.`;
+$("note").innerHTML="Sources: <b>PBI Completed YTD 4dx.xlsx</b> (Sheet 1 — Income summed by Completion Date; "+M.rows.toLocaleString()+" rows, "+M.dataFrom+" → "+M.dataAsOf+", all-time income "+money(M.incomeTotalAll)+") and <b>CBD 2026 Revenue Budget.xlsx</b> (Daily Goals tab — Revenue Goal &amp; Revenue Budget by day; annual goal "+money(M.annualGoal)+", annual budget "+money(M.annualBudget)+").<br>"
++"Alignment: goal, budget and last-year comparisons cover the same elapsed days as actuals, ending at the last populated data day ("+M.dataAsOf+"); last year is shifted 364 days (same weekday). Rolling windows are anchored to that day. Last-365 goal/budget are shown as — because 2025 daily goals are not in the file. Attainment: ≥100% green, 95–99.9% amber, &lt;95% red. Weeks start Monday. Generated "+M.generatedAt+".";
 </script></body></html>
