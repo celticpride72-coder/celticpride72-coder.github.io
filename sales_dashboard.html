@@ -56,34 +56,8 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(76,141,255,.05)}
 <div class="note" id="note"></div>
 
 <script>
-const DATA=/*DATA_START*/{
-"today":"2026-08-28","dataAsOf":"2026-08-27",
-"periods":{
- "yesterday":{"label":"Yesterday (Thu 8/27)","actual":5522.10,"goal":40000,"budget":37530.19,"lastYear":12740,"range":"Aug 27"},
- "wtd":{"label":"WTD","actual":76719.42,"goal":160000,"budget":150120.76,"lastYear":47675.80,"range":"Aug 24 – Aug 27"},
- "mtd":{"label":"MTD","actual":845987.51,"goal":760000,"budget":713073.62,"lastYear":538785.76,"range":"Aug 1 – Aug 27"},
- "qtd":{"label":"QTD","actual":1798523.89,"goal":1661259.35,"budget":1592075.66,"lastYear":1256842.81,"range":"Jul 1 – Aug 27"},
- "ytd":{"label":"YTD","actual":6036767.55,"goal":6462161.42,"budget":5962848.10,"lastYear":4944738.03,"range":"Jan 1 – Aug 27"}},
-"rolling":{
- "d30":{"label":"Last 30 days","actual":949411.74,"goal":882899.00,"budget":832937.53,"lastYear":602629.04},
- "d60":{"label":"Last 60 days","actual":1879668.02,"goal":1738882.02,"budget":1665668.79,"lastYear":1346017.20},
- "d90":{"label":"Last 90 days","actual":2762088.03,"goal":2515108.79,"budget":2401600.10,"lastYear":2160351.83},
- "d180":{"label":"Last 180 days","actual":4545483.24,"goal":4939161.42,"budget":4556133.10,"lastYear":3982236.61},
- "d365":{"label":"Last 365 days","actual":9955437.65,"goal":null,"budget":null,"lastYear":7242004.22}},
-"monthly":{"2024-01":505499,"2024-02":279320,"2024-03":326823,"2024-04":283538,"2024-05":572078,"2024-06":530315,"2024-07":590277,"2024-08":429146,"2024-09":756210,"2024-10":561905,"2024-11":452582,"2024-12":497866,"2025-01":487213,"2025-02":475289,"2025-03":495622,"2025-04":673500,"2025-05":660351,"2025-06":855181,"2025-07":729569,"2025-08":568014,"2025-09":1047646,"2025-10":1059139,"2025-11":888977,"2025-12":910168,"2026-01":858925,"2026-02":632359,"2026-03":446246,"2026-04":493484,"2026-05":873503,"2026-06":933727,"2026-07":952536,"2026-08":845988},
-"monthlyGoal":{"2026-01":760000,"2026-02":763000,"2026-03":741053,"2026-04":830000,"2026-05":853000,"2026-06":853849,"2026-07":901259,"2026-08":840000},
-"currentMonth":"2026-08",
-"weekDaily":[
- {"day":"Mon","date":"8/24","sales":21220,"goal":40000,"budget":37530},
- {"day":"Tue","date":"8/25","sales":14647,"goal":40000,"budget":37530},
- {"day":"Wed","date":"8/26","sales":35330,"goal":40000,"budget":37530},
- {"day":"Thu","date":"8/27","sales":5522,"goal":40000,"budget":37530},
- {"day":"Fri","date":"8/28","sales":0,"goal":40000,"budget":37530,"future":true}],
-"byBU":[["HVAC-Sales-CBD",3269362],["FIRE-Sales-CBD",1253688],["FIRE-Sales-Com-CBD",768548],["HVAC-Sales-Com-CBD",745170]],
-"byRep":[["Aaron Fischer",3825684],["Noah M",2087906],["Michael K",74885],["Lee P",43027],["Collin Lieffort",5185],["Kurtis K",79]],
-"bySrc":[["Direct / unattributed",3783178],["HVAC Repair Aged",980331],["HVAC Repair",475081],["HVAC Membership Visit Aged",281744],["FIRE Repair",145094],["FIRE Inspection",96815],["HVAC Membership Visit",94851],["HVAC System Check Aged",93521],["HVAC System Check",71307],["PLMB Repair",11627],["FIRE Membership Visit",2670],["ELEC Repair",549]]
-}/*DATA_END*/;
-const STAMP=/*STAMP_START*/"updated 2026-08-28 · data through Thu Aug 27, 2026"/*STAMP_END*/;
+const DATA=/*DATA_START*/{"today": "2026-08-31", "dataAsOf": "2026-08-28", "periods": {"yesterday": {"label": "Yesterday (Fri 8/28)", "actual": 64418.76, "goal": 40000, "budget": 37530.19, "lastYear": 0, "range": "Aug 28"}, "wtd": {"label": "WTD", "actual": 0, "goal": 0, "budget": 0, "lastYear": 0, "range": "Aug 31 (new week — no sold days yet)"}, "mtd": {"label": "MTD", "actual": 910406.27, "goal": 800000, "budget": 750603.81, "lastYear": 538785.76, "range": "Aug 1 – Aug 28"}, "qtd": {"label": "QTD", "actual": 1862942.65, "goal": 1701259.35, "budget": 1629605.85, "lastYear": 1256842.81, "range": "Jul 1 – Aug 28"}, "ytd": {"label": "YTD", "actual": 6101186.31, "goal": 6502161.42, "budget": 6000378.29, "lastYear": 4944738.03, "range": "Jan 1 – Aug 28"}}, "rolling": {"d30": {"label": "Last 30 days", "actual": 1008522.5, "goal": 881932.67, "budget": 830513.09, "lastYear": 579214.04}, "d60": {"label": "Last 60 days", "actual": 1871549.65, "goal": 1740070.68, "budget": 1666402.42, "lastYear": 1297582.71}, "d90": {"label": "Last 90 days", "actual": 2796669.79, "goal": 2555108.79, "budget": 2439130.29, "lastYear": 2152763.83}, "d180": {"label": "Last 180 days", "actual": 4609902.0, "goal": 4979161.42, "budget": 4593663.29, "lastYear": 3982236.61}, "d365": {"label": "Last 365 days", "actual": 10007116.41, "goal": null, "budget": null, "lastYear": 7220786.19}}, "monthly": {"2024-01": 505499, "2024-02": 279320, "2024-03": 326823, "2024-04": 283538, "2024-05": 572078, "2024-06": 530315, "2024-07": 590277, "2024-08": 429146, "2024-09": 756210, "2024-10": 561905, "2024-11": 452582, "2024-12": 497866, "2025-01": 487213, "2025-02": 475289, "2025-03": 495622, "2025-04": 673500, "2025-05": 660351, "2025-06": 855181, "2025-07": 729569, "2025-08": 568014, "2025-09": 1047646, "2025-10": 1059139, "2025-11": 888977, "2025-12": 910168, "2026-01": 858925, "2026-02": 632359, "2026-03": 446246, "2026-04": 493484, "2026-05": 873503, "2026-06": 933727, "2026-07": 952536, "2026-08": 910406}, "monthlyGoal": {"2026-01": 760000, "2026-02": 763000, "2026-03": 741053, "2026-04": 830000, "2026-05": 853000, "2026-06": 853849, "2026-07": 901259, "2026-08": 840000}, "currentMonth": "2026-08", "weekDaily": [{"day": "Mon", "date": "8/31", "sales": 0, "goal": 40000, "budget": 37530, "future": true}], "byBU": [["HVAC-Sales-CBD", 3333781], ["FIRE-Sales-CBD", 1253688], ["FIRE-Sales-Com-CBD", 768548], ["HVAC-Sales-Com-CBD", 745170]], "byRep": [["Aaron Fischer", 3846858], ["Noah Meshak", 2131151], ["Michael K", 74885], ["Lee P", 43027], ["Collin Lieffort", 5185], ["Kurtis K", 79]], "bySrc": [["Direct / unattributed", 3826423], ["HVAC Repair Aged", 980331], ["HVAC Repair", 475081], ["HVAC Membership Visit Aged", 281744], ["FIRE Repair", 145094], ["HVAC System Check Aged", 114695], ["FIRE Inspection", 96815], ["HVAC Membership Visit", 94851], ["HVAC System Check", 71307], ["PLMB Repair", 11627], ["FIRE Membership Visit", 2670], ["ELEC Repair", 549]]}/*DATA_END*/;
+const STAMP=/*STAMP_START*/"updated 2026-08-31 · data through Fri Aug 28, 2026"/*STAMP_END*/;
 
 const money=v=>v==null?"—":(Math.abs(v)>=1e6?"$"+(v/1e6).toFixed(2)+"M":"$"+Math.round(v).toLocaleString());
 const pct=(a,t)=>(t==null||t===0)?null:a/t*100;
