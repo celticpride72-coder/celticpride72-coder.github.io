@@ -1,0 +1,106 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Revenue Dashboard</title>
+<style>
+:root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1380px;margin:0 auto;padding:22px 22px 70px}
+h1{margin:0;font-size:26px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);margin-right:8px;vertical-align:middle}
+.sub{color:var(--dim);font-size:14px;margin-top:4px}
+.cards{display:grid;gap:14px;margin:18px 0 6px}
+.c4{grid-template-columns:repeat(4,minmax(0,1fr))}.c5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}
+.kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.kpi .val{font-size:27px;font-weight:750;margin-top:5px;font-variant-numeric:tabular-nums}
+.kpi .rng{font-size:11.5px;color:var(--muted);margin-top:2px}
+.kpi .cmp{font-size:12.5px;margin-top:7px;display:flex;justify-content:space-between;color:var(--dim)}
+.kpi .cmp b{font-variant-numeric:tabular-nums;font-weight:700}
+.g{color:var(--good)}.a{color:var(--warn)}.b{color:var(--bad)}
+.panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:16px 18px;margin-top:14px}
+.ph{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.att{margin:10px 0 14px}.att .lbl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--dim);margin-bottom:4px}
+.track{position:relative;height:16px;background:var(--panel2);border:1px solid var(--edge);border-radius:8px;overflow:visible}
+.fill{position:absolute;top:0;left:0;height:100%;border-radius:8px 0 0 8px;background:var(--accent)}
+.mk{position:absolute;top:-3px;width:2px;height:22px}.mk.goal{background:var(--warn)}
+.legend{font-size:11.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 12px;vertical-align:middle}
+.chart{display:flex;align-items:flex-end;gap:4px;height:220px;padding-top:8px}
+.bar{flex:1;position:relative;border-radius:3px 3px 0 0;min-width:7px}
+.bar.y24{background:#31537e}.bar.y25{background:#3f6ea8}.bar.y26{background:var(--accent)}
+.bar.cur{background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 4px,#2b5aa8 4px,#2b5aa8 8px)}
+.bar .tick{position:absolute;left:-2px;right:-2px;height:0;border-top:2px dashed var(--warn)}
+.bar .bl{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:9px;color:var(--muted);white-space:nowrap}
+.bar:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#000c;border:1px solid var(--edge);color:var(--ink);font-size:11px;padding:3px 7px;border-radius:6px;white-space:nowrap;z-index:5}
+.yr{display:flex;gap:4px;margin-top:26px;font-size:10px;color:var(--muted)}.yr div{text-align:center}
+.note{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.7}
+@media(max-width:1000px){.c4,.c5{grid-template-columns:repeat(2,1fr)}}
+</style></head><body><div class="wrap">
+ <h1><span class="dot"></span>Install Revenue Dashboard</h1>
+ <div class="sub" id="sub"></div>
+
+ <div class="cards c5" id="periodCards"></div>
+
+ <div class="panel"><div class="ph">Rolling windows</div><div class="cards c5" id="rollCards" style="margin:0"></div></div>
+
+ <div class="panel"><div class="ph">Attainment to date — actual vs Install goal</div><div id="att"></div>
+   <div class="legend"><i style="background:var(--accent)"></i>Actual <i style="background:var(--warn)"></i>Goal</div></div>
+
+ <div class="panel"><div class="ph">Monthly install revenue — 2024 · 2025 · 2026 (dashed = 2026 goal)</div>
+   <div class="chart" id="chart"></div><div class="yr" id="yrrow"></div></div>
+
+ <div class="note" id="note"></div>
+</div>
+<script>
+const DATA=/*DATA_START*/{"asOf":"2026-08-27",
+ "periods":{
+  "WTD":{"actual":271012,"goal":150121,"lastYear":120395,"range":"Aug 24 – 27, 2026"},
+  "MTD":{"actual":772413,"goal":713074,"lastYear":647045,"range":"Aug 1 – 27, 2026"},
+  "LM":{"actual":925618,"goal":879002,"lastYear":871195,"range":"July 2026 (full month)"},
+  "QTD":{"actual":1698031,"goal":1592076,"lastYear":1518240,"range":"Jul 1 – Aug 27, 2026"},
+  "YTD":{"actual":5859923,"goal":5962848,"lastYear":5198240,"range":"Jan 1 – Aug 27, 2026"}},
+ "rolling":{
+  "30":{"actual":932722,"goal":832938,"lastYear":763390},
+  "60":{"actual":1825731,"goal":1665669,"lastYear":1618009},
+  "90":{"actual":2631251,"goal":2401600,"lastYear":2253224},
+  "180":{"actual":4412646,"goal":4556133,"lastYear":4070940},
+  "365":{"actual":9330572,"goal":null,"lastYear":7716636}},
+ "monthly":{"2024":[628585,617487,393340,557955,505120,608451,715322,492223,631177,753579,622527,458742],
+  "2025":[518223,622313,471128,648611,697977,721749,871195,684815,668602,1019171,761714,983391],
+  "2026":[732808,714470,673199,548941,559255,933220,925618,772413,0,0,0,0]},
+ "mGoal26":[671153,735562,587169,773829,793535,809524,879002,788134,0,0,0,0],
+ "curMonth":7
+}/*DATA_END*/;
+
+const usd=v=>"$"+Math.round(v).toLocaleString();
+const usdShort=v=>{const a=Math.abs(v);return a>=1e6?"$"+(v/1e6).toFixed(2)+"M":a>=1e3?"$"+Math.round(v/1e3)+"K":"$"+Math.round(v);};
+const attC=p=>p>=100?"g":p>=95?"a":"b";
+const yC=v=>v>=0?"g":"b";
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+document.getElementById("sub").innerHTML="Completed install revenue — HVAC + Fireplace, residential &amp; commercial (business unit contains “Install”) &middot; vs Install(HVAC/FP) daily goal &amp; last year &middot; data as of "+new Date(DATA.asOf+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
+
+function kpi(k,o,showGoal){
+ const gp=o.goal!=null&&o.goal>0?o.actual/o.goal*100:null;
+ const yoy=o.lastYear?(o.actual-o.lastYear)/o.lastYear*100:null;
+ const goalLine=gp!=null?`<div class="cmp"><span>vs Goal</span><b class="${attC(gp)}">${gp.toFixed(1)}%</b></div>`:`<div class="cmp"><span>vs Goal</span><b class="dim">—</b></div>`;
+ const yoyLine=yoy!=null?`<div class="cmp"><span>vs Last yr</span><b class="${yC(yoy)}">${yoy>=0?"▲":"▼"} ${Math.abs(yoy).toFixed(1)}%</b></div>`:"";
+ return `<div class="kpi"><div class="k">${k}</div><div class="val">${usd(o.actual)}</div><div class="rng">${o.range||""}</div>${goalLine}${yoyLine}</div>`;
+}
+const PL={WTD:"WTD",MTD:"MTD",LM:"Last Month",QTD:"QTD",YTD:"YTD"};
+document.getElementById("periodCards").innerHTML=["WTD","MTD","LM","QTD","YTD"].map(p=>kpi(PL[p],DATA.periods[p],true)).join("");
+document.getElementById("rollCards").innerHTML=[30,60,90,180,365].map(n=>{const o=DATA.rolling[n];o.range="last "+n+" days";return kpi("Last "+n+" days",o,true);}).join("");
+
+// attainment
+document.getElementById("att").innerHTML=["WTD","MTD","LM","QTD","YTD"].map(p=>{const o=DATA.periods[p];const scale=Math.max(o.actual,o.goal||0)*1.06||1;const gp=o.goal?o.actual/o.goal*100:null;
+ return `<div class="att"><div class="lbl"><span>${PL[p]} &middot; ${usd(o.actual)}</span><span class="${gp!=null?attC(gp):''}">${gp!=null?gp.toFixed(1)+"% of goal":"—"}${o.goal?" ("+usd(o.goal)+")":""}</span></div>
+  <div class="track"><div class="fill" style="width:${Math.min(100,o.actual/scale*100)}%"></div>${o.goal?`<div class="mk goal" style="left:${Math.min(100,o.goal/scale*100)}%"></div>`:""}</div></div>`;}).join("");
+
+// monthly chart
+const yrs=[["2024","y24"],["2025","y25"],["2026","y26"]];
+let bars=[],max=0;
+yrs.forEach(([y,cls])=>{const arr=DATA.monthly[y];const lastM=y==="2026"?DATA.curMonth:11;
+ for(let m=0;m<=lastM;m++){const v=arr[m];max=Math.max(max,v);const goal=y==="2026"?DATA.mGoal26[m]:null;if(goal)max=Math.max(max,goal);
+  bars.push({y,cls:(y==="2026"&&m===DATA.curMonth)?"cur":cls,m,v,goal,tip:MON[m]+" "+y+" · "+usd(v)+(goal?" · goal "+usd(goal):"")});}});
+document.getElementById("chart").innerHTML=bars.map(b=>{const h=Math.max(1,b.v/max*100);const gtick=b.goal?`<div class="tick" style="bottom:${b.goal/max*100}%"></div>`:"";
+ return `<div class="bar ${b.cls}" style="height:${h}%" data-tip="${b.tip}">${gtick}<div class="bl">${(b.m===0)?b.y:(b.m%3===0?MON[b.m]:"")}</div></div>`;}).join("");
+
+document.getElementById("note").innerHTML="<b>Install revenue</b> = Income by completion date for completed jobs whose Business Unit contains “Install” and is HVAC or Fireplace (residential + commercial: HVAC-Install-CBD, HVAC-Install-Com-CBD, FIRE-Install-CBD, FIRE-Install-Com-CBD and any renamed equivalents) &mdash; Electrical and Plumbing installs excluded. <b>Goal</b> = the Install(HVAC/FP) Goal daily column (CBD 2026 Revenue Budget → Daily Goals), summed over the same days as the actuals. <b>Last year</b> = the identical window one year earlier (weekly windows shift 364 days so weekdays line up). Periods and rolling windows are anchored at the last day with install actuals ("+new Date(DATA.asOf+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})+"; actuals lag ~1–3 days). The 365-day window reaches into 2025 where no daily goal exists, so it shows last-year only. Sources: PBI Completed YTD 4dx.xlsx, CBD 2026 Revenue Budget.xlsx.";
+</script></body></html>
