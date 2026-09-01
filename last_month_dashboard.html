@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Last Month Dashboard — July 2026</title>
+<title>Last Month Dashboard — August 2026</title>
 <style>
   :root{
     --bg:#0f1720; --panel:#161f2b; --panel2:#1c2735; --line:#26303f;
@@ -74,7 +74,7 @@
 <div class="wrap">
   <header>
     <div>
-      <h1>Last Month <span class="pill">July 2026 · complete</span></h1>
+      <h1>Last Month <span class="pill">August 2026 · complete</span></h1>
       <div class="sub">Comfort by Design — Revenue, Sales &amp; TGL month in review</div>
     </div>
     <div class="stamp" id="stamp"></div>
@@ -82,11 +82,11 @@
 
   <div class="cards" id="cards"></div>
 
-  <h2 style="margin:6px 2px 12px;font-size:16px">Additional metrics — July 2026</h2>
+  <h2 style="margin:6px 2px 12px;font-size:16px">Additional metrics — August 2026</h2>
   <div class="cards cards4" id="cards2"></div>
 
   <div class="panel">
-    <h2>Attainment — July 2026</h2>
+    <h2>Attainment — August 2026</h2>
     <div class="cap">Full-month actual vs plan · fill = actual, markers = goal &amp; budget</div>
     <div class="att" id="att"></div>
     <div class="legend" style="margin-top:18px">
@@ -99,7 +99,7 @@
   </div>
 
   <div class="panel">
-    <h2>Daily through July</h2>
+    <h2>Daily through August</h2>
     <div class="cap">Revenue (completed income), Sales (sold estimates) &amp; TGL (tech-generated lead sales) by day · same scale</div>
     <div class="chart" id="chart"></div>
     <div class="legend">
@@ -115,18 +115,18 @@
 
 <script>
 const DATA = {
-  month: "July 2026",
-  generatedAt: "2026-08-03T16:00:00Z",
+  month: "August 2026",
+  generatedAt: "2026-09-01T14:00:00Z",
   metrics: {
     revenue: { label:"Revenue", sub:"Completed income · by completion date", cls:"rev",
-      actual:1120028.84, goal:1092226, budget:1050217, lastYear:1039138.01, priorMonth:1198542.16,
-      daily:{"01":43974.5,"02":43440,"03":9854.61,"04":0,"05":0,"06":18896,"07":42837.63,"08":66849.89,"09":32257.1,"10":48916.93,"11":2425.18,"12":0,"13":42922.54,"14":39658.98,"15":32818.05,"16":50713.06,"17":60860.12,"18":2995.5,"19":0,"20":67396.2,"21":41821.35,"22":38491.48,"23":65922.99,"24":62314.18,"25":12421.5,"26":0,"27":20444.12,"28":83965.7,"29":50910.43,"30":54918.79,"31":82002.01} },
-    sales: { label:"Sales", sub:"Sold estimates · 4 sales business units", cls:"sales",
-      actual:952536.38, goal:901259, budget:879002, lastYear:729568.67, priorMonth:933727.14,
-      daily:{"01":29822.8,"02":53056.85,"03":13768.16,"04":20091,"05":0,"06":24127,"07":23164.9,"08":79186.59,"09":29711,"10":41402.16,"11":13284.78,"12":0,"13":50867.8,"14":54192.9,"15":50609.87,"16":32032.28,"17":37599.12,"18":32520,"19":8349,"20":17862.66,"21":23925.71,"22":38459.53,"23":54231.4,"24":20065.5,"25":23527,"26":0,"27":48750,"28":28504.14,"29":5308,"30":35991,"31":62125.23} },
+      actual:1176086.77, goal:975000, budget:912661, lastYear:876254.40, priorMonth:1120028.84,
+      daily:{"01":79,"02":0,"03":28525.96,"04":24187.77,"05":47550.07,"06":41634.03,"07":51301.5,"08":20069,"09":0,"10":22378.85,"11":53531,"12":55415.07,"13":33918.66,"14":95826.75,"15":148,"16":0,"17":17254.34,"18":33511.22,"19":29167.65,"20":41174.34,"21":37221.52,"22":0,"23":0,"24":31864.42,"25":216007.94,"26":32088.63,"27":22926.7,"28":25470.98,"29":0,"30":0,"31":214833.37} },
+    sales: { label:"Sales", sub:"Sold estimates · HVAC + Fireplace sales business units", cls:"sales",
+      actual:922560.77, goal:840000, budget:788134, lastYear:568014.04, priorMonth:952536.38,
+      daily:{"01":0,"02":9862,"03":8422,"04":413432.95,"05":63527.07,"06":42176.5,"07":15293.76,"08":0,"09":0,"10":14469,"11":26090.7,"12":27725.5,"13":7523.8,"14":4399.45,"15":7780,"16":0,"17":0,"18":22319.5,"19":47572.87,"20":3900,"21":44905.23,"22":0,"23":9867.76,"24":21220,"25":14647,"26":35330.32,"27":5522.1,"28":64418.76,"29":0,"30":0,"31":12154.5} },
     tgl: { label:"TGL", sub:"Tech-generated lead sales · lead from a Service BU", cls:"tgl",
-      actual:383878.23, goal:297436.17, budget:null, lastYear:259129.79, priorMonth:427192.61,
-      daily:{"01":10783,"02":28639,"03":259,"04":20091,"05":0,"06":2346.76,"07":13164.9,"08":12058,"09":26931,"10":6532.68,"11":0,"12":0,"13":9877,"14":12985.86,"15":50609.87,"16":9796.63,"17":0,"18":15287,"19":8349,"20":13627.66,"21":2273,"22":18288.64,"23":12955.42,"24":15530,"25":23527,"26":0,"27":28681,"28":3400,"29":2195,"30":0,"31":35689.81} }
+      actual:162550.68, goal:273253.80, budget:null, lastYear:237612.47, priorMonth:383878.23,
+      daily:{"01":0,"02":0,"03":0,"04":41287.2,"05":16258.27,"06":0,"07":15293.76,"08":0,"09":0,"10":8669,"11":0,"12":2721,"13":0,"14":4399.45,"15":4752,"16":0,"17":0,"18":9129,"19":0,"20":0,"21":11528.48,"22":0,"23":9867.76,"24":549,"25":0,"26":7147,"27":0,"28":21173.76,"29":0,"30":0,"31":9775} }
   }
 };
 
@@ -137,19 +137,19 @@ const arrow = p => p>=0 ? "▲" : "▼";
 const accent = cls => cls==="rev"?"var(--rev)":cls==="sales"?"var(--sales)":"var(--tgl)";
 
 document.getElementById("stamp").innerHTML =
-  `<div><b>Month</b> July 2026 (complete)</div>`+
-  `<div><b>Data through</b> Aug 1–2, 2026</div>`+
+  `<div><b>Month</b> August 2026 (complete)</div>`+
+  `<div><b>Data through</b> Sep 1, 2026</div>`+
   `<div>Revenue · Sales · TGL</div>`;
 
 DATA.extra=[
- {label:"Booked Jobs",sub:"Count of jobs by Created Date · Booking PBI 4DX",bigsub:"jobs booked in July 2026",color:"#f59e0b",fmt:"num",actual:894,goal:898,lastYear:885,priorMonth:895},
- {label:"Service Revenue",sub:"Completed income · 8 service business units",bigsub:"completed in July 2026",color:"#4c8dff",fmt:"money",actual:116867,goal:150000,lastYear:131474,priorMonth:155025},
- {label:"Service Value Created",sub:"Service revenue + TGL sales generated",bigsub:"value created in July 2026",color:"#2bd4a7",fmt:"money",actual:500746,lastYear:390604,priorMonth:582218},
- {label:"Service Avg Ticket",sub:"Service revenue ÷ jobs with revenue",bigsub:"avg ticket, July 2026",color:"#4c8dff",fmt:"money",actual:346,lastYear:366,priorMonth:311},
- {label:"Service TGL %",sub:"Turnover estimates ÷ service visits",bigsub:"of service visits, July 2026",color:"#a371f7",fmt:"pct",actual:12.84,lastYear:8.55,priorMonth:12.54},
- {label:"Install Revenue",sub:"Completed income · HVAC + Fireplace install",bigsub:"completed in July 2026",color:"#4c8dff",fmt:"money",actual:925618,goal:879002,lastYear:871195,priorMonth:933220},
- {label:"Electrical Revenue",sub:"Completed income · Electrical business units",bigsub:"completed in July 2026",color:"#f5c451",fmt:"money",actual:13928,budget:23269,lastYear:27407,priorMonth:61021},
- {label:"Plumbing Revenue",sub:"Completed income · Plumbing business units",bigsub:"completed in July 2026",color:"#f8736a",fmt:"money",actual:36661,lastYear:0,priorMonth:25824}
+ {label:"Booked Jobs",sub:"Count of jobs by Created Date · Booking PBI 4DX",bigsub:"jobs booked in August 2026",color:"#f59e0b",fmt:"num",actual:848,goal:877,lastYear:820,priorMonth:894},
+ {label:"Service Revenue",sub:"Completed income · 8 service business units",bigsub:"completed in August 2026",color:"#4c8dff",fmt:"money",actual:99701,goal:135000,lastYear:128283,priorMonth:116867},
+ {label:"Service Value Created",sub:"Service revenue + TGL sales generated",bigsub:"value created in August 2026",color:"#2bd4a7",fmt:"money",actual:262251,lastYear:365896,priorMonth:500746},
+ {label:"Service Avg Ticket",sub:"Service revenue ÷ jobs with revenue",bigsub:"avg ticket, August 2026",color:"#4c8dff",fmt:"money",actual:330,lastYear:328,priorMonth:346},
+ {label:"Service TGL %",sub:"Turnover estimates ÷ service visits",bigsub:"of service visits, August 2026",color:"#a371f7",fmt:"pct",actual:10.64,lastYear:8.84,priorMonth:12.84},
+ {label:"Install Revenue",sub:"Completed income · HVAC + Fireplace install",bigsub:"completed in August 2026",color:"#4c8dff",fmt:"money",actual:999692,goal:788134,lastYear:684815,priorMonth:925618},
+ {label:"Electrical Revenue",sub:"Completed income · Electrical business units",bigsub:"completed in August 2026",color:"#f5c451",fmt:"money",actual:39164,budget:51866,lastYear:54279,priorMonth:13928},
+ {label:"Plumbing Revenue",sub:"Completed income · Plumbing business units",bigsub:"completed in August 2026",color:"#f8736a",fmt:"money",actual:22846,lastYear:0,priorMonth:36661}
 ];
 const order = ["revenue","sales","tgl"];
 document.getElementById("cards").innerHTML = order.map(key=>{
@@ -167,12 +167,12 @@ document.getElementById("cards").innerHTML = order.map(key=>{
     <div class="lbl" style="color:${c}">${m.label}</div>
     <div class="msub">${m.sub}</div>
     <div class="big">${usd0(m.actual)}</div>
-    <div class="bigsub">total for July 2026</div>
+    <div class="bigsub">total for August 2026</div>
     <div class="grid2">
       <div class="stat"><div class="t">vs Goal</div><div class="v ${attClass(gp)}">${gp.toFixed(1)}%</div><div class="s">${usd0(m.goal)}</div></div>
       ${budgetTile}
-      <div class="stat"><div class="t">vs Last Year</div><div class="v ${signClass(yoy)}">${arrow(yoy)} ${Math.abs(yoy).toFixed(1)}%</div><div class="s">Jul '25 · ${usd0(m.lastYear)}</div></div>
-      <div class="stat"><div class="t">vs Prior Month</div><div class="v ${signClass(mom)}">${arrow(mom)} ${Math.abs(mom).toFixed(1)}%</div><div class="s">Jun '26 · ${usd0(m.priorMonth)}</div></div>
+      <div class="stat"><div class="t">vs Last Year</div><div class="v ${signClass(yoy)}">${arrow(yoy)} ${Math.abs(yoy).toFixed(1)}%</div><div class="s">Aug '25 · ${usd0(m.lastYear)}</div></div>
+      <div class="stat"><div class="t">vs Prior Month</div><div class="v ${signClass(mom)}">${arrow(mom)} ${Math.abs(mom).toFixed(1)}%</div><div class="s">Jul '26 · ${usd0(m.priorMonth)}</div></div>
     </div>
   </div>`;
 }).join("");
@@ -183,10 +183,10 @@ function xStat(t,cls,v,s){return `<div class="stat"><div class="t">${t}</div><di
 function xTiles(m){let t="";
   if(m.goal!=null){const gp=m.actual/m.goal*100;t+=xStat("vs Goal",attClass(gp),gp.toFixed(1)+"%",xNum(m,m.goal));}
   if(m.budget!=null){const bp=m.actual/m.budget*100;t+=xStat("vs Budget",attClass(bp),bp.toFixed(1)+"%",xNum(m,m.budget));}
-  if(m.fmt==="pct"){const d=m.actual-m.lastYear;t+=xStat("vs Last Year",signClass(d),arrow(d)+" "+Math.abs(d).toFixed(1)+" pts","Jul '25 · "+m.lastYear.toFixed(1)+"%");}
-  else{if(m.lastYear){const ly=(m.actual-m.lastYear)/m.lastYear*100;t+=xStat("vs Last Year",signClass(ly),arrow(ly)+" "+Math.abs(ly).toFixed(1)+"%","Jul '25 · "+xNum(m,m.lastYear));}else{t+=xStat("vs Last Year","","—","no Jul '25 activity");}}
-  if(m.fmt==="pct"){const d=m.actual-m.priorMonth;t+=xStat("vs Prior Month",signClass(d),arrow(d)+" "+Math.abs(d).toFixed(1)+" pts","Jun '26 · "+m.priorMonth.toFixed(1)+"%");}
-  else{if(m.priorMonth){const mm=(m.actual-m.priorMonth)/m.priorMonth*100;t+=xStat("vs Prior Month",signClass(mm),arrow(mm)+" "+Math.abs(mm).toFixed(1)+"%","Jun '26 · "+xNum(m,m.priorMonth));}else{t+=xStat("vs Prior Month","","—","—");}}
+  if(m.fmt==="pct"){const d=m.actual-m.lastYear;t+=xStat("vs Last Year",signClass(d),arrow(d)+" "+Math.abs(d).toFixed(1)+" pts","Aug '25 · "+m.lastYear.toFixed(1)+"%");}
+  else{if(m.lastYear){const ly=(m.actual-m.lastYear)/m.lastYear*100;t+=xStat("vs Last Year",signClass(ly),arrow(ly)+" "+Math.abs(ly).toFixed(1)+"%","Aug '25 · "+xNum(m,m.lastYear));}else{t+=xStat("vs Last Year","","—","no Aug '25 activity");}}
+  if(m.fmt==="pct"){const d=m.actual-m.priorMonth;t+=xStat("vs Prior Month",signClass(d),arrow(d)+" "+Math.abs(d).toFixed(1)+" pts","Jul '26 · "+m.priorMonth.toFixed(1)+"%");}
+  else{if(m.priorMonth){const mm=(m.actual-m.priorMonth)/m.priorMonth*100;t+=xStat("vs Prior Month",signClass(mm),arrow(mm)+" "+Math.abs(mm).toFixed(1)+"%","Jul '26 · "+xNum(m,m.priorMonth));}else{t+=xStat("vs Prior Month","","—","—");}}
   return t;}
 document.getElementById("cards2").innerHTML = DATA.extra.map(m=>`<div class="mcard">
     <div class="accentbar" style="background:${m.color}"></div>
@@ -225,7 +225,7 @@ const max=Math.max(...days.map(d=>Math.max(rev[d],sal[d],tgl[d])));
 document.getElementById("chart").innerHTML = days.map(d=>{
   const show=["01","08","15","22","29","31"].includes(d);
   return `<div class="day">
-    <div class="tip"><b>Jul ${d}</b><br><span style="color:var(--rev)">Rev ${usd0(rev[d])}</span><br><span style="color:var(--sales)">Sales ${usd0(sal[d])}</span><br><span style="color:var(--tgl)">TGL ${usd0(tgl[d])}</span></div>
+    <div class="tip"><b>Aug ${d}</b><br><span style="color:var(--rev)">Rev ${usd0(rev[d])}</span><br><span style="color:var(--sales)">Sales ${usd0(sal[d])}</span><br><span style="color:var(--tgl)">TGL ${usd0(tgl[d])}</span></div>
     <div class="bars">
       <div class="b r" style="height:${Math.max(1,rev[d]/max*100)}%"></div>
       <div class="b s" style="height:${Math.max(1,sal[d]/max*100)}%"></div>
@@ -236,8 +236,8 @@ document.getElementById("chart").innerHTML = days.map(d=>{
 }).join("");
 
 document.getElementById("footer").innerHTML =
-  `Sources: <code>PBI Completed YTD 4dx.xlsx</code> (Income) · <code>Sales4dx.xlsx</code> (Sales = Estimates Subtotal for 3 sales BUs; TGL = Estimates Subtotal where Lead-Generated-From-BU contains “Service”) · <code>CBD 2026 Revenue Budget.xlsx</code> → Daily Goals (Revenue Goal/Budget; Sales Goal; Install(HVAC/FP) Goal; TGL Sales col J). &nbsp;·&nbsp; `+
-  `July 2026 complete. Goal/Budget are full-month July targets; Last Year = full July 2025; Prior Month = full June 2026. TGL has a goal but no separate monthly budget.`;
+  `Sources: <code>PBI Completed YTD 4dx.xlsx</code> (Income) · <code>Sales4dx.xlsx</code> (Sales = Estimates Subtotal for the HVAC + Fireplace sales BUs; TGL = Estimates Subtotal where Lead-Generated-From-BU contains “Service”) · <code>CBD 2026 Revenue Budget.xlsx</code> → Daily Goals (Revenue Goal/Budget; Sales Goal; Install(HVAC/FP) Goal; TGL Sales col J). &nbsp;·&nbsp; `+
+  `August 2026 complete. Goal/Budget are full-month August targets; Last Year = full August 2025; Prior Month = full July 2026. TGL has a goal but no separate monthly budget.`;
 </script>
 </body>
 </html>

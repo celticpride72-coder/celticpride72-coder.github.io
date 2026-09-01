@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>YTD Dashboard — through July 2026</title>
+<title>YTD Dashboard — through August 2026</title>
 <style>
   :root{
     --bg:#0f1720; --panel:#161f2b; --panel2:#1c2735; --line:#26303f;
@@ -74,7 +74,7 @@
 <div class="wrap">
   <header>
     <div>
-      <h1>Year to Date <span class="pill">through July 2026</span></h1>
+      <h1>Year to Date <span class="pill">through August 2026</span></h1>
       <div class="sub">Comfort by Design — YTD results through the last full calendar month</div>
     </div>
     <div class="stamp" id="stamp"></div>
@@ -82,11 +82,11 @@
 
   <div class="cards" id="cards"></div>
 
-  <h2 style="margin:6px 2px 12px;font-size:16px">Additional metrics — YTD through July 2026</h2>
+  <h2 style="margin:6px 2px 12px;font-size:16px">Additional metrics — YTD through August 2026</h2>
   <div class="cards cards4" id="cards2"></div>
 
   <div class="panel">
-    <h2>Attainment — YTD through July 2026</h2>
+    <h2>Attainment — YTD through August 2026</h2>
     <div class="cap">Full-month actual vs plan · fill = actual, markers = goal &amp; budget</div>
     <div class="att" id="att"></div>
     <div class="legend" style="margin-top:18px">
@@ -99,7 +99,7 @@
   </div>
 
   <div class="panel">
-    <h2>Monthly through July</h2>
+    <h2>Monthly through August</h2>
     <div class="cap">Revenue (completed income), Sales (sold estimates) &amp; TGL (tech-generated lead sales) by month · same scale</div>
     <div class="chart" id="chart"></div>
     <div class="legend">
@@ -115,25 +115,25 @@
 
 <script>
 const DATA={
- pace:58.33,
+ pace:66.67,
  metrics:{
-  revenue:{label:"Revenue",sub:"Completed income · by completion date",cls:"rev",actual:6678571,goal:6700075,budget:6209696,lastYear:5962034,annualGoal:7675075},
-  sales:{label:"Sales",sub:"Sold estimates · 4 sales business units",cls:"sales",actual:5190780,goal:5702161,budget:5249774,lastYear:4376724,annualGoal:6542161},
-  tgl:{label:"TGL",sub:"Tech-generated lead sales · service leads",cls:"tgl",actual:2181785,goal:1948866,budget:null,lastYear:1618380,annualGoal:2222120}
+  revenue:{label:"Revenue",sub:"Completed income · by completion date",cls:"rev",actual:7854658,goal:7675075,budget:7122357,lastYear:6838288,annualGoal:7675075},
+  sales:{label:"Sales",sub:"Sold estimates · HVAC + Fireplace sales business units",cls:"sales",actual:6113341,goal:6542161,budget:6037908,lastYear:4944738,annualGoal:6542161},
+  tgl:{label:"TGL",sub:"Tech-generated lead sales · service leads",cls:"tgl",actual:2344335,goal:2222120,budget:null,lastYear:1855993,annualGoal:2222120}
  },
- monthly:{labels:["Jan","Feb","Mar","Apr","May","Jun","Jul"],
-   rev:[993719,980229,851588,766576,767888,1198542,1120029],
-   sales:[858925,632359,446246,493484,873503,933727,952536],
-   tgl:[409646,241056,166856,140263,412892,427193,383878]},
+ monthly:{labels:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug"],
+   rev:[993719,980229,851588,766576,767888,1198542,1120029,1176087],
+   sales:[858925,632359,446246,493484,873503,933727,952536,922561],
+   tgl:[409646,241056,166856,140263,412892,427193,383878,162551]},
  extra:[
-  {label:"Booked Jobs",sub:"Count of jobs by Created Date · Booking PBI 4DX",bigsub:"YTD through July 2026",color:"#f59e0b",fmt:"num",actual:6090,goal:5876,lastYear:5639,annualGoal:6753},
-  {label:"Service Revenue",sub:"Completed income · 8 service business units",bigsub:"YTD through July 2026",color:"#4c8dff",fmt:"money",actual:1082073,goal:1058000,lastYear:978111,annualGoal:1193000},
-  {label:"Service Value Created",sub:"Service revenue + TGL sales generated",bigsub:"YTD through July 2026",color:"#2bd4a7",fmt:"money",actual:3263858,lastYear:2595291},
-  {label:"Service Avg Ticket",sub:"Service revenue ÷ jobs with revenue",bigsub:"YTD through July 2026",color:"#4c8dff",fmt:"money",actual:335,lastYear:348},
-  {label:"Service TGL %",sub:"Turnover estimates ÷ service visits",bigsub:"YTD through July 2026",color:"#a879ff",fmt:"pct",actual:9.08,lastYear:7.33},
-  {label:"Install Revenue",sub:"Completed income · HVAC + Fireplace install",bigsub:"YTD through July 2026",color:"#4c8dff",fmt:"money",actual:5087510,goal:5249774,lastYear:4551195,annualGoal:6037908},
-  {label:"Electrical Revenue",sub:"Completed income · Electrical business units",bigsub:"YTD through July 2026",color:"#f5b23d",fmt:"money",actual:343457,budget:352346,lastYear:335674,annualGoal:404212},
-  {label:"Plumbing Revenue",sub:"Completed income · Plumbing business units",bigsub:"YTD through July 2026",color:"#ff6b6b",fmt:"money",actual:63054,lastYear:0}
+  {label:"Booked Jobs",sub:"Count of jobs by Created Date · Booking PBI 4DX",bigsub:"YTD through August 2026",color:"#f59e0b",fmt:"num",actual:6938,goal:6753,lastYear:6459,annualGoal:6753},
+  {label:"Service Revenue",sub:"Completed income · 8 service business units",bigsub:"YTD through August 2026",color:"#4c8dff",fmt:"money",actual:1181774,goal:1193000,lastYear:1106394,annualGoal:1193000},
+  {label:"Service Value Created",sub:"Service revenue + TGL sales generated",bigsub:"YTD through August 2026",color:"#2bd4a7",fmt:"money",actual:3526109,lastYear:2962387},
+  {label:"Service Avg Ticket",sub:"Service revenue ÷ jobs with revenue",bigsub:"YTD through August 2026",color:"#4c8dff",fmt:"money",actual:335,lastYear:346},
+  {label:"Service TGL %",sub:"Turnover estimates ÷ service visits",bigsub:"YTD through August 2026",color:"#a879ff",fmt:"pct",actual:9.21,lastYear:7.51},
+  {label:"Install Revenue",sub:"Completed income · HVAC + Fireplace install",bigsub:"YTD through August 2026",color:"#4c8dff",fmt:"money",actual:6087202,goal:6037908,lastYear:5236011,annualGoal:6037908},
+  {label:"Electrical Revenue",sub:"Completed income · Electrical business units",bigsub:"YTD through August 2026",color:"#f5b23d",fmt:"money",actual:382621,budget:404212,lastYear:389953,annualGoal:404212},
+  {label:"Plumbing Revenue",sub:"Completed income · Plumbing business units",bigsub:"YTD through August 2026",color:"#ff6b6b",fmt:"money",actual:85900,lastYear:0}
  ]
 };
 const order=["revenue","sales","tgl"];
@@ -147,14 +147,14 @@ function stat(t,cls,v,s){return `<div class="stat"><div class="t">${t}</div><div
 function xNum(m,v){return m.fmt==="num"?v.toLocaleString():m.fmt==="pct"?v.toFixed(1)+"%":usd0(v);}
 function xVal(m){return m.fmt==="pct"?m.actual.toFixed(1)+"%":m.fmt==="num"?m.actual.toLocaleString():usd0(m.actual);}
 
-document.getElementById("stamp").innerHTML=`<b>Year to date</b> · Jan 1 – Jul 31, 2026<br>vs same window in 2025 · goals to date`;
+document.getElementById("stamp").innerHTML=`<b>Year to date</b> · Jan 1 – Aug 31, 2026<br>vs same window in 2025 · goals to date`;
 
 document.getElementById("cards").innerHTML=order.map(k=>{const m=DATA.metrics[k];const c=accent(m.cls);
  const gp=m.actual/m.goal*100, bp=m.budget?m.actual/m.budget*100:null, yoy=(m.actual-m.lastYear)/m.lastYear*100, ap=m.actual/m.annualGoal*100;
  const budgetTile=bp!==null?stat("vs Budget (YTD)",attClass(bp),bp.toFixed(1)+"%",usd0(m.budget)):stat("vs Budget","","—","no YTD budget");
  return `<div class="mcard"><div class="accentbar" style="background:${c}"></div>
   <div class="lbl" style="color:${c}">${m.label}</div><div class="msub">${m.sub}</div>
-  <div class="big">${usd0(m.actual)}</div><div class="bigsub">YTD through July 2026</div>
+  <div class="big">${usd0(m.actual)}</div><div class="bigsub">YTD through August 2026</div>
   <div class="grid2">
    ${stat("vs Goal (YTD)",attClass(gp),gp.toFixed(1)+"%",usd0(m.goal))}
    ${budgetTile}
@@ -185,7 +185,7 @@ document.getElementById("cards2").innerHTML=DATA.extra.map(m=>`<div class="mcard
 
 document.getElementById("footer").innerHTML=
  `Sources: <code>PBI Completed YTD 4dx.xlsx</code> (Income / Jobs Total Revenue by completion date) · <code>Sales4dx.xlsx</code> (sold estimates by Sold On) · <code>Booking PBI 4DX.xlsx</code> (count by Created Date) · <code>CBD 2026 Revenue Budget.xlsx</code> → Daily Goals. `+
- `Window = Jan 1 – Jul 31, 2026 (year to date through the last full calendar month). <b>vs Goal / vs Budget</b> use goals summed over the same YTD days; <b>vs Last Year</b> = the identical Jan 1 – Jul 31 window in 2025; <b>% of Annual Goal</b> = YTD actual ÷ the full-year 2026 target (green once past ${DATA.pace}% — July is 58% of the year). Service metrics use Jobs Total Revenue over the 8 service business units; Service Value Created = service revenue + service-lead TGL sales.`;
+ `Window = Jan 1 – Aug 31, 2026 (year to date through the last full calendar month). <b>vs Goal / vs Budget</b> use goals summed over the same YTD days; <b>vs Last Year</b> = the identical Jan 1 – Aug 31 window in 2025; <b>% of Annual Goal</b> = YTD actual ÷ the full-year 2026 target (green once past ${DATA.pace}% — August is 8 of 12 months). Service metrics use Jobs Total Revenue over the 8 service business units; Service Value Created = service revenue + service-lead TGL sales. <b>Note:</b> the Daily Goals sheet in <code>CBD 2026 Revenue Budget.xlsx</code> is only populated through Aug 31, 2026 (Sep–Dec rows are blank), so the full-year “annual goal” currently equals the YTD goal and the “% of Annual Goal” tile mirrors “% of Goal (YTD)” until the remaining months are filled in.`;
 </script>
 </body>
 </html>
