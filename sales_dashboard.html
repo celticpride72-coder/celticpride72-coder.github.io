@@ -1,4 +1,9 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CBD Sales Dashboard</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CBD Sales Dashboard</title>
 <style>
 :root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--hvac:#4c8dff;--fire:#ff7a59}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
@@ -27,105 +32,133 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(76,141,255,.05)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 .note{color:var(--muted);font-size:12px;margin-top:26px;line-height:1.7;border-top:1px solid var(--edge);padding-top:14px}
 @media(max-width:1050px){.cards{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}.week{grid-template-columns:repeat(4,1fr)}}
-</style></head><body><div class="wrap">
+</style>
+</head>
+<body>
+<div class="wrap">
 <h1><span class="dot"></span>CBD Sales Dashboard</h1>
-<div class="sub" id="sub"></div>
+<div class="sub">Sold estimates — HVAC + Fireplace sales (residential + commercial, all historical business-unit names) &nbsp;•&nbsp; Data as of <b>Mon Aug 31, 2026</b> &nbsp;•&nbsp; Generated Tue Sep 1, 2026</div>
 
-<div class="cards" id="kpis"></div>
+<div class="sect">Key periods</div>
+<div class="cards">
+  <div class="kpi"><div class="k">Yesterday · Mon Aug 31</div><div class="val">$12,155</div>
+    <div class="foot">Goal $40,000 → <b class="b">30.4%</b><br>Budget $37,530 → <b class="b">32.4%</b><br>Last yr $0 → <b>—</b></div></div>
+  <div class="kpi"><div class="k">WTD · Aug 31 – Sep 1</div><div class="val">$12,155</div>
+    <div class="foot">Goal $40,000 → <b class="b">30.4%</b><br>Budget $37,530 → <b class="b">32.4%</b><br>Last yr $0 → <b>—</b></div></div>
+  <div class="kpi"><div class="k">MTD · September</div><div class="val">$0</div>
+    <div class="foot">Goal — <br>Budget — <br>Last yr — </div></div>
+  <div class="kpi"><div class="k">QTD · Q3 (Jul 1 →)</div><div class="val">$1,875,097</div>
+    <div class="foot">Goal $1,741,259 → <b class="g">107.7%</b><br>Budget $1,667,136 → <b class="g">112.5%</b><br>Last yr $1,256,843 → <b class="g">+49.2%</b></div></div>
+  <div class="kpi"><div class="k">YTD · 2026</div><div class="val">$6,113,341</div>
+    <div class="foot">Goal $6,542,161 → <b class="b">93.4%</b><br>Budget $6,037,908 → <b class="g">101.2%</b><br>Last yr $4,944,738 → <b class="g">+23.6%</b></div></div>
+</div>
 
-<div class="sect">Rolling windows (anchored to last sold day)</div>
-<div class="cards" id="rolling"></div>
+<div class="sect">Rolling windows (anchored at Aug 31, 2026)</div>
+<div class="cards">
+  <div class="kpi"><div class="k">Last 30 days</div><div class="val">$922,561</div>
+    <div class="foot">Goal $840,000 → <b class="g">109.8%</b><br>Budget $788,134 → <b class="g">117.1%</b><br>Last yr $538,786 → <b class="g">+71.2%</b></div></div>
+  <div class="kpi"><div class="k">Last 60 days</div><div class="val">$1,792,218</div>
+    <div class="foot">Goal $1,659,327 → <b class="g">108.0%</b><br>Budget $1,587,227 → <b class="g">112.9%</b><br>Last yr $1,200,909 → <b class="g">+49.2%</b></div></div>
+  <div class="kpi"><div class="k">Last 90 days</div><div class="val">$2,786,077</div>
+    <div class="foot">Goal $2,517,486 → <b class="g">110.7%</b><br>Budget $2,403,067 → <b class="g">115.9%</b><br>Last yr $2,134,455 → <b class="g">+30.5%</b></div></div>
+  <div class="kpi"><div class="k">Last 180 days</div><div class="val">$4,579,508</div>
+    <div class="foot">Goal $4,918,109 → <b class="b">93.1%</b><br>Budget $4,551,125 → <b class="g">100.6%</b><br>Last yr $3,943,228 → <b class="g">+16.1%</b></div></div>
+  <div class="kpi"><div class="k">Last 365 days</div><div class="val">$10,019,271</div>
+    <div class="foot">Goal —<br>Budget —<br>Last yr $7,213,300 → <b class="g">+38.9%</b></div></div>
+</div>
 
 <div class="sect">Attainment to date</div>
-<div class="panel"><table id="attain"><thead><tr><th>Period</th><th>Actual</th><th>Goal</th><th>% of Goal</th><th>Budget</th><th>% of Budget</th><th>Last Year</th><th>YoY</th></tr></thead><tbody></tbody></table></div>
+<div class="panel">
+<table>
+<tr><th>Period</th><th>Actual</th><th>Goal</th><th style="width:23%">vs Goal</th><th>Budget</th><th style="width:23%">vs Budget</th></tr>
+<tr><td>Yesterday (Aug 31)</td><td>$12,155</td><td>$40,000</td><td><div class="track"><div class="fill" style="width:30.4%;background:var(--bad)"></div></div><span class="b">30.4%</span></td><td>$37,530</td><td><div class="track"><div class="fill" style="width:32.4%;background:var(--bad)"></div></div><span class="b">32.4%</span></td></tr>
+<tr><td>WTD</td><td>$12,155</td><td>$40,000</td><td><div class="track"><div class="fill" style="width:30.4%;background:var(--bad)"></div></div><span class="b">30.4%</span></td><td>$37,530</td><td><div class="track"><div class="fill" style="width:32.4%;background:var(--bad)"></div></div><span class="b">32.4%</span></td></tr>
+<tr><td>MTD</td><td>$0</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>QTD</td><td>$1,875,097</td><td>$1,741,259</td><td><div class="track"><div class="fill" style="width:100%;background:var(--good)"></div></div><span class="g">107.7%</span></td><td>$1,667,136</td><td><div class="track"><div class="fill" style="width:100%;background:var(--good)"></div></div><span class="g">112.5%</span></td></tr>
+<tr><td>YTD</td><td>$6,113,341</td><td>$6,542,161</td><td><div class="track"><div class="fill" style="width:93.4%;background:var(--bad)"></div></div><span class="b">93.4%</span></td><td>$6,037,908</td><td><div class="track"><div class="fill" style="width:100%;background:var(--good)"></div></div><span class="g">101.2%</span></td></tr>
+</table>
+</div>
 
-<div class="sect">Monthly trend — sold estimates</div>
-<div class="panel"><svg id="chart" width="100%" height="300" viewBox="0 0 1340 300" preserveAspectRatio="none"></svg>
-<div style="font-size:11.5px;color:var(--muted);margin-top:6px">Dashed tick = 2026 monthly Sales Goal · hatched bar = current (partial) month</div></div>
+<div class="sect">Monthly trend — sold estimates (dashed tick = 2026 sales goal, hatched = current month)</div>
+<div class="panel">
+<svg viewBox="0 0 1320 300" width="100%" preserveAspectRatio="xMidYMid meet" font-family="inherit">
+<defs><pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="#1b212b"/><line x1="0" y1="0" x2="0" y2="6" stroke="#4c8dff" stroke-width="2.5"/></pattern></defs>
+<g id="bars"></g>
+<script><![CDATA[
+(function(){
+var m=[["2024-01",505499],["2024-02",279320],["2024-03",326823],["2024-04",283538],["2024-05",572078],["2024-06",530315],["2024-07",590277],["2024-08",429146],["2024-09",756210],["2024-10",561905],["2024-11",452582],["2024-12",497866],
+["2025-01",487213],["2025-02",475289],["2025-03",495622],["2025-04",673500],["2025-05",660351],["2025-06",855181],["2025-07",729569],["2025-08",568014],["2025-09",1047646],["2025-10",1059139],["2025-11",888977],["2025-12",910168],
+["2026-01",858925],["2026-02",632359],["2026-03",446246],["2026-04",493484],["2026-05",873503],["2026-06",933727],["2026-07",952536],["2026-08",922561],["2026-09",0]];
+var goal={"2026-01":760000,"2026-02":763000,"2026-03":741053,"2026-04":830000,"2026-05":853000,"2026-06":853849,"2026-07":901259,"2026-08":840000};
+var max=1150000,W=1320,H=300,pad=8,bw=(W-2*pad)/m.length,plotH=H-46,ns="http://www.w3.org/2000/svg";
+var g=document.getElementById("bars");
+m.forEach(function(e,i){
+  var x=pad+i*bw, v=e[1], h=v/max*plotH, y=plotH-h+10, cur=(e[0]==="2026-09");
+  var yr=e[0].slice(0,4), col=yr==="2024"?"#3a4656":(yr==="2025"?"#33629e":"#4c8dff");
+  var r=document.createElementNS(ns,"rect");
+  r.setAttribute("x",x+2);r.setAttribute("y",y);r.setAttribute("width",bw-5);r.setAttribute("height",Math.max(h,1.5));
+  r.setAttribute("rx",2);r.setAttribute("fill",cur?"url(#hatch)":col);
+  var t=document.createElementNS(ns,"title");t.textContent=e[0]+": $"+v.toLocaleString();r.appendChild(t);g.appendChild(r);
+  if(goal[e[0]]){var gy=plotH-goal[e[0]]/max*plotH+10,l=document.createElementNS(ns,"line");
+    l.setAttribute("x1",x+1);l.setAttribute("x2",x+bw-2);l.setAttribute("y1",gy);l.setAttribute("y2",gy);
+    l.setAttribute("stroke","#f5c451");l.setAttribute("stroke-width",2);l.setAttribute("stroke-dasharray","5 3");g.appendChild(l);}
+  if(e[0].slice(5)==="01"||i===0){var tx=document.createElementNS(ns,"text");tx.setAttribute("x",x+2);tx.setAttribute("y",H-24);
+    tx.setAttribute("fill","#7c8a9c");tx.setAttribute("font-size","12");tx.setAttribute("font-weight","700");tx.textContent=yr;g.appendChild(tx);}
+  var ml=document.createElementNS(ns,"text");ml.setAttribute("x",x+bw/2-1);ml.setAttribute("y",H-8);ml.setAttribute("text-anchor","middle");
+  ml.setAttribute("fill","#5c6a7c");ml.setAttribute("font-size","9");ml.textContent=e[0].slice(5);g.appendChild(ml);
+});
+})();
+]]></script>
+</svg>
+</div>
 
-<div class="sect">This week (Mon-start)</div>
-<div class="week" id="week"></div>
+<div class="sect">This week (Mon-start · Aug 31 – Sep 6)</div>
+<div class="week">
+  <div class="day"><div class="d">Mon 8/31</div><div class="v">$12,155</div><div class="gsub">goal $40,000</div></div>
+  <div class="day"><div class="d">Tue 9/1</div><div class="v">$0</div><div class="gsub">goal —</div></div>
+  <div class="day future"><div class="d">Wed 9/2</div><div class="v">—</div><div class="gsub"></div></div>
+  <div class="day future"><div class="d">Thu 9/3</div><div class="v">—</div><div class="gsub"></div></div>
+  <div class="day future"><div class="d">Fri 9/4</div><div class="v">—</div><div class="gsub"></div></div>
+  <div class="day future"><div class="d">Sat 9/5</div><div class="v">—</div><div class="gsub"></div></div>
+  <div class="day future"><div class="d">Sun 9/6</div><div class="v">—</div><div class="gsub"></div></div>
+</div>
 
 <div class="sect">Additional data — YTD 2026 breakdowns</div>
 <div class="grid3">
-  <div class="panel"><table id="bu"><thead><tr><th>Business unit</th><th>Sold</th><th>Share</th></tr></thead><tbody></tbody></table></div>
-  <div class="panel"><table id="rep"><thead><tr><th>Sales rep</th><th>Sold</th><th>Share</th></tr></thead><tbody></tbody></table></div>
-  <div class="panel"><table id="src"><thead><tr><th>Lead source (lead job type)</th><th>Sold</th><th>Share</th></tr></thead><tbody></tbody></table></div>
+<div class="panel">
+<table><tr><th>Business unit</th><th>YTD sales</th><th>Share</th></tr>
+<tr><td>HVAC-Sales-CBD</td><td>$3,341,244</td><td>54.7%</td></tr>
+<tr><td>FIRE-Sales-CBD</td><td>$1,256,309</td><td>20.6%</td></tr>
+<tr><td>FIRE-Sales-Com-CBD</td><td>$770,619</td><td>12.6%</td></tr>
+<tr><td>HVAC-Sales-Com-CBD</td><td>$745,170</td><td>12.2%</td></tr>
+</table></div>
+<div class="panel">
+<table><tr><th>Sales rep</th><th>YTD sales</th><th>Share</th></tr>
+<tr><td>Aaron Fischer</td><td>$3,851,241</td><td>63.0%</td></tr>
+<tr><td>Noah Meshak</td><td>$2,131,460</td><td>34.9%</td></tr>
+<tr><td>Michael K</td><td>$82,348</td><td>1.3%</td></tr>
+<tr><td>Lee P</td><td>$43,027</td><td>0.7%</td></tr>
+<tr><td>Collin Lieffort</td><td>$5,185</td><td>0.1%</td></tr>
+<tr><td>Kurtis K</td><td>$79</td><td>0.0%</td></tr>
+</table></div>
+<div class="panel">
+<table><tr><th>Lead source (lead job type)</th><th>YTD sales</th><th>Share</th></tr>
+<tr><td>Direct / Unattributed</td><td>$3,828,803</td><td>62.6%</td></tr>
+<tr><td>HVAC Repair Aged</td><td>$980,331</td><td>16.0%</td></tr>
+<tr><td>HVAC Repair</td><td>$475,081</td><td>7.8%</td></tr>
+<tr><td>HVAC Membership Visit Aged</td><td>$281,744</td><td>4.6%</td></tr>
+<tr><td>FIRE Repair</td><td>$145,094</td><td>2.4%</td></tr>
+<tr><td>HVAC System Check Aged</td><td>$122,158</td><td>2.0%</td></tr>
+<tr><td>FIRE Inspection</td><td>$99,127</td><td>1.6%</td></tr>
+<tr><td>HVAC Membership Visit</td><td>$94,851</td><td>1.6%</td></tr>
+<tr><td>HVAC System Check</td><td>$71,307</td><td>1.2%</td></tr>
+<tr><td>Other (PLMB/ELEC/FIRE Mbr)</td><td>$14,846</td><td>0.2%</td></tr>
+</table></div>
 </div>
 
-<div class="note" id="note"></div>
-
-<script>
-const DATA=/*DATA_START*/{"today": "2026-08-31", "dataAsOf": "2026-08-28", "periods": {"yesterday": {"label": "Yesterday (Fri 8/28)", "actual": 64418.76, "goal": 40000, "budget": 37530.19, "lastYear": 0, "range": "Aug 28"}, "wtd": {"label": "WTD", "actual": 0, "goal": 0, "budget": 0, "lastYear": 0, "range": "Aug 31 (new week — no sold days yet)"}, "mtd": {"label": "MTD", "actual": 910406.27, "goal": 800000, "budget": 750603.81, "lastYear": 538785.76, "range": "Aug 1 – Aug 28"}, "qtd": {"label": "QTD", "actual": 1862942.65, "goal": 1701259.35, "budget": 1629605.85, "lastYear": 1256842.81, "range": "Jul 1 – Aug 28"}, "ytd": {"label": "YTD", "actual": 6101186.31, "goal": 6502161.42, "budget": 6000378.29, "lastYear": 4944738.03, "range": "Jan 1 – Aug 28"}}, "rolling": {"d30": {"label": "Last 30 days", "actual": 1008522.5, "goal": 881932.67, "budget": 830513.09, "lastYear": 579214.04}, "d60": {"label": "Last 60 days", "actual": 1871549.65, "goal": 1740070.68, "budget": 1666402.42, "lastYear": 1297582.71}, "d90": {"label": "Last 90 days", "actual": 2796669.79, "goal": 2555108.79, "budget": 2439130.29, "lastYear": 2152763.83}, "d180": {"label": "Last 180 days", "actual": 4609902.0, "goal": 4979161.42, "budget": 4593663.29, "lastYear": 3982236.61}, "d365": {"label": "Last 365 days", "actual": 10007116.41, "goal": null, "budget": null, "lastYear": 7220786.19}}, "monthly": {"2024-01": 505499, "2024-02": 279320, "2024-03": 326823, "2024-04": 283538, "2024-05": 572078, "2024-06": 530315, "2024-07": 590277, "2024-08": 429146, "2024-09": 756210, "2024-10": 561905, "2024-11": 452582, "2024-12": 497866, "2025-01": 487213, "2025-02": 475289, "2025-03": 495622, "2025-04": 673500, "2025-05": 660351, "2025-06": 855181, "2025-07": 729569, "2025-08": 568014, "2025-09": 1047646, "2025-10": 1059139, "2025-11": 888977, "2025-12": 910168, "2026-01": 858925, "2026-02": 632359, "2026-03": 446246, "2026-04": 493484, "2026-05": 873503, "2026-06": 933727, "2026-07": 952536, "2026-08": 910406}, "monthlyGoal": {"2026-01": 760000, "2026-02": 763000, "2026-03": 741053, "2026-04": 830000, "2026-05": 853000, "2026-06": 853849, "2026-07": 901259, "2026-08": 840000}, "currentMonth": "2026-08", "weekDaily": [{"day": "Mon", "date": "8/31", "sales": 0, "goal": 40000, "budget": 37530, "future": true}], "byBU": [["HVAC-Sales-CBD", 3333781], ["FIRE-Sales-CBD", 1253688], ["FIRE-Sales-Com-CBD", 768548], ["HVAC-Sales-Com-CBD", 745170]], "byRep": [["Aaron Fischer", 3846858], ["Noah Meshak", 2131151], ["Michael K", 74885], ["Lee P", 43027], ["Collin Lieffort", 5185], ["Kurtis K", 79]], "bySrc": [["Direct / unattributed", 3826423], ["HVAC Repair Aged", 980331], ["HVAC Repair", 475081], ["HVAC Membership Visit Aged", 281744], ["FIRE Repair", 145094], ["HVAC System Check Aged", 114695], ["FIRE Inspection", 96815], ["HVAC Membership Visit", 94851], ["HVAC System Check", 71307], ["PLMB Repair", 11627], ["FIRE Membership Visit", 2670], ["ELEC Repair", 549]]}/*DATA_END*/;
-const STAMP=/*STAMP_START*/"updated 2026-08-31 · data through Fri Aug 28, 2026"/*STAMP_END*/;
-
-const money=v=>v==null?"—":(Math.abs(v)>=1e6?"$"+(v/1e6).toFixed(2)+"M":"$"+Math.round(v).toLocaleString());
-const pct=(a,t)=>(t==null||t===0)?null:a/t*100;
-const cls=p=>p==null?"":(p>=100?"g":p>=95?"a":"b");
-const yoyCls=p=>p==null?"":(p>=0?"g":"b");
-const fmtPct=p=>p==null?"—":p.toFixed(1)+"%";
-const yoy=(a,ly)=>(ly==null||ly===0)?null:(a-ly)/ly*100;
-const fmtYoy=p=>p==null?"—":(p>=0?"▲ ":"▼ ")+Math.abs(p).toFixed(1)+"% YoY";
-
-document.getElementById("sub").textContent="Sold estimates — HVAC + Fireplace sales (residential + commercial, all historical BU names) · "+STAMP+" · weeks start Monday";
-
-// KPI cards
-const kEl=document.getElementById("kpis");
-for(const key of ["yesterday","wtd","mtd","qtd","ytd"]){
-  const p=DATA.periods[key], pg=pct(p.actual,p.goal), pb=pct(p.actual,p.budget), y=yoy(p.actual,p.lastYear);
-  kEl.insertAdjacentHTML("beforeend",`<div class="kpi"><div class="k">${p.label}</div><div class="val">${money(p.actual)}</div><div class="foot"><span class="${cls(pg)}">${fmtPct(pg)} of goal</span> · <span class="${cls(pb)}">${fmtPct(pb)} of budget</span><br><span class="${yoyCls(y)}">${fmtYoy(y)}</span> <span style="color:var(--muted)">(${money(p.lastYear)})</span><br><span style="color:var(--muted)">${p.range}</span></div></div>`);
-}
-// Rolling cards
-const rEl=document.getElementById("rolling");
-for(const key of ["d30","d60","d90","d180","d365"]){
-  const p=DATA.rolling[key], pg=pct(p.actual,p.goal), pb=pct(p.actual,p.budget), y=yoy(p.actual,p.lastYear);
-  const gtxt=p.goal==null?`<span style="color:var(--muted)">— goal · — budget</span>`:`<span class="${cls(pg)}">${fmtPct(pg)} of goal</span> · <span class="${cls(pb)}">${fmtPct(pb)} of budget</span>`;
-  rEl.insertAdjacentHTML("beforeend",`<div class="kpi"><div class="k">${p.label}</div><div class="val">${money(p.actual)}</div><div class="foot">${gtxt}<br><span class="${yoyCls(y)}">${fmtYoy(y)}</span> <span style="color:var(--muted)">(${money(p.lastYear)})</span></div></div>`);
-}
-// Attainment table
-const aB=document.querySelector("#attain tbody");
-const allRows=[...Object.entries(DATA.periods),...Object.entries(DATA.rolling)];
-for(const [k,p] of allRows){
-  const pg=pct(p.actual,p.goal), pb=pct(p.actual,p.budget), y=yoy(p.actual,p.lastYear);
-  aB.insertAdjacentHTML("beforeend",`<tr><td>${p.label}</td><td>${money(p.actual)}</td><td>${money(p.goal)}</td><td class="${cls(pg)}">${fmtPct(pg)}</td><td>${money(p.budget)}</td><td class="${cls(pb)}">${fmtPct(pb)}</td><td>${money(p.lastYear)}</td><td class="${yoyCls(y)}">${fmtYoy(y)}</td></tr>`);
-}
-// Monthly chart (SVG)
-(function(){
-  const svg=document.getElementById("chart");
-  const months=Object.keys(DATA.monthly).sort();
-  const W=1340,H=300,padL=54,padB=34,padT=12;
-  const max=Math.max(...months.map(m=>DATA.monthly[m]),...Object.values(DATA.monthlyGoal))*1.08;
-  const bw=(W-padL-8)/months.length;
-  let s='<defs><pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="#4c8dff" opacity="0.35"/><line x1="0" y1="0" x2="0" y2="6" stroke="#4c8dff" stroke-width="2.5"/></pattern></defs>';
-  for(let i=0;i<=4;i++){const v=max/4*i,y=H-padB-(H-padB-padT)*(v/max);s+=`<line x1="${padL}" y1="${y}" x2="${W}" y2="${y}" stroke="#232a34" stroke-width="1"/><text x="${padL-6}" y="${y+4}" fill="#7c8a9c" font-size="10" text-anchor="end">$${Math.round(v/1000)}K</text>`;}
-  months.forEach((m,i)=>{
-    const v=DATA.monthly[m],h=(H-padB-padT)*(v/max),x=padL+i*bw+2,y=H-padB-h;
-    const cur=m===DATA.currentMonth;
-    const col=m.startsWith("2026")?"#4c8dff":m.startsWith("2025")?"#2f5aa8":"#25406f";
-    s+=`<rect x="${x}" y="${y}" width="${bw-4}" height="${h}" rx="2" fill="${cur?'url(#hatch)':col}" ${cur?'stroke="#4c8dff" stroke-width="1.5"':''}/>`;
-    const g=DATA.monthlyGoal[m];
-    if(g){const gy=H-padB-(H-padB-padT)*(g/max);s+=`<line x1="${x-1}" y1="${gy}" x2="${x+bw-3}" y2="${gy}" stroke="#f5c451" stroke-width="2" stroke-dasharray="4,3"/>`;}
-    if(m.endsWith("-01")||i===0)s+=`<text x="${x+bw/2}" y="${H-padB+16}" fill="#93a1b3" font-size="11" text-anchor="middle" font-weight="700">${m.slice(0,4)}</text>`;
-    else if(["-04","-07","-10"].some(q=>m.endsWith(q)))s+=`<text x="${x+bw/2}" y="${H-padB+16}" fill="#5c6a7c" font-size="9.5" text-anchor="middle">${["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][+m.slice(5,7)]}</text>`;
-  });
-  svg.innerHTML=s;
-})();
-// Week strip
-const wEl=document.getElementById("week");
-for(const d of DATA.weekDaily){
-  const pg=pct(d.sales,d.goal);
-  wEl.insertAdjacentHTML("beforeend",`<div class="day${d.future?' future':''}"><div class="d">${d.day} ${d.date}</div><div class="v ${d.future?'':cls(pg)}">${money(d.sales)}</div><div class="gsub">goal ${money(d.goal)} · ${d.future?"today":fmtPct(pg)}</div></div>`);
-}
-// Breakdowns
-function fillBreak(id,arr){
-  const tot=arr.reduce((t,x)=>t+x[1],0);
-  const tb=document.querySelector("#"+id+" tbody");
-  for(const [k,v] of arr){
-    tb.insertAdjacentHTML("beforeend",`<tr><td>${k}</td><td>${money(v)}</td><td style="min-width:110px"><div class="track"><div class="fill" style="width:${(v/tot*100).toFixed(1)}%;background:var(--accent)"></div></div><span style="font-size:11px;color:var(--dim)">${(v/tot*100).toFixed(1)}%</span></td></tr>`);
-  }
-  tb.insertAdjacentHTML("beforeend",`<tr style="font-weight:700"><td>Total</td><td>${money(tot)}</td><td></td></tr>`);
-}
-fillBreak("bu",DATA.byBU); fillBreak("rep",DATA.byRep); fillBreak("src",DATA.bySrc);
-
-document.getElementById("note").innerHTML=`<b>Method:</b> Sales = sum of "Estimates Subtotal" by Sold On date for HVAC + Fireplace <i>sales</i> business units across all historical BU names (HVAC-Sales-CBD, HVAC-Sales-Com/Commercial-CBD, FIRE-Sales-CBD, FIRE-Sales-Com-CBD, Fireplace-Sales-Residential/Commercial-CBD) — residential + commercial; Electrical, Plumbing and Retail excluded. Goal = "Sales Goal", Budget = "Install(HVAC/FP) Goal" from the 2026 Revenue Budget Daily Goals, summed through the data-as-of date. Last-year comparisons are weekday-aligned (−364 days). Last 365 days has no 2025 daily goals, so Goal/Budget show "—". Weeks start Monday. Attainment: <span class="g">green ≥100%</span>, <span class="a">amber 95–99.9%</span>, <span class="b">red &lt;95%</span>. Data as of ${DATA.dataAsOf}; generated ${DATA.today}. Source: Sales4dx.xlsx + CBD 2026 Revenue Budget.xlsx (SharePoint).`;
-</script></body></html>
+<div class="note">
+Sales = HVAC + Fireplace <b>sales</b> business units (residential + commercial), matched across all historical business-unit names (HVAC-Sales-CBD, HVAC-Sales-Com/Commercial-CBD, FIRE-Sales-CBD, FIRE-Sales-Com-CBD, Fireplace-Sales-Residential/Commercial-CBD) so 2024/2025 prior-year figures are complete and comparable. Electrical, plumbing, and retail excluded. Sum of "Estimates Subtotal" dated by "Sold On". Weeks start Monday. Goal = "Sales Goal", Budget = "Install(HVAC/FP) Goal" from CBD 2026 Revenue Budget (Daily Goals); goal/budget/last-year comparisons anchor to the last populated Sold On date (Aug 31, 2026 — "Yesterday"). Last-365 goal/budget unavailable (2025 daily goals blank). Sep 2026 daily goals not yet populated (MTD shows "—"). Last-year periods use a 364-day shift (weekday-aligned). Colors: green ≥100% of target (YoY ≥0), amber 95–99.9%, red &lt;95% (YoY &lt;0). Sources: Sales4dx.xlsx + CBD 2026 Revenue Budget.xlsx (SharePoint).
+</div>
+</div>
+</body>
+</html>
