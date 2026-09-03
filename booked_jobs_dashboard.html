@@ -76,30 +76,30 @@ footer{color:var(--muted);font-size:11.5px;line-height:1.7;margin-top:8px;border
 
 <script>
 const DATA = {
-  today:"2026-09-02", dataAsOf:"2026-09-01",
-  yesterday:{date:"2026-09-01",weekday:"Tuesday",actual:57,goal:48.85,lastYear:56,awaiting:false,lyDate:"2025-09-02"},
+  today:"2026-09-03", dataAsOf:"2026-09-02",
+  yesterday:{date:"2026-09-02",weekday:"Wednesday",actual:55,goal:48.85,lastYear:77,awaiting:false,lyDate:"2025-09-03"},
   spark:[
-    {date:"2026-08-19",dow:3,count:38,goal:41.78},{date:"2026-08-20",dow:4,count:19,goal:41.78},
-    {date:"2026-08-21",dow:5,count:37,goal:41.78},{date:"2026-08-22",dow:6,count:2,goal:null},
-    {date:"2026-08-23",dow:0,count:2,goal:null},{date:"2026-08-24",dow:1,count:35,goal:41.78},
-    {date:"2026-08-25",dow:2,count:41,goal:41.78},{date:"2026-08-26",dow:3,count:25,goal:41.78},
-    {date:"2026-08-27",dow:4,count:45,goal:41.78},{date:"2026-08-28",dow:5,count:32,goal:41.78},
-    {date:"2026-08-29",dow:6,count:9,goal:null},{date:"2026-08-30",dow:0,count:7,goal:null},
-    {date:"2026-08-31",dow:1,count:61,goal:41.78},{date:"2026-09-01",dow:2,count:57,goal:48.85}],
-  sparkAvgGoal:42.49,
+    {date:"2026-08-20",dow:4,count:19,goal:41.78},{date:"2026-08-21",dow:5,count:37,goal:41.78},
+    {date:"2026-08-22",dow:6,count:2,goal:null},{date:"2026-08-23",dow:0,count:2,goal:null},
+    {date:"2026-08-24",dow:1,count:35,goal:41.78},{date:"2026-08-25",dow:2,count:41,goal:41.78},
+    {date:"2026-08-26",dow:3,count:25,goal:41.78},{date:"2026-08-27",dow:4,count:45,goal:41.78},
+    {date:"2026-08-28",dow:5,count:32,goal:41.78},{date:"2026-08-29",dow:6,count:9,goal:null},
+    {date:"2026-08-30",dow:0,count:7,goal:null},{date:"2026-08-31",dow:1,count:61,goal:41.78},
+    {date:"2026-09-01",dow:2,count:57,goal:48.85},{date:"2026-09-02",dow:3,count:55,goal:48.85}],
+  sparkAvgGoal:43.20,
   periods:{
-    WTD:{actual:118,goal:90.63,lastYear:58,start:"2026-08-31"},
-    MTD:{actual:57,goal:48.85,lastYear:2,start:"2026-09-01"},
-    QTD:{actual:1799,goal:1823.98,lastYear:1707,start:"2026-07-01"},
-    YTD:{actual:6995,goal:6802.30,lastYear:6461,start:"2026-01-01"}},
+    WTD:{actual:173,goal:139.48,lastYear:135,start:"2026-08-31"},
+    MTD:{actual:112,goal:97.70,lastYear:58,start:"2026-09-01"},
+    QTD:{actual:1854,goal:1872.83,lastYear:1763,start:"2026-07-01"},
+    YTD:{actual:7050,goal:6851.15,lastYear:6517,start:"2026-01-01"}},
   rolling:{
-    "Last 30":{actual:896,goal:926.25,lastYear:845},
-    "Last 60":{actual:1712,goal:1721.97,lastYear:1655},
-    "Last 90":{actual:2589,goal:2599.29,lastYear:2506},
-    "Last 180":{actual:5051,goal:4891.14,lastYear:4644}},
-  monthly:{"2025-01":918,"2025-02":792,"2025-03":702,"2025-04":720,"2025-05":775,"2025-06":847,"2025-07":885,"2025-08":820,"2025-09":996,"2025-10":1386,"2025-11":1079,"2025-12":1088,"2026-01":1157,"2026-02":675,"2026-03":769,"2026-04":880,"2026-05":820,"2026-06":895,"2026-07":894,"2026-08":848,"2026-09":57},
-  monthlyGoal:{"2026-01":946,"2026-02":832,"2026-03":737,"2026-04":737,"2026-05":829,"2026-06":898,"2026-07":898,"2026-08":877,"2026-09":1026},
-  week:[{date:"2026-08-31",dow:1,count:61,goal:41.78},{date:"2026-09-01",dow:2,count:57,goal:48.85},{date:"2026-09-02",dow:3,count:0,goal:48.85}]
+    "Last 30":{actual:910,goal:933.32,lastYear:894},
+    "Last 60":{actual:1762,goal:1770.82,lastYear:1726},
+    "Last 90":{actual:2608,goal:2607.34,lastYear:2551},
+    "Last 180":{actual:5075,goal:4906.49,lastYear:4701}},
+  monthly:{"2025-01":918,"2025-02":792,"2025-03":702,"2025-04":720,"2025-05":775,"2025-06":847,"2025-07":885,"2025-08":820,"2025-09":996,"2025-10":1386,"2025-11":1079,"2025-12":1088,"2026-01":1157,"2026-02":675,"2026-03":769,"2026-04":880,"2026-05":820,"2026-06":895,"2026-07":894,"2026-08":848,"2026-09":112},
+  monthlyGoal:{"2026-01":945,"2026-02":832,"2026-03":737,"2026-04":737,"2026-05":830,"2026-06":898,"2026-07":898,"2026-08":878,"2026-09":1027},
+  week:[{date:"2026-08-31",dow:1,count:61,goal:41.78},{date:"2026-09-01",dow:2,count:57,goal:48.85},{date:"2026-09-02",dow:3,count:55,goal:48.85},{date:"2026-09-03",dow:4,count:0,goal:48.85}]
 };
 const fmtI=n=>Math.round(n).toLocaleString();
 const attCls=p=>p>=100?"green":(p>=95?"amber":"red");
@@ -255,9 +255,9 @@ document.getElementById("sub").textContent =
 })();
 
 document.getElementById("foot").innerHTML =
-  'Source: <b>Booking PBI 4DX.xlsx</b> (SharePoint) — metric is the COUNT of rows grouped by Created Date (each row = one booked job; 18,003 rows, Jan 1 2025 – '+niceDate(DATA.dataAsOf)+'). '+
+  'Source: <b>Booking PBI 4DX.xlsx</b> (SharePoint) — metric is the COUNT of rows grouped by Created Date (each row = one booked job; 18,058 rows, Jan 1 2025 – '+niceDate(DATA.dataAsOf)+'). <b>Source note (Sep 3 run):</b> the live file had been overwritten with a 7-day extract (Aug 27 – Sep 2 only, 266 rows); history was taken from SharePoint version 344.0 (Sep 2, full Jan 2025 – Sep 1) and Sep 2 rows from the live file — overlapping days matched exactly. '+
   'Goal: <b>Booked Jobs Goal</b> column, CBD 2026 Revenue Budget.xlsx → Daily Goals.<br>'+
-  '<b>Yesterday</b> = prior calendar day; its last-year comparison shifts 364 days so the weekday matches (Sep 1 2026 ↔ Sep 2 2025). '+
+  '<b>Yesterday</b> = prior calendar day; its last-year comparison shifts 364 days so the weekday matches (Sep 2 2026 ↔ Sep 3 2025). '+
   'Weeks start Monday. Period goals and last-year figures anchor to the last Created Date in the data ('+niceDate(DATA.dataAsOf)+'). MTD/WTD last-year windows include Sep 1 2025 (Labor Day, 2 jobs), which depresses those LY baselines.<br>'+
   '<b>Goal coverage caveat:</b> the Booked Jobs Goal is populated on business days only and currently runs Jan 2 – Sep 30, 2026. Weekends, holidays, and unbudgeted months have no goal — those days/periods show "no goal set" rather than 0. Attainment: <span class="green">&ge;100%</span> / <span class="amber">95–99.9%</span> / <span class="red">&lt;95%</span>; YoY green when &ge; last year.';
 </script>
