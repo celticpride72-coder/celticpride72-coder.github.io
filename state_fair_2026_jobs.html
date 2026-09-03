@@ -2,14 +2,14 @@
 <style>:root{--bg:#0e1116;--panel:#161b22;--panel2:#1b212b;--edge:#232a34;--ink:#e7edf5;--dim:#93a1b3;--muted:#7c8a9c;--accent:#4c8dff;--accent2:#2bd4a7;--good:#2bd4a7;--warn:#f5c451;--bad:#f8736a;--hvac:#4c8dff;--fire:#ff7a59;--elec:#f5c451;--plmb:#a371f7}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 .wrap{max-width:1380px;margin:0 auto;padding:22px 22px 70px}h1{margin:0;font-size:26px}.dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--fire);box-shadow:0 0 10px var(--fire);margin-right:8px;vertical-align:middle}.sub{color:var(--dim);font-size:14px;margin-top:4px}
-.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:18px 0}.kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}.kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase}.kpi .val{font-size:30px;font-weight:750;margin-top:5px}.kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin:18px 0}.kpi{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--edge);border-radius:12px;padding:15px 17px}.kpi .k{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase}.kpi .val{font-size:30px;font-weight:750;margin-top:5px}.kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .panel{background:var(--panel);border:1px solid var(--edge);border-radius:12px;padding:14px 16px;margin-top:12px}.panel h2{margin:0 0 10px;font-size:11.5px;text-transform:uppercase;letter-spacing:1px;color:var(--dim)}
 .bar{display:grid;grid-template-columns:150px 1fr 44px;gap:10px;align-items:center;font-size:13px;margin:6px 0}.bar .lbl{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.track{height:12px;background:var(--panel2);border-radius:6px;overflow:hidden}.fill{height:100%;border-radius:6px}.bar .n{text-align:right;font-variant-numeric:tabular-nums;color:var(--dim)}
 .days{display:flex;gap:6px;align-items:flex-end;height:120px;padding-top:16px}.day{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}.day .b{width:100%;background:var(--fire);border-radius:4px 4px 0 0;min-height:2px}.day .b.past{background:#3a4356}.day .v{font-size:11px;color:var(--dim);margin-bottom:3px}.day .d{font-size:10px;color:var(--muted);margin-top:4px;white-space:nowrap}
 .seg{display:inline-flex;background:var(--panel2);border:1px solid var(--edge);border-radius:999px;padding:3px;gap:2px;margin:0 0 10px}.seg button{border:0;background:transparent;color:var(--dim);padding:5px 13px;border-radius:999px;font-size:13px;cursor:pointer}.seg button.on{background:var(--accent);color:#fff}
 table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--edge);white-space:nowrap}th{color:var(--muted);font-size:11px;text-transform:uppercase;position:sticky;top:0;background:var(--panel);cursor:pointer;user-select:none}th.sorted{color:var(--accent)}tr:hover td{background:var(--panel2)}td.num{text-align:right;font-variant-numeric:tabular-nums}
-.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700}.pill.Fireplace{background:#ff7a5926;color:var(--fire)}.pill.HVAC{background:#4c8dff26;color:var(--hvac)}.pill.Electrical{background:#f5c45126;color:var(--elec)}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700}.pill.Fireplace{background:#ff7a5926;color:var(--fire)}.pill.HVAC{background:#4c8dff26;color:var(--hvac)}.pill.Electrical{background:#f5c45126;color:var(--elec)}.pill.sold{background:#2bd4a726;color:var(--good)}.pill.open{background:#7c8a9c22;color:var(--muted)}
 .tblwrap{max-height:640px;overflow:auto}.note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
 @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}}</style></head><body><div class="wrap">
 <h1><span class="dot"></span>State Fair 2026 — Booked Jobs</h1><div class="sub" id="sub"></div>
@@ -36,12 +36,14 @@ document.getElementById("sub").textContent="Every booked job whose Job Campaign 
 const bu=Object.fromEntries(cnt(R,"bu"));const wk=new Date(asOf);wk.setDate(wk.getDate()+7);
 const next7=R.filter(r=>pd(r.sched)>asOf&&pd(r.sched)<=wk).length;const past=R.filter(r=>pd(r.sched)<=asOf).length;
 const days=[...new Set(R.map(r=>r.created))].length;
+const soldRows=R.filter(r=>r.sold);const soldAmt=soldRows.reduce((a,r)=>a+(r.sold.amt||0),0);const money=v=>"$"+Math.round(v).toLocaleString();
 document.getElementById("kpis").innerHTML=[
  ["Total booked",R.length,"first booked "+md(R.map(r=>r.created).sort()[0])+" · "+days+" days · "+(R.length/days).toFixed(1)+"/day"],
  ["Fireplace",bu.Fireplace||0,Math.round((bu.Fireplace||0)/R.length*100)+"% of campaign","var(--fire)"],
  ["HVAC replacement",bu.HVAC||0,Math.round((bu.HVAC||0)/R.length*100)+"% of campaign","var(--hvac)"],
  ["Electrical",bu.Electrical||0,Math.round((bu.Electrical||0)/R.length*100)+"% of campaign","var(--elec)"],
- ["Estimates next 7 days",next7,past+" already ran through "+md(DATA.dataAsOf)+" · "+(R.length-past-next7)+" later"]
+ ["Estimates next 7 days",next7,past+" already ran through "+md(DATA.dataAsOf)+" · "+(R.length-past-next7)+" later"],
+ ["Sold",soldRows.length+(soldRows.length?' <span style="font-size:15px;color:var(--dim)">'+money(soldAmt)+'</span>':''),(past?Math.round(soldRows.length/past*100)+"% of "+past+" estimates run":"no estimates run yet")+" · Sales4dx.xlsx","var(--good)"]
 ].map(k=>'<div class="kpi"><div class="k">'+k[0]+'</div><div class="val"'+(k[3]?' style="color:'+k[3]+'"':'')+'>'+k[1]+'</div><div class="foot">'+k[2]+'</div></div>').join("");
 // day charts
 function dayChart(id,key,from,to){const m={};R.forEach(r=>{m[r[key]]=(m[r[key]]||0)+1});const out=[];let mx=1;for(let d=pd(from);d<=pd(to);d.setDate(d.getDate()+1)){const k=d.toISOString().slice(0,10);}
@@ -54,15 +56,15 @@ function bars(id,key,colorFn){const c=cnt(R,key);const mx=c[0][1];document.getEl
 const buCol={Fireplace:"var(--fire)",HVAC:"var(--hvac)",Electrical:"var(--elec)"};
 bars("bu","bu",k=>buCol[k]);bars("by","by");bars("tech","tech");
 // table
-const COLS=[["created","Created"],["cust","Customer"],["job","Job #"],["bu","Unit"],["type","Job type"],["sched","Scheduled"],["tech","Estimator"],["by","Booked by"],["city","City"],["zip","Zip"],["status","Status"]];
+const COLS=[["created","Created"],["cust","Customer"],["job","Job #"],["bu","Unit"],["type","Job type"],["sched","Scheduled"],["tech","Estimator"],["by","Booked by"],["city","City"],["zip","Zip"],["status","Status"],["soldk","Sold"],["soldamt","Sold $"]];
 const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};let filt=LS.get("sf_filt")||"All",sortK="created",sortD=1;
-const segs=["All","Fireplace","HVAC","Electrical"];
-function renderSeg(){document.getElementById("seg").innerHTML=segs.map(s=>'<button class="'+(s===filt?"on":"")+'" onclick="setF(\''+s+'\')">'+s+(s==="All"?" ("+R.length+")":" ("+(bu[s]||0)+")")+'</button>').join("");}
+const segs=["All","Fireplace","HVAC","Electrical","Sold"];
+function renderSeg(){document.getElementById("seg").innerHTML=segs.map(s=>'<button class="'+(s===filt?"on":"")+'" onclick="setF(\''+s+'\')">'+s+(s==="All"?" ("+R.length+")":s==="Sold"?" ("+soldRows.length+")":" ("+(bu[s]||0)+")")+'</button>').join("");}
 window.setF=s=>{filt=s;LS.set("sf_filt",s);renderSeg();renderTbl();};
 window.setS=k=>{if(sortK===k)sortD=-sortD;else{sortK=k;sortD=1;}renderTbl();};
-function renderTbl(){const rows=R.filter(r=>filt==="All"||r.bu===filt).sort((a,b)=>(a[sortK]>b[sortK]?1:a[sortK]<b[sortK]?-1:0)*sortD||(a.job>b.job?1:-1));
+function renderTbl(){R.forEach(r=>{r.soldk=r.sold?r.sold.date:"";r.soldamt=r.sold?r.sold.amt||0:0;});const rows=R.filter(r=>filt==="All"||(filt==="Sold"?!!r.sold:r.bu===filt)).sort((a,b)=>(a[sortK]>b[sortK]?1:a[sortK]<b[sortK]?-1:0)*sortD||(a.job>b.job?1:-1));
  document.querySelector("#tbl thead").innerHTML="<tr>"+COLS.map(([k,l])=>'<th class="'+(k===sortK?"sorted":"")+'" onclick="setS(\''+k+'\')">'+l+(k===sortK?(sortD>0?" ▲":" ▼"):"")+'</th>').join("")+"</tr>";
- document.querySelector("#tbl tbody").innerHTML=rows.map(r=>"<tr>"+COLS.map(([k])=>{let v=r[k];if(k==="created"||k==="sched")v=dow(r[k])+" "+md(r[k]);if(k==="bu")v='<span class="pill '+r.bu+'">'+r.bu+'</span>';return"<td>"+v+"</td>";}).join("")+"</tr>").join("");}
+ document.querySelector("#tbl tbody").innerHTML=rows.map(r=>"<tr>"+COLS.map(([k])=>{let v=r[k];if(k==="created"||k==="sched")v=dow(r[k])+" "+md(r[k]);if(k==="bu")v='<span class="pill '+r.bu+'">'+r.bu+'</span>';if(k==="soldk")v=r.sold?'<span class="pill sold">Sold '+md(r.sold.date)+(r.sold.by?' · '+r.sold.by:'')+'</span>':(pd(r.sched)<=asOf?'<span class="pill open">ran · not sold</span>':'<span class="pill open">pending</span>');if(k==="soldamt")return'<td class="num">'+(r.sold?money(r.sold.amt||0):"—")+"</td>";return"<td>"+v+"</td>";}).join("")+"</tr>").join("");}
 renderSeg();renderTbl();
-document.getElementById("note").innerHTML="Rows are booked jobs from <b>Booking PBI 4DX.xlsx</b> (Sheet1) filtered to Job Campaign = \"State Fair 2026\"; the export has no Tags column, so the campaign field is the State Fair identifier. \"Created\" = job creation date (booking), \"Scheduled\" = appointment date. All jobs are $0 estimates at booking; sold value is not in this export. Another 17 jobs in the same window mention the State Fair only in call notes but were booked under other campaigns — they are excluded here. Weeks start Monday.";
+document.getElementById("note").innerHTML="Rows are booked jobs from <b>Booking PBI 4DX.xlsx</b> (Sheet1) filtered to Job Campaign = \"State Fair 2026\"; the export has no Tags column, so the campaign field is the State Fair identifier. \"Created\" = job creation date (booking), \"Scheduled\" = appointment date. All jobs are $0 estimates at booking; sold value is not in this export. Another 17 jobs in the same window mention the State Fair only in call notes but were booked under other campaigns — they are excluded here. Weeks start Monday. <b>Sold</b> = a Sold estimate in <b>Sales4dx.xlsx</b> whose Parent Job ID matches the State Fair job # (fallback: same customer name with Sold On on/after the booking date); Sold $ = Estimates Subtotal. Sold status is refreshed every weekday morning through Oct 30, 2026.";
 </script></body></html>
