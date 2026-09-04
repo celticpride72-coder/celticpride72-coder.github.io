@@ -11,7 +11,10 @@
 table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--edge);white-space:nowrap}th{color:var(--muted);font-size:11px;text-transform:uppercase;position:sticky;top:0;background:var(--panel);cursor:pointer;user-select:none}th.sorted{color:var(--accent)}tr:hover td{background:var(--panel2)}td.num{text-align:right;font-variant-numeric:tabular-nums}
 .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700}.pill.Fireplace{background:#ff7a5926;color:var(--fire)}.pill.HVAC{background:#4c8dff26;color:var(--hvac)}.pill.Electrical{background:#f5c45126;color:var(--elec)}.pill.sold{background:#2bd4a726;color:var(--good)}.pill.open{background:#7c8a9c22;color:var(--muted)}
 .tblwrap{max-height:640px;overflow:auto}.note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
-@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}}</style></head><body><div class="wrap">
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}}</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head><body><div class="wrap">
 <h1><span class="dot"></span>State Fair 2026 — Booked Jobs</h1><div class="sub" id="sub"></div>
 <div class="kpis" id="kpis"></div>
 <div class="grid2">
@@ -23,6 +26,7 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{padding:8px 10p
  <div class="panel"><h2>Booked by</h2><div id="by"></div></div>
  <div class="panel"><h2>Assigned estimator</h2><div id="tech"></div></div>
 </div>
+<div class="panel"><h2>Job map — estimate locations by ZIP</h2><div id="map" style="height:480px;border-radius:8px;overflow:hidden;background:var(--panel2)"></div><div id="maplegend" class="note" style="margin-top:8px"></div></div>
 <div class="panel"><h2>Job list</h2><div class="seg" id="seg"></div><div class="tblwrap"><table id="tbl"><thead></thead><tbody></tbody></table></div></div>
 <div class="note" id="note"></div>
 <script>
@@ -67,4 +71,33 @@ function renderTbl(){R.forEach(r=>{r.soldk=r.sold?r.sold.date:"";r.soldamt=r.sol
  document.querySelector("#tbl tbody").innerHTML=rows.map(r=>"<tr>"+COLS.map(([k])=>{let v=r[k];if(k==="created"||k==="sched")v=dow(r[k])+" "+md(r[k]);if(k==="bu")v='<span class="pill '+r.bu+'">'+r.bu+'</span>';if(k==="soldk")v=r.sold?'<span class="pill sold">Sold '+md(r.sold.date)+(r.sold.by?' · '+r.sold.by:'')+'</span>':(pd(r.sched)<=asOf?'<span class="pill open">ran · not sold</span>':'<span class="pill open">pending</span>');if(k==="soldamt")return'<td class="num">'+(r.sold?money(r.sold.amt||0):"—")+"</td>";return"<td>"+v+"</td>";}).join("")+"</tr>").join("");}
 renderSeg();renderTbl();
 document.getElementById("note").innerHTML="Rows are booked jobs from <b>Booking PBI 4DX.xlsx</b> (Sheet1) filtered to Job Campaign = \"State Fair 2026\"; the export has no Tags column, so the campaign field is the State Fair identifier. \"Created\" = job creation date (booking), \"Scheduled\" = appointment date. All jobs are $0 estimates at booking; sold value is not in this export. Another 17 jobs in the same window mention the State Fair only in call notes but were booked under other campaigns — they are excluded here. Weeks start Monday. <b>Sold</b> = a Sold estimate in <b>Sales4dx.xlsx</b> whose Parent Job ID matches the State Fair job # (fallback: same customer name with Sold On on/after the booking date); Sold $ = Estimates Subtotal. Sold status is refreshed every weekday morning through Oct 30, 2026.";
-</script></body></html>
+</script><script>
+(function(){
+ var rows=(typeof DATA!=='undefined'&&DATA.rows)?DATA.rows:[];
+ var COL={Fireplace:'#ff7a59',HVAC:'#4c8dff',Electrical:'#f5c451',Plumbing:'#a371f7'};
+ var leg=document.getElementById('maplegend');
+ if(typeof L==='undefined'){ if(leg)leg.textContent='Map library failed to load (offline?).'; return; }
+ var map=L.map('map',{scrollWheelZoom:false}).setView([44.95,-93.25],9);
+ L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+ var cache={}; try{cache=JSON.parse(localStorage.getItem('sfZipGeo')||'{}');}catch(e){}
+ function geocode(zip){ if(cache[zip])return Promise.resolve(cache[zip]);
+   return fetch('https://api.zippopotam.us/us/'+zip).then(function(r){return r.ok?r.json():null;})
+     .then(function(j){var p=j&&j.places&&j.places[0]; if(!p)return null; var c=[+p.latitude,+p.longitude]; cache[zip]=c; return c;})
+     .catch(function(){return null;}); }
+ var byZip={}; rows.forEach(function(r){var z=(r.zip||'').trim(); if(!z)return; (byZip[z]=byZip[z]||[]).push(r);});
+ var zips=Object.keys(byZip); var bounds=[]; var mapped=0;
+ Promise.all(zips.map(function(z){ return geocode(z).then(function(c){ if(!c)return; var list=byZip[z]; var n=list.length;
+   list.forEach(function(r,i){ var lat=c[0],lng=c[1];
+     if(n>1){var ang=2*Math.PI*i/n; var rad=0.004+0.0018*Math.floor(i/12); lat+=rad*Math.cos(ang); lng+=rad*Math.sin(ang)/Math.cos(c[0]*Math.PI/180);}
+     var col=COL[r.bu]||'#7c8a9c'; mapped++; bounds.push([lat,lng]);
+     L.circleMarker([lat,lng],{radius:7,weight:1.5,color:'#0e1116',fillColor:col,fillOpacity:.92}).addTo(map)
+      .bindPopup('<b>'+(r.cust||'')+'</b><br>'+(r.city||'')+' '+z+'<br>'+(r.bu||'')+' · '+(r.type||'')+'<br>Sched '+(r.sched||'—')+' · '+(r.tech||'')+'<br>'+(r.status||''));
+   });
+ }); })).then(function(){ try{localStorage.setItem('sfZipGeo',JSON.stringify(cache));}catch(e){}
+   if(bounds.length)map.fitBounds(bounds,{padding:[30,30],maxZoom:12});
+   if(leg){var parts=Object.keys(COL).map(function(k){return '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+COL[k]+';margin:0 4px 0 14px;vertical-align:middle"></span>'+k;}).join('');
+     leg.innerHTML='Mapped '+mapped+' of '+rows.length+' jobs across '+zips.length+' ZIPs · located by ZIP-code centroid (same-ZIP markers are fanned out slightly).'+parts;}
+ });
+})();
+</script>
+</body></html>
