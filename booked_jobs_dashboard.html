@@ -1,265 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Booked Jobs Dashboard — Comfort by Design</title>
 <style>
 :root{
-  --bg:#0e1116; --panel:#161b23; --panel2:#1c2230; --border:#252d3d;
-  --text:#e8ecf3; --muted:#8b94a7; --accent:#f97316; --accent-soft:#f9731633;
-  --green:#22c55e; --amber:#f5b342; --red:#ef4444;
+  --bg:#0d0f13; --panel:#161a21; --panel2:#1d222b; --line:#2a3140;
+  --txt:#e8ecf3; --muted:#8b95a7; --accent:#ff8a1f; --accent2:#ffb266;
+  --green:#3ddc84; --amber:#ffc94d; --red:#ff5f56;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;padding:24px;max-width:1200px;margin:0 auto}
-h1{font-size:22px;font-weight:700;letter-spacing:.3px}
-h1 span{color:var(--accent)}
-.sub{color:var(--muted);font-size:13px;margin-top:4px;margin-bottom:20px}
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px}
-.panel h2{font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:14px}
-/* hero */
-.hero{display:flex;gap:24px;flex-wrap:wrap;align-items:stretch;border-left:4px solid var(--accent)}
-.hero-left{flex:0 0 260px;display:flex;flex-direction:column;justify-content:center}
-.hero-wd{font-size:15px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:1.5px}
-.hero-num{font-size:64px;font-weight:800;line-height:1.05;margin:4px 0}
-.hero-date{color:var(--muted);font-size:14px;margin-bottom:12px}
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;border:1px solid var(--border);background:var(--panel2)}
-.chip small{font-weight:400;color:var(--muted)}
-.hero-right{flex:1 1 480px;min-width:340px}
-.green{color:var(--green)} .amber{color:var(--amber)} .red{color:var(--red)}
-/* KPI cards */
-.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
-.card .lbl{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
-.card .val{font-size:34px;font-weight:800;margin:6px 0 8px}
-.card .row{display:flex;justify-content:space-between;font-size:12.5px;margin-top:4px}
-.card .row .k{color:var(--muted)}
-/* attainment bars */
-.abar{margin-bottom:14px}
-.abar .top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
-.abar .track{position:relative;height:16px;background:var(--panel2);border-radius:8px;overflow:visible}
-.abar .fill{position:absolute;top:0;left:0;height:100%;border-radius:8px}
-.abar .marker{position:absolute;top:-4px;width:2px;height:24px;background:var(--text);opacity:.85}
-.abar .marker::after{content:"Goal";position:absolute;top:-14px;left:-12px;font-size:9px;color:var(--muted)}
-.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
-svg text{font-family:'Segoe UI',system-ui,sans-serif}
-.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
-.wk .d{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
-.wk .d.today{border-color:var(--accent)}
-.wk .d .dn{font-size:11px;color:var(--muted);text-transform:uppercase}
-.wk .d .dc{font-size:24px;font-weight:800;margin:2px 0}
-.wk .d .dg{font-size:11px;color:var(--muted)}
-footer{color:var(--muted);font-size:11.5px;line-height:1.7;margin-top:8px;border-top:1px solid var(--border);padding-top:14px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding:26px 22px 50px}
+h1{font-size:22px;margin:0 0 4px;letter-spacing:.3px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+.ptitle{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);margin-bottom:14px}
+.hero{display:flex;gap:26px;flex-wrap:wrap;align-items:stretch;
+  background:linear-gradient(135deg,#1b1f28 0%,#161a21 60%);border:1px solid #33393f;border-left:4px solid var(--accent)}
+.hero-l{min-width:250px;flex:0 0 auto}
+.hero-r{flex:1 1 460px;min-width:340px}
+.hbig{font-size:66px;font-weight:700;line-height:1;margin:6px 0 2px}
+.hday{font-size:15px;color:var(--accent2);text-transform:uppercase;letter-spacing:2px;font-weight:600}
+.hdate{color:var(--muted);font-size:13px;margin-bottom:14px}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:12px;color:var(--muted)}
+.chip b{display:block;font-size:17px;margin-top:3px}
+.green{color:var(--green)} .amber{color:var(--amber)} .red{color:var(--red)} .accent{color:var(--accent)}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.card .lab{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}
+.card .val{font-size:34px;font-weight:700;margin:6px 0 10px}
+.card .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:3px 0}
+.card .row b{font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:right;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td{padding:9px 8px;border-bottom:1px solid #20252e;text-align:right}
+tr:last-child td{border-bottom:none}
+.bar-wrap{height:16px;background:#20252e;border-radius:8px;position:relative;overflow:visible;min-width:150px}
+.bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.goalmark{position:absolute;top:-4px;bottom:-4px;width:2px;background:#e8ecf3}
+.foot{color:var(--muted);font-size:11.5px;line-height:1.7;border-top:1px solid var(--line);padding-top:14px;margin-top:6px}
+svg{display:block;width:100%;height:auto}
 </style>
 </head>
 <body>
-<h1>BOOKED JOBS <span>DASHBOARD</span></h1>
+<h1>Booked Jobs Dashboard</h1>
 <div class="sub" id="sub"></div>
 
-<div class="panel hero" id="hero"></div>
+<div class="panel hero">
+  <div class="hero-l">
+    <div class="hday" id="h-day"></div>
+    <div class="hbig" id="h-count"></div>
+    <div class="hdate" id="h-date"></div>
+    <div class="chips">
+      <div class="chip">vs Goal<b id="h-goal"></b></div>
+      <div class="chip">vs Last Year<b id="h-ly"></b></div>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="ptitle">Last 14 days — booked jobs</div>
+    <div id="spark"></div>
+  </div>
+</div>
 
-<div class="grid4" id="kpis" style="margin-bottom:18px"></div>
+<div class="grid4" id="kpis"></div>
 
-<div class="panel"><h2>Rolling Windows (anchored to last data date)</h2><div class="grid4" id="rolling"></div></div>
+<div class="panel" style="margin-top:18px">
+  <div class="ptitle">Rolling windows (anchored at last data date)</div>
+  <table id="rolling"></table>
+</div>
 
-<div class="panel"><h2>Attainment to Date</h2><div id="attain"></div>
-<div class="legend"><span><i style="background:var(--green)"></i>&ge;100% of goal</span><span><i style="background:var(--amber)"></i>95&ndash;99.9%</span><span><i style="background:var(--red)"></i>&lt;95%</span></div></div>
+<div class="panel">
+  <div class="ptitle">Attainment to date</div>
+  <table id="attain"></table>
+</div>
 
-<div class="panel"><h2>Monthly Booked Jobs by Year</h2><div id="monthly"></div>
-<div class="legend"><span><i style="background:#5b8dd9"></i>2025</span><span><i style="background:var(--accent)"></i>2026</span><span><i style="background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 2px,transparent 2px,transparent 4px)"></i>Current month (partial)</span><span>&#9482; dashed tick = 2026 Booked Jobs Goal</span></div></div>
+<div class="panel">
+  <div class="ptitle">Monthly booked jobs</div>
+  <div id="monthly"></div>
+</div>
 
-<div class="panel"><h2 id="wkTitle">This Week (Mon-start)</h2><div class="wk" id="week"></div></div>
+<div class="panel">
+  <div class="ptitle">This week (Monday start)</div>
+  <table id="week"></table>
+</div>
 
-<footer id="foot"></footer>
+<div class="panel">
+  <div class="foot" id="foot"></div>
+</div>
 
 <script>
-const DATA = {
-  today:"2026-09-03", dataAsOf:"2026-09-02",
-  yesterday:{date:"2026-09-02",weekday:"Wednesday",actual:55,goal:48.85,lastYear:77,awaiting:false,lyDate:"2025-09-03"},
-  spark:[
-    {date:"2026-08-20",dow:4,count:19,goal:41.78},{date:"2026-08-21",dow:5,count:37,goal:41.78},
-    {date:"2026-08-22",dow:6,count:2,goal:null},{date:"2026-08-23",dow:0,count:2,goal:null},
-    {date:"2026-08-24",dow:1,count:35,goal:41.78},{date:"2026-08-25",dow:2,count:41,goal:41.78},
-    {date:"2026-08-26",dow:3,count:25,goal:41.78},{date:"2026-08-27",dow:4,count:45,goal:41.78},
-    {date:"2026-08-28",dow:5,count:32,goal:41.78},{date:"2026-08-29",dow:6,count:9,goal:null},
-    {date:"2026-08-30",dow:0,count:7,goal:null},{date:"2026-08-31",dow:1,count:61,goal:41.78},
-    {date:"2026-09-01",dow:2,count:57,goal:48.85},{date:"2026-09-02",dow:3,count:55,goal:48.85}],
-  sparkAvgGoal:43.20,
-  periods:{
-    WTD:{actual:173,goal:139.48,lastYear:135,start:"2026-08-31"},
-    MTD:{actual:112,goal:97.70,lastYear:58,start:"2026-09-01"},
-    QTD:{actual:1854,goal:1872.83,lastYear:1763,start:"2026-07-01"},
-    YTD:{actual:7050,goal:6851.15,lastYear:6517,start:"2026-01-01"}},
-  rolling:{
-    "Last 30":{actual:910,goal:933.32,lastYear:894},
-    "Last 60":{actual:1762,goal:1770.82,lastYear:1726},
-    "Last 90":{actual:2608,goal:2607.34,lastYear:2551},
-    "Last 180":{actual:5075,goal:4906.49,lastYear:4701}},
-  monthly:{"2025-01":918,"2025-02":792,"2025-03":702,"2025-04":720,"2025-05":775,"2025-06":847,"2025-07":885,"2025-08":820,"2025-09":996,"2025-10":1386,"2025-11":1079,"2025-12":1088,"2026-01":1157,"2026-02":675,"2026-03":769,"2026-04":880,"2026-05":820,"2026-06":895,"2026-07":894,"2026-08":848,"2026-09":112},
-  monthlyGoal:{"2026-01":945,"2026-02":832,"2026-03":737,"2026-04":737,"2026-05":830,"2026-06":898,"2026-07":898,"2026-08":878,"2026-09":1027},
-  week:[{date:"2026-08-31",dow:1,count:61,goal:41.78},{date:"2026-09-01",dow:2,count:57,goal:48.85},{date:"2026-09-02",dow:3,count:55,goal:48.85},{date:"2026-09-03",dow:4,count:0,goal:48.85}]
-};
-const fmtI=n=>Math.round(n).toLocaleString();
-const attCls=p=>p>=100?"green":(p>=95?"amber":"red");
-const attColor=p=>p>=100?"var(--green)":(p>=95?"var(--amber)":"var(--red)");
-const yoyCls=p=>p>=0?"green":"red";
-const pct=(a,g)=>g?a/g*100:null;
-const sign=p=>(p>=0?"+":"")+p.toFixed(1)+"%";
-const niceDate=s=>{const[y,m,d]=s.split("-");return new Date(+y,m-1,+d).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});};
-const shortDate=s=>{const[y,m,d]=s.split("-");return (+m)+"/"+(+d);};
+const D = {"TODAY": "2026-09-04", "dataAsOf": "2026-09-03", "updated": "2026-09-04", "yesterday": {"date": "2026-09-03", "weekday": "Thursday", "full": "Thursday, September 3, 2026", "actual": 44, "goal": 48.85142857142858, "lastYear": 66, "lyDate": "2025-09-04", "awaiting": false}, "spark": [{"date": "2026-08-21", "count": 37, "goal": 41.78095238095238, "dow": 5}, {"date": "2026-08-22", "count": 2, "goal": null, "dow": 6}, {"date": "2026-08-23", "count": 2, "goal": null, "dow": 0}, {"date": "2026-08-24", "count": 35, "goal": 41.78095238095238, "dow": 1}, {"date": "2026-08-25", "count": 41, "goal": 41.78095238095238, "dow": 2}, {"date": "2026-08-26", "count": 25, "goal": 41.78095238095238, "dow": 3}, {"date": "2026-08-27", "count": 45, "goal": 41.78095238095238, "dow": 4}, {"date": "2026-08-28", "count": 32, "goal": 41.78095238095238, "dow": 5}, {"date": "2026-08-29", "count": 9, "goal": null, "dow": 6}, {"date": "2026-08-30", "count": 7, "goal": null, "dow": 0}, {"date": "2026-08-31", "count": 61, "goal": 41.78095238095238, "dow": 1}, {"date": "2026-09-01", "count": 57, "goal": 48.85142857142858, "dow": 2}, {"date": "2026-09-02", "count": 55, "goal": 48.85142857142858, "dow": 3}, {"date": "2026-09-03", "count": 44, "goal": 48.85142857142858, "dow": 4}], "periods": {"WTD": {"start": "2026-08-31", "actual": 217, "goal": 188.3352380952381, "lastYear": 201}, "MTD": {"start": "2026-09-01", "actual": 156, "goal": 146.55428571428573, "lastYear": 135}, "QTD": {"start": "2026-07-01", "actual": 1898, "goal": 1921.6842857142856, "lastYear": 1840}, "YTD": {"start": "2026-01-01", "actual": 7094, "goal": 6900.004285714284, "lastYear": 6594}}, "rolling": {"30": {"actual": 892, "goal": 940.3923809523808, "lastYear": 928, "start": "2026-08-05"}, "60": {"actual": 1805, "goal": 1819.669512987013, "lastYear": 1792, "start": "2026-07-06"}, "90": {"actual": 2617, "goal": 2615.3847402597407, "lastYear": 2575, "start": "2026-06-06"}, "180": {"actual": 5117, "goal": 4955.341558441554, "lastYear": 4765, "start": "2026-03-08"}}, "monthly": {"2025-01": 918, "2025-02": 792, "2025-03": 702, "2025-04": 720, "2025-05": 775, "2025-06": 847, "2025-07": 885, "2025-08": 820, "2025-09": 996, "2025-10": 1386, "2025-11": 1079, "2025-12": 1088, "2026-01": 1157, "2026-02": 675, "2026-03": 769, "2026-04": 880, "2026-05": 820, "2026-06": 895, "2026-07": 894, "2026-08": 848, "2026-09": 156}, "monthlyGoal": {"2026-01": 945.54, "2026-02": 831.6, "2026-03": 737.1, "2026-04": 737.1, "2026-05": 829.25, "2026-06": 897.73, "2026-07": 897.73, "2026-08": 877.4, "2026-09": 1025.88}, "weekDaily": [{"date": "2026-08-31", "count": 61, "goal": 41.78095238095238}, {"date": "2026-09-01", "count": 57, "goal": 48.85142857142858}, {"date": "2026-09-02", "count": 55, "goal": 48.85142857142858}, {"date": "2026-09-03", "count": 44, "goal": 48.85142857142858}, {"date": "2026-09-04", "count": 0, "goal": 48.85142857142858}]};
 
-document.getElementById("sub").textContent =
-  "Job count vs Booked Jobs Goal and same period last year · Data through "+niceDate(DATA.dataAsOf)+" · Generated "+niceDate(DATA.today);
+const fmtI = n => Math.round(n).toLocaleString();
+const attCls = p => p>=100?'green':(p>=95?'amber':'red');
+const yoyCls = p => p>=0?'green':'red';
+const pct = (a,g) => g? (a/g*100) : null;
+const sgn = v => (v>=0?'+':'') + v.toFixed(1) + '%';
+const parse = s => {const [a,b,c]=s.split('-').map(Number); return new Date(a,b-1,c);};
 
-// ---- HERO ----
+document.getElementById('sub').textContent =
+  'Count of booked jobs vs the Booked Jobs Goal and same period last year · data through ' +
+  parse(D.dataAsOf).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) +
+  ' · generated ' + parse(D.TODAY).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+
+/* ---------- HERO ---------- */
+const Y = D.yesterday;
+document.getElementById('h-day').textContent = Y.weekday;
+document.getElementById('h-date').textContent = Y.full + (Y.awaiting ? ' — awaiting data' : '');
+const yPct = Y.goal ? pct(Y.actual, Y.goal) : null;
+const hc = document.getElementById('h-count');
+hc.textContent = Y.awaiting ? '—' : fmtI(Y.actual);
+hc.className = 'hbig ' + (yPct===null ? 'accent' : attCls(yPct));
+document.getElementById('h-goal').innerHTML = Y.goal
+  ? '<span class="'+attCls(yPct)+'">'+yPct.toFixed(1)+'%</span> <span style="color:#8b95a7;font-size:12px">of '+Y.goal.toFixed(1)+'</span>'
+  : '<span style="color:#8b95a7;font-size:13px">no goal set / non-business day</span>';
+const yoy = Y.lastYear ? (Y.actual - Y.lastYear)/Y.lastYear*100 : null;
+document.getElementById('h-ly').innerHTML = yoy===null
+  ? '<span style="color:#8b95a7;font-size:13px">n/a</span>'
+  : '<span class="'+yoyCls(yoy)+'">'+sgn(yoy)+'</span> <span style="color:#8b95a7;font-size:12px">vs '+fmtI(Y.lastYear)+'</span>';
+
+/* ---------- SPARKLINE ---------- */
 (function(){
-  const y=DATA.yesterday;
-  const p=pct(y.actual,y.goal);
-  const numCls = y.goal!=null ? attCls(p) : "";
-  const yoy = y.lastYear>0 ? (y.actual-y.lastYear)/y.lastYear*100 : null;
-  let chips="";
-  if (y.goal!=null) chips += '<span class="chip"><span class="'+attCls(p)+'">'+p.toFixed(1)+'% of goal</span> <small>(goal '+y.goal.toFixed(1)+')</small></span>';
-  else chips += '<span class="chip"><small>no goal set / non-business day</small></span>';
-  chips += '<span class="chip">'+(yoy!=null?'<span class="'+yoyCls(yoy)+'">'+sign(yoy)+' vs LY</span>':'<span>LY: '+y.lastYear+'</span>')+' <small>(LY '+y.lastYear+' on '+shortDate(y.lyDate)+')</small></span>';
-  const awaiting = y.awaiting ? '<div style="color:var(--amber);font-size:12px;margin-top:8px">⚠ Awaiting data — source not yet refreshed for this date.</div>' : "";
-  // sparkline
-  const W=560,H=170,pad=6,bw=W/14;
-  const max=Math.max(...DATA.spark.map(s=>s.count), DATA.sparkAvgGoal||0)*1.15;
-  let bars="";
-  DATA.spark.forEach((s,i)=>{
-    const wknd = s.dow===0||s.dow===6;
-    const h=Math.max(2, s.count/max*(H-38));
-    const x=i*bw+5, yb=H-24-h;
-    const fill = i===13 ? "var(--accent)" : (wknd ? "#3a4356" : "#5b6a85");
-    bars += '<rect x="'+x+'" y="'+yb+'" width="'+(bw-10)+'" height="'+h+'" rx="3" fill="'+fill+'"/>';
-    bars += '<text x="'+(x+(bw-10)/2)+'" y="'+(yb-5)+'" text-anchor="middle" font-size="10.5" fill="'+(i===13?"var(--accent)":"var(--muted)")+'" font-weight="'+(i===13?'700':'400')+'">'+s.count+'</text>';
-    bars += '<text x="'+(x+(bw-10)/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="9" fill="var(--muted)">'+shortDate(s.date)+'</text>';
+  const s = D.spark, W=760, H=210, pad={t:22,r:12,b:36,l:12};
+  const n=s.length, iw=W-pad.l-pad.r, bw=iw/n*0.66, gap=iw/n;
+  const goals = s.map(d=>d.goal).filter(g=>g!==null);
+  const avgGoal = goals.length? goals.reduce((a,b)=>a+b,0)/goals.length : null;
+  const max = Math.max(...s.map(d=>d.count), avgGoal||0)*1.18 || 1;
+  const ih = H-pad.t-pad.b;
+  let o = '<svg viewBox="0 0 '+W+' '+H+'">';
+  if(avgGoal){
+    const gy = pad.t + ih - (avgGoal/max)*ih;
+    o += '<line x1="'+pad.l+'" x2="'+(W-pad.r)+'" y1="'+gy+'" y2="'+gy+'" stroke="#ffffff" stroke-opacity=".45" stroke-dasharray="5 4"/>';
+    o += '<text x="'+(W-pad.r)+'" y="'+(gy-5)+'" text-anchor="end" font-size="10" fill="#8b95a7">avg daily goal '+avgGoal.toFixed(1)+'</text>';
+  }
+  s.forEach((d,i)=>{
+    const x = pad.l + i*gap + (gap-bw)/2;
+    const h = (d.count/max)*ih, y = pad.t+ih-h;
+    const wknd = d.dow===0||d.dow===6;
+    const last = i===n-1;
+    o += '<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h,1)+'" rx="3" fill="'+(last?'#ff8a1f':(wknd?'#333b48':'#46536b'))+'"/>';
+    o += '<text x="'+(x+bw/2)+'" y="'+(y-5)+'" text-anchor="middle" font-size="10.5" fill="'+(last?'#ffb266':'#8b95a7')+'">'+d.count+'</text>';
+    const dt = parse(d.date);
+    o += '<text x="'+(x+bw/2)+'" y="'+(H-20)+'" text-anchor="middle" font-size="9.5" fill="#8b95a7">'+dt.toLocaleDateString('en-US',{weekday:'short'}).charAt(0)+'</text>';
+    o += '<text x="'+(x+bw/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="9" fill="#5f6a7d">'+(dt.getMonth()+1)+'/'+dt.getDate()+'</text>';
   });
-  let goalLine="";
-  if (DATA.sparkAvgGoal){
-    const gy=H-24-(DATA.sparkAvgGoal/max*(H-38));
-    goalLine='<line x1="2" x2="'+(W-2)+'" y1="'+gy+'" y2="'+gy+'" stroke="var(--text)" stroke-dasharray="5,4" stroke-width="1.2" opacity="0.6"/>'+
-      '<text x="'+(W-4)+'" y="'+(gy-5)+'" text-anchor="end" font-size="9.5" fill="var(--muted)">avg daily goal '+DATA.sparkAvgGoal.toFixed(1)+'</text>';
-  }
-  document.getElementById("hero").innerHTML =
-    '<div class="hero-left"><div class="hero-wd">Yesterday · '+y.weekday+'</div>'+
-    '<div class="hero-num '+numCls+'">'+y.actual+'</div>'+
-    '<div class="hero-date">'+niceDate(y.date)+' · booked jobs</div>'+
-    '<div class="chips">'+chips+'</div>'+awaiting+'</div>'+
-    '<div class="hero-right"><svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet">'+bars+goalLine+'</svg>'+
-    '<div style="font-size:11px;color:var(--muted);text-align:center">Last 14 days · weekends muted</div></div>';
+  o += '</svg>';
+  document.getElementById('spark').innerHTML = o;
 })();
 
-// ---- KPI CARDS ----
+/* ---------- KPI CARDS ---------- */
 (function(){
-  let html="";
-  for (const [name,p] of Object.entries(DATA.periods)){
-    const at=pct(p.actual,p.goal);
-    const goalRow = p.goal!=null
-      ? '<div class="row"><span class="k">vs Goal ('+fmtI(p.goal)+')</span><span class="'+attCls(at)+'">'+at.toFixed(1)+'%</span></div>'
-      : '<div class="row"><span class="k">vs Goal</span><span class="k">no goal set</span></div>';
-    const yoy = p.lastYear>0 ? (p.actual-p.lastYear)/p.lastYear*100 : null;
-    const yoyRow = yoy!=null
-      ? '<div class="row"><span class="k">vs Last-yr ('+fmtI(p.lastYear)+')</span><span class="'+yoyCls(yoy)+'">'+sign(yoy)+'</span></div>'
-      : '<div class="row"><span class="k">vs Last-yr</span><span class="k">LY '+fmtI(p.lastYear)+'</span></div>';
-    html += '<div class="card"><div class="lbl">'+name+' <span style="letter-spacing:0;text-transform:none">· from '+shortDate(p.start)+'</span></div>'+
-      '<div class="val">'+fmtI(p.actual)+'</div>'+goalRow+yoyRow+'</div>';
-  }
-  document.getElementById("kpis").innerHTML=html;
+  const order=['WTD','MTD','QTD','YTD'];
+  const lab={WTD:'Week to date',MTD:'Month to date',QTD:'Quarter to date',YTD:'Year to date'};
+  document.getElementById('kpis').innerHTML = order.map(k=>{
+    const p=D.periods[k], a=pct(p.actual,p.goal), y=p.lastYear?(p.actual-p.lastYear)/p.lastYear*100:null;
+    return '<div class="card"><div class="lab">'+lab[k]+'</div><div class="val">'+fmtI(p.actual)+'</div>'+
+      '<div class="row"><span>vs Goal ('+fmtI(p.goal)+')</span><b class="'+(a?attCls(a):'')+'">'+(a?a.toFixed(1)+'%':'—')+'</b></div>'+
+      '<div class="row"><span>vs Last yr ('+fmtI(p.lastYear)+')</span><b class="'+(y===null?'':yoyCls(y))+'">'+(y===null?'—':sgn(y))+'</b></div></div>';
+  }).join('');
 })();
 
-// ---- ROLLING ----
+/* ---------- ROLLING ---------- */
 (function(){
-  let html="";
-  for (const [name,p] of Object.entries(DATA.rolling)){
-    const at=pct(p.actual,p.goal);
-    const yoy=(p.actual-p.lastYear)/p.lastYear*100;
-    html += '<div class="card" style="background:var(--panel2)"><div class="lbl">'+name+' days</div>'+
-      '<div class="val" style="font-size:28px">'+fmtI(p.actual)+'</div>'+
-      '<div class="row"><span class="k">vs Goal ('+fmtI(p.goal)+')</span><span class="'+attCls(at)+'">'+at.toFixed(1)+'%</span></div>'+
-      '<div class="row"><span class="k">vs Last-yr ('+fmtI(p.lastYear)+')</span><span class="'+yoyCls(yoy)+'">'+sign(yoy)+'</span></div></div>';
-  }
-  document.getElementById("rolling").innerHTML=html;
-})();
-
-// ---- ATTAINMENT BARS ----
-(function(){
-  let html="";
-  const items = Object.entries(DATA.periods).concat(Object.entries(DATA.rolling));
-  for (const [name,p] of items){
-    if (p.goal==null || p.goal===0){
-      html += '<div class="abar"><div class="top"><span>'+name+'</span><span style="color:var(--muted)">no goal set for this period</span></div>'+
-        '<div class="track"></div></div>';
-      continue;
-    }
-    const at=pct(p.actual,p.goal);
-    const scale=Math.max(p.actual,p.goal)*1.08;
-    const fw=p.actual/scale*100, gx=p.goal/scale*100;
-    html += '<div class="abar"><div class="top"><span>'+name+'</span><span><b>'+fmtI(p.actual)+'</b> <span style="color:var(--muted)">/ '+fmtI(p.goal)+' goal</span> · <span class="'+attCls(at)+'">'+at.toFixed(1)+'%</span></span></div>'+
-      '<div class="track"><div class="fill" style="width:'+fw+'%;background:'+attColor(at)+'"></div><div class="marker" style="left:'+gx+'%"></div></div></div>';
-  }
-  document.getElementById("attain").innerHTML=html;
-})();
-
-// ---- MONTHLY CHART ----
-(function(){
-  const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const W=1100,H=260,padL=8,padB=22,padT=18;
-  const years=["2025","2026"], colors={"2025":"#5b8dd9","2026":"var(--accent)"};
-  const max=Math.max(...Object.values(DATA.monthly),...Object.values(DATA.monthlyGoal))*1.12;
-  const groupW=(W-padL*2)/12, bw=(groupW-14)/2;
-  const curMonth = DATA.dataAsOf.slice(0,7);
-  let out='<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet">';
-  out += '<defs><pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" fill="var(--accent)"/><line x1="0" y1="0" x2="0" y2="6" stroke="#0e1116" stroke-width="2.5"/></pattern></defs>';
-  for (let m=0;m<12;m++){
-    const mm=String(m+1).padStart(2,"0");
-    years.forEach((yr,yi)=>{
-      const key=yr+"-"+mm, v=DATA.monthly[key];
-      const x=padL+m*groupW+6+yi*(bw+2);
-      if (v!=null){
-        const h=v/max*(H-padB-padT), yb=H-padB-h;
-        const fill = key===curMonth ? "url(#hatch)" : colors[yr];
-        out += '<rect x="'+x+'" y="'+yb+'" width="'+bw+'" height="'+h+'" rx="2.5" fill="'+fill+'"/>';
-        out += '<text x="'+(x+bw/2)+'" y="'+(yb-4)+'" text-anchor="middle" font-size="9" fill="var(--muted)">'+v+'</text>';
-      }
-      // goal tick on 2026 bars
-      if (yr==="2026"){
-        const g=DATA.monthlyGoal[key];
-        if (g!=null){
-          const gy=H-padB-(g/max*(H-padB-padT));
-          out += '<line x1="'+(x-2)+'" x2="'+(x+bw+2)+'" y1="'+gy+'" y2="'+gy+'" stroke="var(--text)" stroke-dasharray="4,3" stroke-width="1.3" opacity="0.8"/>';
-        }
-      }
-    });
-    out += '<text x="'+(padL+m*groupW+groupW/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10.5" fill="var(--muted)">'+months[m]+'</text>';
-  }
-  out += '</svg>';
-  document.getElementById("monthly").innerHTML=out;
-})();
-
-// ---- WEEK STRIP ----
-(function(){
-  const names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  let html="";
-  DATA.week.forEach(d=>{
-    const isToday = d.date===DATA.today;
-    const at = (d.goal!=null && !isToday) ? pct(d.count,d.goal) : null;
-    html += '<div class="d'+(isToday?' today':'')+'"><div class="dn">'+names[d.dow]+' '+shortDate(d.date)+(isToday?' · today':'')+'</div>'+
-      '<div class="dc'+(at!=null?' '+attCls(at):'')+'">'+d.count+'</div>'+
-      '<div class="dg">'+(at!=null?('goal '+d.goal.toFixed(1)+' · '+at.toFixed(0)+'%'):(isToday?('in progress'+(d.goal!=null?' · goal '+d.goal.toFixed(1):'')):'no goal set'))+'</div></div>';
+  let h='<tr><th>Window</th><th>Booked jobs</th><th>Goal</th><th>% of goal</th><th>Last year</th><th>YoY</th></tr>';
+  [30,60,90,180].forEach(N=>{
+    const r=D.rolling[String(N)], a=pct(r.actual,r.goal), y=r.lastYear?(r.actual-r.lastYear)/r.lastYear*100:null;
+    h+='<tr><td>Last '+N+' days</td><td>'+fmtI(r.actual)+'</td><td>'+fmtI(r.goal)+'</td>'+
+       '<td class="'+(a?attCls(a):'')+'">'+(a?a.toFixed(1)+'%':'—')+'</td><td>'+fmtI(r.lastYear)+'</td>'+
+       '<td class="'+(y===null?'':yoyCls(y))+'">'+(y===null?'—':sgn(y))+'</td></tr>';
   });
-  document.getElementById("week").innerHTML=html;
-  document.getElementById("wkTitle").textContent = "This Week · Mon "+shortDate(DATA.week[0].date)+" – today";
+  document.getElementById('rolling').innerHTML=h;
 })();
 
-document.getElementById("foot").innerHTML =
-  'Source: <b>Booking PBI 4DX.xlsx</b> (SharePoint) — metric is the COUNT of rows grouped by Created Date (each row = one booked job; 18,058 rows, Jan 1 2025 – '+niceDate(DATA.dataAsOf)+'). <b>Source note (Sep 3 run):</b> the live file had been overwritten with a 7-day extract (Aug 27 – Sep 2 only, 266 rows); history was taken from SharePoint version 344.0 (Sep 2, full Jan 2025 – Sep 1) and Sep 2 rows from the live file — overlapping days matched exactly. '+
-  'Goal: <b>Booked Jobs Goal</b> column, CBD 2026 Revenue Budget.xlsx → Daily Goals.<br>'+
-  '<b>Yesterday</b> = prior calendar day; its last-year comparison shifts 364 days so the weekday matches (Sep 2 2026 ↔ Sep 3 2025). '+
-  'Weeks start Monday. Period goals and last-year figures anchor to the last Created Date in the data ('+niceDate(DATA.dataAsOf)+'). MTD/WTD last-year windows include Sep 1 2025 (Labor Day, 2 jobs), which depresses those LY baselines.<br>'+
-  '<b>Goal coverage caveat:</b> the Booked Jobs Goal is populated on business days only and currently runs Jan 2 – Sep 30, 2026. Weekends, holidays, and unbudgeted months have no goal — those days/periods show "no goal set" rather than 0. Attainment: <span class="green">&ge;100%</span> / <span class="amber">95–99.9%</span> / <span class="red">&lt;95%</span>; YoY green when &ge; last year.';
+/* ---------- ATTAINMENT BARS ---------- */
+(function(){
+  const order=['WTD','MTD','QTD','YTD'];
+  let h='<tr><th>Period</th><th style="width:46%"></th><th>Actual</th><th>Goal</th><th>%</th></tr>';
+  order.forEach(k=>{
+    const p=D.periods[k], a=pct(p.actual,p.goal);
+    const scale=Math.max(p.actual,p.goal)*1.08||1;
+    h+='<tr><td>'+k+'</td><td><div class="bar-wrap"><div class="bar-fill" style="width:'+(p.actual/scale*100).toFixed(1)+'%"></div>'+
+       '<div class="goalmark" style="left:'+(p.goal/scale*100).toFixed(1)+'%"></div></div></td>'+
+       '<td>'+fmtI(p.actual)+'</td><td>'+fmtI(p.goal)+'</td><td class="'+(a?attCls(a):'')+'">'+(a?a.toFixed(1)+'%':'—')+'</td></tr>';
+  });
+  document.getElementById('attain').innerHTML=h;
+})();
+
+/* ---------- MONTHLY ---------- */
+(function(){
+  const keys=Object.keys(D.monthly).sort();
+  const W=1120,H=280,pad={t:24,r:14,b:46,l:14};
+  const n=keys.length, iw=W-pad.l-pad.r, gap=iw/n, bw=gap*0.62, ih=H-pad.t-pad.b;
+  const max=Math.max(...keys.map(k=>Math.max(D.monthly[k], D.monthlyGoal[k]||0)))*1.15||1;
+  const curMonth = D.TODAY.slice(0,7);
+  let o='<svg viewBox="0 0 '+W+' '+H+'">';
+  o+='<defs><pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">'+
+     '<rect width="6" height="6" fill="#ff8a1f" fill-opacity=".35"/><line x1="0" y1="0" x2="0" y2="6" stroke="#ffb266" stroke-width="3"/></pattern></defs>';
+  keys.forEach((k,i)=>{
+    const v=D.monthly[k], g=D.monthlyGoal[k];
+    const x=pad.l+i*gap+(gap-bw)/2, h=(v/max)*ih, y=pad.t+ih-h;
+    const yr=k.slice(0,4);
+    const col = k===curMonth ? 'url(#hatch)' : (yr==='2026' ? '#ff8a1f' : '#46536b');
+    o+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h,1)+'" rx="3" fill="'+col+'"/>';
+    o+='<text x="'+(x+bw/2)+'" y="'+(y-5)+'" text-anchor="middle" font-size="9.5" fill="#8b95a7">'+v+'</text>';
+    if(g){const gy=pad.t+ih-(g/max)*ih;
+      o+='<line x1="'+(x-2)+'" x2="'+(x+bw+2)+'" y1="'+gy+'" y2="'+gy+'" stroke="#e8ecf3" stroke-opacity=".8" stroke-dasharray="4 3" stroke-width="1.6"/>';}
+    const mm=k.slice(5);
+    o+='<text x="'+(x+bw/2)+'" y="'+(H-24)+'" text-anchor="middle" font-size="9.5" fill="#8b95a7">'+mm+'</text>';
+    if(mm==='01'||i===0) o+='<text x="'+(x+bw/2)+'" y="'+(H-10)+'" text-anchor="middle" font-size="10" fill="#5f6a7d">'+yr+'</text>';
+  });
+  o+='</svg>';
+  document.getElementById('monthly').innerHTML=o+
+    '<div style="color:#8b95a7;font-size:11px;margin-top:6px">Orange = 2026 · slate = 2025 · hatched = current (partial) month · dashed tick = 2026 Booked Jobs Goal for that month</div>';
+})();
+
+/* ---------- WEEK STRIP ---------- */
+(function(){
+  let h='<tr><th>Day</th><th>Date</th><th>Booked jobs</th><th>Goal</th><th>% of goal</th></tr>';
+  D.weekDaily.forEach(d=>{
+    const dt=parse(d.date), a=d.goal?pct(d.count,d.goal):null;
+    h+='<tr><td>'+dt.toLocaleDateString('en-US',{weekday:'long'})+'</td><td>'+dt.toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</td>'+
+       '<td>'+fmtI(d.count)+'</td><td>'+(d.goal?d.goal.toFixed(1):'—')+'</td>'+
+       '<td class="'+(a?attCls(a):'')+'">'+(a?a.toFixed(1)+'%':'—')+'</td></tr>';
+  });
+  document.getElementById('week').innerHTML=h;
+})();
+
+/* ---------- FOOTER ---------- */
+document.getElementById('foot').innerHTML =
+  'Source: <b>Booking PBI 4DX.xlsx</b> via the booking history ledger (updated '+D.updated+') — metric is the COUNT of booked jobs by <b>Created Date</b>. '+
+  'Goal: <b>Booked Jobs Goal</b> column, "Daily Goals" tab of CBD 2026 Revenue Budget.xlsx.<br>'+
+  '<b>Yesterday</b> = the prior calendar day ('+D.yesterday.date+'); last year = a 364-day shift ('+D.yesterday.lyDate+') so the weekday matches.<br>'+
+  'Weeks start Monday. Goal and last-year comparisons for periods and rolling windows anchor to the last Created Date in the data ('+D.dataAsOf+').<br>'+
+  '<b>Goal coverage caveat:</b> the Booked Jobs Goal is populated on business days only (Jan 2 – Sep 30, 2026). Weekends, holidays and unbudgeted months carry no goal and are omitted from goal markers rather than counted as zero.';
 </script>
 </body>
 </html>
