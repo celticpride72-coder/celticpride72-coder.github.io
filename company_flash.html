@@ -27,8 +27,8 @@
  <div class="note" id="note"></div>
 </div>
 <script>
-const F=/*DATA_START*/{"asOf":"2026-08-31","today":"2026-09-02","month":"September 2026","rev_mtd":0,"rev_ytd":7891259,"jobs_mtd":0,"jobs_ytd":6780,"svc_mtd":0,"svc_ytd":1272714,"inst_ytd":6499908,"inst_n":1068,"gp":49.1,"fcc":86,"ttiMed":13,"backlog":63261,"backlogN":14}/*DATA_END*/;
-const REFRESHED=/*STAMP_START*/"Sep 2, 2026"/*STAMP_END*/;
+const F=/*DATA_START*/{"asOf":"2026-09-03","today":"2026-09-04","month":"September 2026","rev_mtd":112248,"rev_ytd":7967417,"jobs_mtd":132,"jobs_ytd":6878,"svc_mtd":23225,"svc_ytd":1288082,"inst_ytd":6550671,"inst_n":1087,"gp":49.1,"fcc":86,"ttiMed":13,"backlog":63369,"backlogN":6}/*DATA_END*/;
+const REFRESHED=/*STAMP_START*/"Sep 4, 2026"/*STAMP_END*/;
 const money=v=>(v||v===0)?"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:0}):"—";
 const moneyK=v=>v>=1000000?"$"+(v/1000000).toFixed(2)+"M":"$"+Math.round(v/1000)+"K";
 function tile(o){return `<div class="tile${o.hero?' hero':''}"><div class="k">${o.k}</div><div class="val">${o.v}</div><div class="sec2">${o.s||""}</div><div class="src">${o.src||""}</div></div>`;}
