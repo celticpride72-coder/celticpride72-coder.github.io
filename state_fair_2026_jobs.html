@@ -11,7 +11,7 @@
 table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--edge);white-space:nowrap}th{color:var(--muted);font-size:11px;text-transform:uppercase;position:sticky;top:0;background:var(--panel);cursor:pointer;user-select:none}th.sorted{color:var(--accent)}tr:hover td{background:var(--panel2)}td.num{text-align:right;font-variant-numeric:tabular-nums}
 .pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700}.pill.Fireplace{background:#ff7a5926;color:var(--fire)}.pill.HVAC{background:#4c8dff26;color:var(--hvac)}.pill.Electrical{background:#f5c45126;color:var(--elec)}.pill.sold{background:#2bd4a726;color:var(--good)}.pill.open{background:#7c8a9c22;color:var(--muted)}
 .tblwrap{max-height:640px;overflow:auto}.note{color:var(--muted);font-size:12px;margin-top:20px;line-height:1.6}
-@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}}</style>
+@media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.grid3{grid-template-columns:1fr}}.leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.9) saturate(.9)}.leaflet-container{background:#0e1116}</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head><body><div class="wrap">
@@ -78,7 +78,7 @@ document.getElementById("note").innerHTML="Rows are booked jobs from <b>Booking 
  var leg=document.getElementById('maplegend');
  if(typeof L==='undefined'){ if(leg)leg.textContent='Map library failed to load (offline?).'; return; }
  var map=L.map('map',{scrollWheelZoom:false}).setView([44.95,-93.25],9);
- L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
  var cache={}; try{cache=JSON.parse(localStorage.getItem('sfZipGeo')||'{}');}catch(e){}
  function geocode(zip){ if(cache[zip])return Promise.resolve(cache[zip]);
    return fetch('https://api.zippopotam.us/us/'+zip).then(function(r){return r.ok?r.json():null;})
